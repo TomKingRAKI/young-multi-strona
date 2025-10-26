@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Antonio:wght@700&display=swap');
+body {
+  margin: 0;
+  background-color: #111; /* Ciemne tło na wszelki wypadek */
+  font-family: 'Anton', sans-serif; /* Ustawiamy czcionkę globalnie */
+}

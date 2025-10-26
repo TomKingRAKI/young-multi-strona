@@ -1,0 +1,56 @@
+/* Plik: /src/components/Header/Header.css */
+
+.header-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  padding: 2.5rem 3rem; 
+  box-sizing: border-box;
+  z-index: 100;
+  
+  /* ZMIANA: Usunęliśmy 'transition' dla tła */
+}
+
+/* ZMIANA: CAŁA klasa .header-container.scrolled została USUNIĘTA */
+
+/* --- LOGO --- */
+.header-logo {
+  height: 80px; 
+  width: auto;
+  cursor: pointer;
+  transition: filter 0.4s ease-in-out; /* Animacja zmiany koloru (zostaje) */
+}
+
+/* --- HAMBURGER --- */
+.header-menu-icon {
+  font-size: 2.5rem; 
+  cursor: pointer;
+  transition: color 0.4s ease-in-out; /* Animacja zmiany koloru (zostaje) */
+}
+
+
+/* --- MAGIA ZMIANY KOLORÓW (zostaje bez zmian) --- */
+
+/* Motyw CIEMNY (dla jasnego tła, czyli Hero) */
+.header-container.theme-dark .header-logo {
+  /* Używasz czarnego logo, więc 'invert(0)' = czarny */
+  filter: invert(0); 
+}
+.header-container.theme-dark .header-menu-icon {
+  color: #000; /* Czarny hamburger */
+}
+
+/* Motyw JASNY (dla ciemnego tła, czyli NewSong) */
+.header-container.theme-light .header-logo {
+  /* 'invert(1)' zamieni twoje czarne logo na BIAŁE */
+  filter: invert(1); 
+}
+.header-container.theme-light .header-menu-icon {
+  color: #fff; /* Biały hamburger */
+}

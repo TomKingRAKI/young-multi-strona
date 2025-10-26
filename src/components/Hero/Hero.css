@@ -1,0 +1,142 @@
+/* Plik: /src/components/Hero/Hero.css */
+
+@font-face {
+  font-family: 'Bernoru';
+  src: url('/fonts/bernoru.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.hero-section {
+  /* ZMIANA: Usuwamy stąd background-image */
+  height: 100vh;
+  width: 100%;
+  place-items: center; /* Nadal centrujemy wszystko */
+  color: white;
+  overflow: hidden;
+  background-color: #111; /* Kolor tła na wypadek wolnego ładowania */
+  perspective: 1200px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.hero-content-wrapper {
+  /* Ten wrapper odzyskuje 'grid', aby centrować warstwy */
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+/* ZMIANA: Teraz wszystkie 4 elementy (tło, young, postać, multi)
+  lądują w tej samej komórce siatki
+*/
+.hero-background-image,
+.text-young,
+.hero-cutout-image,
+.text-multi {
+  grid-area: 1 / 1; /* Kluczowe dla nałożenia na siebie */
+  margin: 0;
+  transition: filter 0.3s ease-in-out;
+}
+
+/* --- WARSTWY I POPRAWKI SKALOWANIA --- */
+
+/* WARSTWA 0: TŁO (NOWY ELEMENT) */
+.hero-background-image {
+  z-index: 0; /* Na samym spodzie */
+  
+  /* ZMIANA: Te same właściwości co postać */
+  height: 100%; /* 100% wysokości sekcji (czyli 100vh) */
+  width: 100%;
+  object-fit: cover; /* Dopasuj przez przycięcie, aby wypełnić ekran */
+  object-position: center;
+}
+
+/* WARSTWA 1: Napis "YOUNG" */
+.text-young {
+  z-index: 1;
+  font-family: 'Antonio', sans-serif;
+  font-weight: 700; /* 'Bold' to 700 */
+  font-size: 24vw; 
+  letter-spacing: 0.03em;
+  
+  color: #000;
+text-shadow: 
+    4px 4px 0px #333333,  /* Warstwa 1 (ciemnoszara) */
+    8px 8px 0px #666666,  /* Warstwa 2 (średnio-szara) */
+    12px 12px 0px #999999; /* Warstwa 3 (jasno-szara) */
+  
+  
+  /* ZMIANA: Przesuwamy napis do góry */
+  transform: translateY(-34%);
+}
+
+
+/* WARSTWA 2: Postać */
+.hero-cutout-image {
+  z-index: 2;
+  
+  /* ZMIANA: Te same właściwości co tło, aby się idealnie pokryły */
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+
+  /* Cień zostaje, ale można go osłabić */
+  filter: drop-shadow(3px 3px 8px rgba(0, 0, 0, 0.2));
+  pointer-events: none;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+/* WARSTWA 3: Napis "MULTI" */
+.text-multi {
+  z-index: 3;
+  color: #fff;
+  font-family: 'Bernoru', sans-serif;
+  text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.6);
+  
+  /* ZMIANA: Ustawiamy rozmiar wg proporcji (27vw / 3.27 = ~8.25vw) */
+  font-size: 7vw; /* To jest odpowiednik ~119px */
+  
+  /* ZMIANA: Przesuwamy napis do góry (mniejszy translateY) */
+  transform: translateY(80%);
+}
+
+
+
+/* --- NAWIGACJA (POPRAWKI ROZMIARU) --- */
+.hero-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.5rem 3rem;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.nav-logo {
+  /* ZMIANA: Większe logo */
+  height: 80px; 
+  width: auto;
+}
+
+.nav-menu-icon {
+  /* ZMIANA: Większy hamburger */
+  font-size: 2.5rem; 
+  cursor: pointer;
+  color: rgb(0, 0, 0);
+}
+
+.multi-letter {
+  display: inline-block;
+  position: relative; /* Ważne dla animacji */
+  cursor: pointer;
+}

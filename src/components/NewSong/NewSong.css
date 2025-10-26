@@ -1,0 +1,24 @@
+/* Plik: /src/components/NewSong/NewSong.css */
+
+.newsong-section {
+  /* Kluczowe, aby była NAD sekcją Hero */
+  position: relative;
+  z-index: 2; /* Hero ma 1, więc ta sekcja (i każda kolejna) będzie wyżej */
+
+  /* Reszta stylów */
+  height: 100vh; /* Na razie niech ma wysokość całego ekranu */
+  background-color: #000; /* Twoje czarne tło */
+  color: white; /* Tekst będzie biały */
+  
+  /* Ważne: to nadpisze style z JS, jeśli JS się nie załaduje */
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+}
+
+/* Tylko dla wycentrowania tekstu, możesz to zmienić */
+.newsong-content {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-size: 2rem;
+}
