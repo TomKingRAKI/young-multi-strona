@@ -1,0 +1,9 @@
+
+=======POCZATEK PRACY========
+git pull
+
+
+====KONIEC PRACY=======
+git add .
+git commit -m "Zrobiłem coś fajnego na laptopie"
+git push
