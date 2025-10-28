@@ -6,7 +6,7 @@ import Hero from './components/Hero/Hero';
 import Preloader from './components/Preloader/Preloader';
 import NewSong from './components/NewSong/NewSong';
 import Header from './components/Header/Header';
-import MenuOverlay from './components/MenuOverlay/MenuOverlay'; // 1. Importujemy Menu
+import MenuOverlay from './components/MenuOverlay/MenuOverlay';
 import { motionValue } from 'framer-motion';
 
 const globalScrollY = motionValue(0);
@@ -16,13 +16,22 @@ function App() {
   const [headerTheme, setHeaderTheme] = useState('dark');
   const newSongRef = useRef(null);
 
-  // --- ZMIANA 1: Dodajemy "włącznik" menu ---
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  // ZMIANA 1: Dodajemy nowy stan, który "blokuje" zmianę motywu
+  const [isThemeLocked, setIsThemeLocked] = useState(false);
 
-  // Funkcje do otwierania i zamykania
-  const openMenu = () => setIsMenuOpen(true);
-  const closeMenu = () => setIsMenuOpen(false);
-  // ------------------------------------------
+  // ZMIANA 2: Funkcja otwierania teraz "blokuje" motyw na jasny
+  const openMenu = () => {
+    setIsMenuOpen(true);
+    setIsThemeLocked(true); // Zablokuj motyw na 'light'
+  };
+
+  // ZMIANA 3: Funkcja zamykania tylko rozpoczyna animację
+  const closeMenu = () => {
+    setIsMenuOpen(false); // Rozpocznij animację 'exit'
+    // Nie odblokowujemy motywu jeszcze!
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000); 
@@ -47,10 +56,9 @@ function App() {
     };
   }, []);
 
-  // --- ZMIANA 2: Wymuszamy biały header, gdy menu jest otwarte ---
-  // Jeśli menu jest otwarte, 'effectiveTheme' zawsze będzie 'light' (białe ikony).
-  // Jeśli jest zamknięte, będzie działać logika scrollowania.
-  const effectiveTheme = isMenuOpen ? 'light' : headerTheme;
+  // ZMIANA 4: Logika motywu teraz sprawdza też blokadę
+  // Motyw jest 'light' JEŚLI menu jest otwarte LUB motyw jest zablokowany
+  const effectiveTheme = (isMenuOpen || isThemeLocked) ? 'light' : headerTheme;
   // -----------------------------------------------------------
 
   return (
@@ -59,17 +67,21 @@ function App() {
         {isLoading && <Preloader />}
       </AnimatePresence>
       
-      {/* 3. Przekazujemy 'effectiveTheme' i funkcję 'openMenu' */}
       <Header 
         headerTheme={effectiveTheme} 
-        onMenuClick={openMenu}    // Funkcja do otwierania
-        onCloseClick={closeMenu}  // Funkcja do zamykania
-        isMenuOpen={isMenuOpen}   // Stan (true/false)
+        onMenuClick={openMenu}
+        onCloseClick={closeMenu}
+        isMenuOpen={isMenuOpen}
       />
       
-      {/* 4. Renderujemy MenuOverlay tylko, gdy 'isMenuOpen' jest true */}
-      {/* (Później dodamy tu AnimatePresence dla animacji) */}
-      {isMenuOpen && <MenuOverlay onCloseClick={closeMenu} />}
+      {/* ZMIANA 5: Dodajemy 'onExitComplete' */}
+      {/* Ta funkcja odpali się, GDY animacja zamykania SIĘ ZAKOŃCZY */}
+      <AnimatePresence 
+        mode='wait' 
+        onExitComplete={() => setIsThemeLocked(false)} // Odblokuj motyw
+      >
+        {isMenuOpen && <MenuOverlay />} 
+      </AnimatePresence>
       
       {!isLoading && (
         <main>

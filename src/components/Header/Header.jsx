@@ -4,9 +4,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import './Header.css';
 import logoYFL from '../../assets/logoyflczarne.png'; 
+import HamburgerMenuIcon from '../HamburgerMenuIcon/HamburgerMenuIcon'; // ZMIANA: Importujemy nowy komponent
 
-// ZMIANA 1: Przyjmujemy nowe propsy
-function Header({ headerTheme, onMenuClick, onCloseClick, isMenuOpen }) {
+// ZMIANA: Teraz przyjmujemy 'isMenuOpen'
+function Header({ headerTheme, onMenuClick, isMenuOpen, onCloseClick }) {
 
   const headerClasses = [
     "header-container",
@@ -22,24 +23,12 @@ function Header({ headerTheme, onMenuClick, onCloseClick, isMenuOpen }) {
     >
       <img src={logoYFL} alt="YFL Logo" className="header-logo" />
       
-      {/* ZMIANA 2: Logika warunkowa dla ikon */}
-      {isMenuOpen ? (
-        // Jeśli menu jest otwarte, pokaż "X" i podepnij funkcję zamykania
-        <div 
-          className="header-menu-icon" 
-          onClick={onCloseClick}
-        >
-          &#10005; {/* Znak 'X' */}
-        </div>
-      ) : (
-        // Jeśli menu jest zamknięte, pokaż hamburger i podepnij funkcję otwierania
-        <div 
-          className="header-menu-icon" 
-          onClick={onMenuClick}
-        >
-          &#9776; {/* Znak hamburgera */}
-        </div>
-      )}
+      {/* ZMIANA: Renderujemy nowy komponent HamburgerMenuIcon */}
+      <HamburgerMenuIcon 
+        isOpen={isMenuOpen} // Przekazujemy stan menu
+        onClick={isMenuOpen ? onCloseClick : onMenuClick} // Zmieniamy akcję kliknięcia
+        theme={headerTheme} // Przekazujemy motyw koloru
+      />
     </motion.nav>
   );
 }

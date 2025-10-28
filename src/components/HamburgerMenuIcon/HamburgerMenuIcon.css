@@ -1,0 +1,40 @@
+/* Plik: /src/components/HamburgerMenuIcon/HamburgerMenuIcon.css */
+
+/* Plik: /src/components/HamburgerMenuIcon/HamburgerMenuIcon.css */
+
+/* ZMIANA: Zmieniamy nazwę klasy z .hamburger-menu-icon na .hamburger-wrapper */
+.hamburger-menu-icon {
+  /* ZMIANA: Ustawiamy wysokość na 80px, tak jak logo */
+  width: 40px; 
+  height: 80px; 
+  
+  /* ZMIANA: Centrujemy paski w środku tego dużego (80px) obszaru */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Wyśrodkuj w pionie */
+  align-items: center; /* Wyśrodkuj w poziomie */
+  gap: 10px; /* Odstęp między paskami */
+  
+  cursor: pointer;
+  z-index: 1001; 
+  
+  transition: filter 0.4s ease-in-out;
+}
+
+/* ... reszta pliku bez zmian ... */
+.hamburger-bar {
+  width: 100%;
+  height: 4px; /* Grubość paska */
+  border-radius: 2px; /* Lekko zaokrąglone końce */
+  transform-origin: center; /* Ważne dla obrotu */
+  transition: background-color 0.4s ease-in-out;
+}
+
+/* --- ZMIANA KOLORÓW DYNAMICZNA --- */
+.hamburger-menu-icon.theme-dark .hamburger-bar {
+  background-color: #000; /* Czarne paski dla jasnego tła */
+}
+
+.hamburger-menu-icon.theme-light .hamburger-bar {
+  background-color: #fff; /* Białe paski dla ciemnego tła */
+}

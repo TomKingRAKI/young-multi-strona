@@ -7,10 +7,7 @@
   width: 100%;
   height: 100vh;
   background-color: #000;
-  z-index: 99; /* Wysoko, ale niżej niż header (który ma 1000) */
-  
-  /* Na razie go nie animujemy, po prostu jest widoczny */
-  opacity: 1; 
+  z-index: 999; /* Wysoko, ale niżej niż header (który ma 1000) */
 }
 
 
@@ -28,28 +25,31 @@
   place-items: center; /* Wyśrodkuj pudełko z obrazkiem */
   padding: 4rem;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .menu-image-container {
   width: 80%;
   height: 80%; /* Obrazek zajmuje 80% wysokości kolumny */
-  
-  /* Nasz obrazek (musi być w /public/menu-image.jpg) */
+  position: relative;
+  overflow: hidden; 
+}
+
+
+.menu-image-bw {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-image: url('/menu-image.jpg');
   background-size: cover;
   background-position: center;
-  
-  /* Obramówka */
-  border: 4px solid #fff;
-  
-  /* EFEKT GRAYSCALE */
-  filter: grayscale(100%);
-  transition: filter 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  filter: grayscale(100%); /* Filtr jest tylko tutaj! */
+  pointer-events: none;
+  z-index: 1;
 }
 
-.menu-image-container:hover {
-  filter: grayscale(0%); /* Znika po najechaniu */
-}
 
 /* --- PRAWA STRONA (Linki) --- */
 .menu-links-side {
@@ -57,6 +57,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center; /* Linki wyrównane do lewej */
+  overflow: hidden;
 }
 
 .menu-link {
@@ -66,12 +67,15 @@
   color: #fff;
   text-decoration: none;
   text-align: center;
-  
-  /* Efekt hover */
-  transition: color 0.3s ease, transform 0.3s ease;
+  background-image: linear-gradient(90deg, #fff, #999, #fff);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-position: 100% 0;
+  transition: background-position 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .menu-link:hover {
-  color: #aaa; /* Lekko szarzeje */
-  transform: translateX(10px); /* Mały ruch w prawo */
+  background-position: 0 0;
 }
