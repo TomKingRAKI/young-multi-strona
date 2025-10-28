@@ -1,14 +1,13 @@
 // Plik: /src/components/Header/Header.jsx
-// TO JEST POPRAWNA, "GŁUPIA" WERSJA BEZ 'useState' I 'useScroll'
 
 import React from 'react';
 import { motion } from 'framer-motion';
 import './Header.css';
 import logoYFL from '../../assets/logoyflczarne.png'; 
 
-function Header({ headerTheme }) { // Przyjmuje 'headerTheme' z App.jsx
+// ZMIANA 1: Przyjmujemy nowe propsy
+function Header({ headerTheme, onMenuClick, onCloseClick, isMenuOpen }) {
 
-  // Dynamiczne klasy zależą TERAZ TYLKO od 'headerTheme'
   const headerClasses = [
     "header-container",
     headerTheme === 'light' ? "theme-light" : "theme-dark"
@@ -22,7 +21,25 @@ function Header({ headerTheme }) { // Przyjmuje 'headerTheme' z App.jsx
       transition={{ duration: 0.8, delay: 0.8 }}
     >
       <img src={logoYFL} alt="YFL Logo" className="header-logo" />
-      <div className="header-menu-icon">&#9776;</div>
+      
+      {/* ZMIANA 2: Logika warunkowa dla ikon */}
+      {isMenuOpen ? (
+        // Jeśli menu jest otwarte, pokaż "X" i podepnij funkcję zamykania
+        <div 
+          className="header-menu-icon" 
+          onClick={onCloseClick}
+        >
+          &#10005; {/* Znak 'X' */}
+        </div>
+      ) : (
+        // Jeśli menu jest zamknięte, pokaż hamburger i podepnij funkcję otwierania
+        <div 
+          className="header-menu-icon" 
+          onClick={onMenuClick}
+        >
+          &#9776; {/* Znak hamburgera */}
+        </div>
+      )}
     </motion.nav>
   );
 }

@@ -1,5 +1,4 @@
 // Plik: /src/App.jsx
-// TO JEST POPRAWNA WERSJA Z LOGIKĄ 'useEffect'
 
 import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
@@ -7,45 +6,52 @@ import Hero from './components/Hero/Hero';
 import Preloader from './components/Preloader/Preloader';
 import NewSong from './components/NewSong/NewSong';
 import Header from './components/Header/Header';
+import MenuOverlay from './components/MenuOverlay/MenuOverlay'; // 1. Importujemy Menu
 import { motionValue } from 'framer-motion';
 
 const globalScrollY = motionValue(0);
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [headerTheme, setHeaderTheme] = useState('dark'); // Zaczyna jako 'dark' (czarne ikony)
+  const [headerTheme, setHeaderTheme] = useState('dark');
   const newSongRef = useRef(null);
+
+  // --- ZMIANA 1: Dodajemy "włącznik" menu ---
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Funkcje do otwierania i zamykania
+  const openMenu = () => setIsMenuOpen(true);
+  const closeMenu = () => setIsMenuOpen(false);
+  // ------------------------------------------
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000); 
     return () => clearTimeout(timer);
   }, []);
 
-  // Ten useEffect śledzi scroll
   useEffect(() => {
-    
     const handleScroll = () => {
       globalScrollY.set(window.scrollY);
-      
       if (newSongRef.current) {
         const rect = newSongRef.current.getBoundingClientRect();
-        
-        // Jeśli góra sekcji NewSong jest 100px (lub mniej) od góry okna...
         if (rect.top < 100) { 
-          setHeaderTheme('light'); // ...zmień motyw na 'light' (białe ikony)
+          setHeaderTheme('light');
         } else {
-          setHeaderTheme('dark'); // ...inaczej bądź 'dark' (czarne ikony)
+          setHeaderTheme('dark');
         }
       }
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []); // Uruchom tylko raz
+  }, []);
 
+  // --- ZMIANA 2: Wymuszamy biały header, gdy menu jest otwarte ---
+  // Jeśli menu jest otwarte, 'effectiveTheme' zawsze będzie 'light' (białe ikony).
+  // Jeśli jest zamknięte, będzie działać logika scrollowania.
+  const effectiveTheme = isMenuOpen ? 'light' : headerTheme;
+  // -----------------------------------------------------------
 
   return (
     <>
@@ -53,7 +59,17 @@ function App() {
         {isLoading && <Preloader />}
       </AnimatePresence>
       
-      <Header headerTheme={headerTheme} />
+      {/* 3. Przekazujemy 'effectiveTheme' i funkcję 'openMenu' */}
+      <Header 
+        headerTheme={effectiveTheme} 
+        onMenuClick={openMenu}    // Funkcja do otwierania
+        onCloseClick={closeMenu}  // Funkcja do zamykania
+        isMenuOpen={isMenuOpen}   // Stan (true/false)
+      />
+      
+      {/* 4. Renderujemy MenuOverlay tylko, gdy 'isMenuOpen' jest true */}
+      {/* (Później dodamy tu AnimatePresence dla animacji) */}
+      {isMenuOpen && <MenuOverlay onCloseClick={closeMenu} />}
       
       {!isLoading && (
         <main>
