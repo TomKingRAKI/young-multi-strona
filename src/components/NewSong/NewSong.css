@@ -1,24 +1,102 @@
 /* Plik: /src/components/NewSong/NewSong.css */
 
 .newsong-section {
-  /* Kluczowe, aby była NAD sekcją Hero */
+  /* "Długi" kontener do scrollowania */
+  height: 300vh; /* 3x wysokość ekranu */
   position: relative;
-  z-index: 2; /* Hero ma 1, więc ta sekcja (i każda kolejna) będzie wyżej */
-
-  /* Reszta stylów */
-  height: 100vh; /* Na razie niech ma wysokość całego ekranu */
-  background-color: #000; /* Twoje czarne tło */
-  color: white; /* Tekst będzie biały */
+  background-color: #000;
+  color: white;
   
-  /* Ważne: to nadpisze style z JS, jeśli JS się nie załaduje */
-  border-top-left-radius: 40px;
-  border-top-right-radius: 40px;
+  /* ZMIANA: DODAJ TĘ LINIĘ! */
+  z-index: 2; /* Musi być wyżej niż Hero (który ma z-index: 1) */
 }
 
-/* Tylko dla wycentrowania tekstu, możesz to zmienić */
-.newsong-content {
+/* "Lepki" panel, który stoi w miejscu */
+.newsong-sticky-content {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: transparent;
+  
+  /* Używamy grida, aby elementy mogły na siebie nachodzić */
   display: grid;
   place-items: center;
-  height: 100%;
+  overflow: hidden;
+}
+
+/* Wspólne style dla "warstw" animacji */
+.newsong-text-wrapper,
+.video-container,
+.links-container {
+  /* Wszystkie są w tej samej komórce siatki (na sobie) */
+  grid-area: 1 / 1;
+  /* Domyślnie są niewidoczne, opacity dostaną z Framer Motion */
+  opacity: 0; 
+}
+
+/* --- Style dla Tekstu --- */
+.newsong-text-wrapper {
+  text-align: center;
+  z-index: 2; /* Tekst jest nad wideo */
+}
+
+.newsong-title {
+  font-family: 'Bernoru', sans-serif;
+  font-size: 6rem; /* Zmniejszone, tak jak chciałeś */
+  margin: 0;
+  color: #fff;
+}
+
+.newsong-subtitle {
+  font-family: 'Antonio', sans-serif;
+  font-weight: 700;
   font-size: 2rem;
+  letter-spacing: 4px;
+  color: #aaa;
+  margin: 0;
+}
+
+/* --- Style dla Wideo --- */
+.video-container {
+  width: 100%;
+  max-width: 1000px; /* Mniejsze wideo, tak jak chciałeś */
+  z-index: 1; /* Wideo jest pod tekstem, ale nad tłem */
+}
+
+.video-placeholder {
+  width: 100%;
+  background-color: #333;
+  aspect-ratio: 16 / 9; /* Proporcje 16:9 */
+  display: grid;
+  place-items: center;
+  font-family: 'Antonio', sans-serif;
+  font-size: 3rem;
+  border-radius: 12px;
+}
+
+.links-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  z-index: 3; /* Linki są na samej górze */
+}
+
+.streaming-link {
+  font-family: 'Antonio', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #000;
+  background-color: #fff;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  border-radius: 50px;
+  text-align: center;
+  min-width: 250px; /* Stała szerokość dla przycisków */
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.streaming-link:hover {
+  transform: scale(1.05);
+  background-color: #ccc;
 }
