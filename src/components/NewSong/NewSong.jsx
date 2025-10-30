@@ -12,48 +12,82 @@ const NewSong = forwardRef((props, ref) => {
   const { scrollYProgress: radiusProgress } = useScroll({
     target: scrollRef,
     
-    // ZMIANA 1: POPRAWIONY OFFSET!
+    // ZMIANA 1: NAPRAWIONY OFFSET!
     // Animacja dzieje się szybko, na pierwszych 20% wjazdu
     offset: ["start end", "start start"] 
   });
 
-  // Przekształcamy postęp (0 do 1) na radius (40px do 0px)
+  // Przekształcamy postęp (0 do 1) na radius (100px to 0px)
   const radius = useTransform(
     radiusProgress,
     [0, 1], 
-    ["100px", "0px"]
+    ["100px", "0px"] // Zostawiłem 100px, które ustawiłeś
   );
   // -----------------------------------------------------------
 
 
-  // --- ANIMACJA 2: Wewnętrzna (Tekst i Wideo) ---
+  // --- ANIMACJA 2: Wewnętrzna (NOWA LOGIKA) ---
   const { scrollYProgress: contentProgress } = useScroll({
     target: scrollRef,
     offset: ["start start", "end end"] 
   });
 
-  // Animacje tekstu i wideo (bez zmian)
-  const textOpacity = useTransform(contentProgress, [0.05, 0.15, 0.25], [0, 1, 0]);
-  const textY = useTransform(contentProgress, [0.05, 0.15], ["20px", "0px"]);
-  const videoOpacity = useTransform(contentProgress, [0.25, 0.35, 0.8], [0, 1, 1]);
-  const videoX = useTransform(contentProgress, [0.4, 0.6], ["0%", "-25%"]);
-  const videoScale = useTransform(contentProgress, [0.4, 0.6], [1, 0.7]);
-  // -----------------------------------------------------------
-  const linksOpacity = useTransform(
-    contentProgress,
-    [0.55, 0.7], // Startują, gdy wideo jest w połowie ruchu
+  // --- ZMIANA: NOWA LOGIKA NAPISU ---
+  // 1. Napis pojawia się na początku
+  const textOpacity = useTransform(
+    contentProgress, 
+    [0.05, 0.15], 
     [0, 1]
   );
-  // Wjeżdżają z prawej (startują z 50px, kończą na 25% w prawo)
+  // 2. Napis jest "przepychany" do góry, gdy wideo wjeżdża
+  const textY = useTransform(
+    contentProgress,
+    [0.2, 0.4], // Kiedy wideo wjeżdża
+    ["0vh", "-30vh"] // Przesuń ze środka (0vh) na górę (-40vh)
+  );
+
+  // --- ZMIANA: NOWA LOGIKA WIDEO ---
+  // 1. Wideo wjeżdża z dołu, pchając napis
+  const videoY = useTransform(
+    contentProgress,
+    [0.2, 0.4], // W tym samym czasie co pchanie tekstu
+    ["100vh", "10vh"] // Wjedź z dołu (100vh) na środek (0vh)
+  );
+  // 2. Wideo się zmniejsza
+  const videoScale = useTransform(
+    contentProgress,
+    [0.4, 0.6], // Zaraz po dojechaniu na środek
+    [1, 0.7]
+  );
+  // 3. Wideo idzie na PRAWO (tak jak prosiłeś)
+  const videoX = useTransform(
+    contentProgress,
+    [0.4, 0.6],
+    ["0%", "-25%"] // Przesuń ze środka (0%) na prawo (25%)
+  );
+
+  // --- ZMIANA: NOWA LOGIKA LINKÓW ---
+  // 1. Linki pojawiają się, gdy wideo się przesuwa
+  const linksOpacity = useTransform(
+    contentProgress,
+    [0.55, 0.7],
+    [0, 1]
+  );
+  // 2. Linki wjeżdżają z LEWEJ strony (żeby wypełnić lukę)
   const linksX = useTransform(
     contentProgress,
     [0.55, 0.7],
-    ["250vw", "100%"] 
+    ["300vw", "100%"] // Wjedź zza lewej krawędzi
   );
 
+  const linksY = useTransform(
+    contentProgress,
+    [0.4, 0.6], // Użyj tego samego czasu co wideo
+    ["0vh", "10vh"] // Przesuń się z środka na 15% poniżej
+  );
+  // -----------------------------------------------------------
+
   return (
-    // ZMIANA 2: Zewnętrzna sekcja jest znowu STATYCZNA
-    // Nie potrzebuje 'motion' ani 'style'
     <motion.section 
       ref={(node) => {
         scrollRef.current = node;
@@ -68,16 +102,17 @@ const NewSong = forwardRef((props, ref) => {
     >
       
       {/* "Lepki" kontener */}
-      {/* ZMIANA 3: Animacja rogów jest TYLKO TUTAJ */}
       <motion.div 
         className="newsong-sticky-content"
         style={{
-          borderTopLeftRadius: radius, // Podpinamy animowany radius
-          borderTopRightRadius: radius // Podpinamy animowany radius
+          borderTopLeftRadius: radius,
+          borderTopRightRadius: radius
         }}
       >
         
-        {/* Reszta kodu (Tekst i Wideo) zostaje bez zmian */}
+        {/* === ELEMENTY ANIMACJI === */}
+
+        {/* 1. Tekst (teraz ma 'y' i 'opacity') */}
         <motion.div 
           className="newsong-text-wrapper" 
           style={{ opacity: textOpacity, y: textY }}
@@ -86,18 +121,26 @@ const NewSong = forwardRef((props, ref) => {
           <h2 className="newsong-subtitle">OUT NOW</h2>
         </motion.div>
         
+        {/* 2. Wideo (teraz ma 'y', 'x' i 'scale') */}
         <motion.div 
           className="video-container" 
-          style={{ opacity: videoOpacity, x: videoX, scale: videoScale }}
+          style={{ 
+            opacity: 1, // ZMIANA: Opacity jest teraz stałe (wjeżdża z dołu)
+            y: videoY,
+            x: videoX, 
+            scale: videoScale 
+          }}
         >
           <div className="video-placeholder">VIDEO</div>
         </motion.div>
 
+        {/* 3. Linki (teraz mają 'x' i 'opacity') */}
         <motion.div 
           className="links-container" 
           style={{ 
             opacity: linksOpacity, 
-            x: linksX 
+            x: linksX,
+            y: linksY
           }}
         >
           <a href="#" className="streaming-link" target="_blank">SPOTIFY</a>
