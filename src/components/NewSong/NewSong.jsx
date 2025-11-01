@@ -1,11 +1,12 @@
 // Plik: /src/components/NewSong/NewSong.jsx
 
+// Usunęliśmy 'useEffect' z importu
 import React, { useRef, forwardRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import './NewSong.css';
-// ZMIANA: Importujemy Gramophone
 import Gramophone from '../Gramophone/Gramophone';
 
+// Komponent nie przyjmuje już 'setThemeOverride'
 const NewSong = forwardRef((props, ref) => {
   
   const scrollRef = useRef(null);
@@ -27,25 +28,49 @@ const NewSong = forwardRef((props, ref) => {
     offset: ["start start", "end end"] 
   });
 
-  // Logika napisów (bez zmian)
-  const textOpacity = useTransform(contentProgress, [0.05, 0.15], [0, 1]);
-  const textY = useTransform(contentProgress, [0.2, 0.4], ["0vh", "-30vh"]);
+  // --- SEKWENCJA "POŚRODKU" (STABILNA) ---
 
-  // Logika wideo (bez zmian)
-  const videoY = useTransform(contentProgress, [0.2, 0.4], ["100vh", "10vh"]);
-  const videoScale = useTransform(contentProgress, [0.4, 0.6], [1, 0.7]);
-  const videoX = useTransform(contentProgress, [0.4, 0.6], ["0%", "-25%"]);
+  // 1. Tekst
+  const textOpacity = useTransform(contentProgress, [0.05, 0.13], [0, 1]);
+  const textY = useTransform(contentProgress, [0.13, 0.32], ["0vh", "-30vh"]); 
 
-  // Logika linków (bez zmian)
-  const linksOpacity = useTransform(contentProgress, [0.55, 0.7], [0, 1]);
-  const linksX = useTransform(contentProgress, [0.55, 0.7], ["300vw", "100%"]);
-  const linksY = useTransform(contentProgress, [0.4, 0.6], ["0vh", "10vh"]);
+  // 2. Wideo Wjeżdża
+  const videoY = useTransform(contentProgress, [0.13, 0.32], ["100vh", "10vh"]);
 
-  // --- ZMIANA: NOWA ANIMACJA "POCIĄGU" (TAŚMY) ---
+  // 3. Pauza dla Wideo
+  const videoScale = useTransform(
+    contentProgress,
+    [0.32, 0.38, 0.52], 
+    [1, 1, 0.7]       
+  );
+  const videoX = useTransform(
+    contentProgress,
+    [0.32, 0.38, 0.52], 
+    ["0%", "0%", "-25%"] 
+  );
+
+  // 4. Linki 
+  const linksOpacity = useTransform(
+    contentProgress,
+    [0.52, 0.58],       
+    [0, 1]
+  );
+  const linksX = useTransform(
+    contentProgress,
+    [0.52, 0.58],       
+    ["300vw", "100%"]
+  );
+  const linksY = useTransform(
+    contentProgress,
+    [0.52, 0.58],       
+    ["10vh", "10vh"]   
+  );
+
+  // 5. Animacja "Pociągu" (trackX) Z PAUZĄ
   const trackX = useTransform(
     contentProgress,
-    [0.7, 1.0], // Używamy ostatnie 30% scrolla
-    ["0%", "-100%"] // Przesuń z (Wagon 1) na (Wagon 2)
+    [0.58, 0.65, 1.0],  
+    ["0%", "0%", "-50%"] 
   );
   // -----------------------------------------------------------
 
@@ -64,7 +89,6 @@ const NewSong = forwardRef((props, ref) => {
       }}
     >
       
-      {/* ZMIANA: "POCIĄG" animowany przez 'trackX' */}
       <motion.div 
         className="newsong-sticky-content"
         style={{
@@ -72,9 +96,6 @@ const NewSong = forwardRef((props, ref) => {
         }}
       >
         
-        {/* ZMIANA: "WAGON 1" - NOWY PANEL
-           (Ten div "opakowuje" całą starą zawartość)
-        */}
         <motion.div 
           className="newsong-panel"
           style={{
@@ -110,8 +131,6 @@ const NewSong = forwardRef((props, ref) => {
         </motion.div> 
         {/* Koniec "Wagonu 1" */}
 
-
-        {/* ZMIANA: "WAGON 2" */}
         <Gramophone />
         {/* Koniec "Wagonu 2" */}
         

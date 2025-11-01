@@ -18,19 +18,16 @@ function App() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
-  // ZMIANA 1: Dodajemy nowy stan, który "blokuje" zmianę motywu
+  // Tu była logika z 'isThemeLocked', która jest OK
   const [isThemeLocked, setIsThemeLocked] = useState(false);
 
-  // ZMIANA 2: Funkcja otwierania teraz "blokuje" motyw na jasny
   const openMenu = () => {
     setIsMenuOpen(true);
     setIsThemeLocked(true); // Zablokuj motyw na 'light'
   };
 
-  // ZMIANA 3: Funkcja zamykania tylko rozpoczyna animację
   const closeMenu = () => {
     setIsMenuOpen(false); // Rozpocznij animację 'exit'
-    // Nie odblokowujemy motywu jeszcze!
   };
 
   useEffect(() => {
@@ -39,6 +36,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    // To jest stara logika scrolla, która tylko częściowo działała
     const handleScroll = () => {
       globalScrollY.set(window.scrollY);
       if (newSongRef.current) {
@@ -56,10 +54,8 @@ function App() {
     };
   }, []);
 
-  // ZMIANA 4: Logika motywu teraz sprawdza też blokadę
-  // Motyw jest 'light' JEŚLI menu jest otwarte LUB motyw jest zablokowany
+  // Logika motywu bez 'themeOverride'
   const effectiveTheme = (isMenuOpen || isThemeLocked) ? 'light' : headerTheme;
-  // -----------------------------------------------------------
 
   return (
     <>
@@ -74,8 +70,6 @@ function App() {
         isMenuOpen={isMenuOpen}
       />
       
-      {/* ZMIANA 5: Dodajemy 'onExitComplete' */}
-      {/* Ta funkcja odpali się, GDY animacja zamykania SIĘ ZAKOŃCZY */}
       <AnimatePresence 
         mode='wait' 
         onExitComplete={() => setIsThemeLocked(false)} // Odblokuj motyw
@@ -86,7 +80,9 @@ function App() {
       {!isLoading && (
         <main>
           <Hero scrollY={globalScrollY} /> 
+          {/* Przekazujemy tylko ref, bez 'setThemeOverride' */}
           <NewSong ref={newSongRef} />
+          
         </main>
       )}
     </>
