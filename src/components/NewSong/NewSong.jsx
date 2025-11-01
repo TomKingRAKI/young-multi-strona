@@ -69,8 +69,8 @@ const NewSong = forwardRef((props, ref) => {
   // 5. Animacja "Pociągu" (trackX) Z PAUZĄ
   const trackX = useTransform(
     contentProgress,
-    [0.58, 0.65, 1.0],  
-    ["0%", "0%", "-50%"] 
+    [0.58, 0.65, 0.8, 1.0],  // Dodaliśmy punkt '0.8'
+    ["0%", "0%", "-50%", "-50%"] // Pociąg dojeżdża do -50% i tam zostaje
   );
   // -----------------------------------------------------------
 
@@ -131,7 +131,7 @@ const NewSong = forwardRef((props, ref) => {
         </motion.div> 
         {/* Koniec "Wagonu 1" */}
 
-        <Gramophone />
+        <Gramophone contentProgress={contentProgress} />
         {/* Koniec "Wagonu 2" */}
         
       </motion.div> 

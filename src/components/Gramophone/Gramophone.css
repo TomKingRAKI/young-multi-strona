@@ -1,20 +1,62 @@
-/* Plik: /src/components/Gramophone/Gramophone.css */
+/* Plik: /src/components/Gramophone/Gramophone.css (NOWA POPRAWIONA WERSJA) */
 
+/* "Wagon" - główny kontener */
 .Gramophone-section {
-  /* --- Style dla "Wagonu 2" --- */
   width: 100vw;
   height: 100vh;
-  flex-shrink: 0; /* WAŻNE */
-  /* ----------------------------- */
-
-  display: grid;
-  place-items: center;
+  flex-shrink: 0; 
   background-color: #EAEAEA;
   color: #111;
   font-family: 'Bernoru', sans-serif;
+  
+  /* ZMIANA: Używamy Flexbox, aby ułożyć tytuł NAD scrollerem */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Ukrywa wszystko, co się wylewa */
 }
 
-.Gramophone-section h1 {
+/* ZMIANA: Nowa klasa dla statycznego tytułu */
+.gramophone-title-static {
   font-size: 6rem;
+  text-align: center;
   margin: 0;
+  padding: 3rem 0; /* Trochę oddechu od góry i dołu */
+  flex-shrink: 0; /* Tytuł się nie kurczy */
+  z-index: 10;
+  
+  /* Dodajemy tło, aby karty chowały się POD tytułem */
+  background-color: #EAEAEA; 
+  /* Opcjonalny cień, aby ładnie oddzielić od kart */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+}
+
+/* Scroller (to jest nasz komponent ScrollStack) */
+.gramophone-scroller {
+  flex-grow: 1; 
+  position: relative;
+  overflow: hidden;
+}
+
+/* Nadpisujemy domyślny padding z ScrollStack.css, 
+   bo nie potrzebujemy już miejsca na animowany tytuł.
+*/
+.gramophone-scroller .scroll-stack-inner {
+  /* ZMIANA: Usuwamy 'padding' i 'padding-top'. 
+    Ustawimy go w ScrollStack.css, aby pasował do 'stackPosition'.
+  */
+  padding: 80vh 5rem 50rem; /* Tylko boczne i dolny */
+}
+
+/* Karta albumu (to jest itemClassName) */
+.album-card {
+  background-color: #ffffff;
+  padding: 2rem;
+  display: grid;
+  place-items: center;
+  font-family: 'Antonio', sans-serif;
+  
+  /* Zmieniamy domyślne style z ScrollStack.css */
+  height: 15rem; 
+  margin: 0 0 20px 0; /* Usuwamy marginesy boczne, dodajemy dolny */
+  border-radius: 20px;
 }
