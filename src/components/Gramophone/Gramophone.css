@@ -1,0 +1,20 @@
+/* Plik: /src/components/Gramophone/Gramophone.css */
+
+.Gramophone-section {
+  /* --- Style dla "Wagonu 2" --- */
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0; /* WAŻNE */
+  /* ----------------------------- */
+
+  display: grid;
+  place-items: center;
+  background-color: #EAEAEA;
+  color: #111;
+  font-family: 'Bernoru', sans-serif;
+}
+
+.Gramophone-section h1 {
+  font-size: 6rem;
+  margin: 0;
+}

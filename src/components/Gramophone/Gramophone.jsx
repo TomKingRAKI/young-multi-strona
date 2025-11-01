@@ -3,9 +3,9 @@ import './Gramophone.css';
 
 function Gramophone() {
   return (
-    <section className="Gramophone-section">
-      <h1>Gramophone Section</h1>
-    </section>
+    <div className="Gramophone-section">
+          <h1>GRAMOPHONE</h1>
+        </div>
   );
 }
 
