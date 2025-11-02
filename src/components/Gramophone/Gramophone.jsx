@@ -8,6 +8,7 @@ import nowaFalaCover from '../../assets/NowafalaCover.jpg';
 import trapstarCover from '../../assets/trapstarCover.jpg';
 import tadCover from '../../assets/tadCover.jpg';
 import toxicCover from '../../assets/toxicCover.jpg'; 
+import Silk from '../Silk/Silk';
 
 
 // === ZMIANA 2: Aktualizujemy dane ===
@@ -55,6 +56,16 @@ function Gramophone({ contentProgress }) {
   
   return (
     <div className="Gramophone-section">
+
+      <div className="gramophone-background">
+        <Silk
+          speed={5}
+          scale={1}
+          color="#696969ff" // Domyślny kolor z react-bits
+          noiseIntensity={1.5}
+          rotation={0}
+        />
+      </div>
       
       <h1 className="gramophone-title-static">
         DYSKOGRAFIA
