@@ -5,6 +5,7 @@ import React, { useRef, forwardRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import './NewSong.css';
 import Gramophone from '../Gramophone/Gramophone';
+import LiquidEther from '../LiquidEther/LiquidEther';
 
 // Komponent nie przyjmuje już 'setThemeOverride'
 const NewSong = forwardRef((props, ref) => {
@@ -103,6 +104,17 @@ const NewSong = forwardRef((props, ref) => {
             borderTopRightRadius: radius
           }}
         >
+
+          <LiquidEther
+            className="newsong-liquid-background" // Dajemy mu klasę do stylowania
+            colors={[ '#ffffffff', '#e4e4e4ff', '#cacacaff' ]} // Kolory z Twojego przykładu
+            mouseForce={13}
+            cursorSize={65}
+            isViscous={false}
+            autoDemo={true}      // Niech sam się porusza
+            autoSpeed={0.5}
+            autoIntensity={2.2}
+          />
           {/* Cała dotychczasowa zawartość idzie TUTAJ */}
           <motion.div 
             className="newsong-text-wrapper" 

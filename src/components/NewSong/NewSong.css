@@ -1,59 +1,74 @@
-/* Plik: /src/components/NewSong/NewSong.css */
+/* Plik: /src/components/NewSong/NewSong.css (NOWA, POPRAWIONA WERSJA) */
 
 .newsong-section {
-  /* "Długi" kontener do scrollowania */
-  height: 700vh; /* 3x wysokość ekranu */
+  height: 700vh;
   position: relative;
   background-color: #000;
   color: white;
-  
-  /* ZMIANA: DODAJ TĘ LINIĘ! */
-  z-index: 2; /* Musi być wyżej niż Hero (który ma z-index: 1) */
+  z-index: 2; 
 }
 
-/* "Lepki" panel, który stoi w miejscu */
 .newsong-sticky-content {
   position: sticky;
   top: 0;
   height: 100vh;
   width: 200vw;
   background-color: transparent;
-  
-  /* Używamy grida, aby elementy mogły na siebie nachodzić */
   display: flex;
 }
 
 .newsong-panel {
   width: 100vw;
   height: 100vh;
-  flex-shrink: 0; /* WAŻNE: Zapobiega kurczeniu się panelu */
-
-  /* Przejmuje style, które USUNĄŁEŚ z .newsong-sticky-content */
+  flex-shrink: 0; 
   display: grid;
   place-items: center;
   overflow: hidden;
   position: relative; 
+  /* Usunęliśmy stąd tło */
 }
+
+/* === ZMIANY SĄ TUTAJ === */
+
+.newsong-liquid-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* ZMIANA 1: Ustawia tło na najniższą warstwę *wewnątrz* panelu */
+  z-index: 0; 
+  
+  /* ZMIANA 2: Mówi siatce (grid), żeby umieściła tło 
+     w tej samej komórce (1 / 1) co resztę treści.
+     To naprawia problem "podwyższenia".
+  */
+  grid-area: 1 / 1; 
+}
+
+/* === KONIEC ZMIAN === */
+
 
 /* Wspólne style dla "warstw" animacji */
 .newsong-text-wrapper,
 .video-container,
 .links-container {
-  /* Wszystkie są w tej samej komórce siatki (na sobie) */
   grid-area: 1 / 1;
-  /* Domyślnie są niewidoczne, opacity dostaną z Framer Motion */
   opacity: 0; 
+  position: relative; /* Ważne, aby z-index zadziałał */
 }
 
 /* --- Style dla Tekstu --- */
 .newsong-text-wrapper {
   text-align: center;
-  z-index: 2; /* Tekst jest nad wideo */
+  /* z-index: 2 jest > 0 (tła), więc jest widoczny i nad tłem */
+  z-index: 2; 
 }
 
 .newsong-title {
   font-family: 'Bernoru', sans-serif;
-  font-size: 6rem; /* Zmniejszone, tak jak chciałeś */
+  font-size: 6rem;
   margin: 0;
   color: #fff;
 }
@@ -70,14 +85,15 @@
 /* --- Style dla Wideo --- */
 .video-container {
   width: 100%;
-  max-width: 1000px; /* Mniejsze wideo, tak jak chciałeś */
-  z-index: 1; /* Wideo jest pod tekstem, ale nad tłem */
+  max-width: 1000px; 
+  /* z-index: 1 jest > 0 (tła) */
+  z-index: 1; 
 }
 
 .video-placeholder {
   width: 100%;
   background-color: #333;
-  aspect-ratio: 16 / 9; /* Proporcje 16:9 */
+  aspect-ratio: 16 / 9; 
   display: grid;
   place-items: center;
   font-family: 'Antonio', sans-serif;
@@ -85,11 +101,13 @@
   border-radius: 12px;
 }
 
+/* --- Style dla Linków --- */
 .links-container {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  z-index: 3; /* Linki są na samej górze */
+  /* z-index: 3 jest > 0 (tła) */
+  z-index: 3; 
 }
 
 .streaming-link {
@@ -102,7 +120,7 @@
   text-decoration: none;
   border-radius: 50px;
   text-align: center;
-  min-width: 250px; /* Stała szerokość dla przycisków */
+  min-width: 250px; 
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
