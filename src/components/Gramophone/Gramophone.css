@@ -9,10 +9,9 @@
   color: #111;
   font-family: 'Bernoru', sans-serif;
   
-  /* ZMIANA: Używamy Flexbox, aby ułożyć tytuł NAD scrollerem */
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Ukrywa wszystko, co się wylewa */
+  overflow: hidden; 
 }
 
 /* ZMIANA: Nowa klasa dla statycznego tytułu */
@@ -20,14 +19,21 @@
   font-size: 6rem;
   text-align: center;
   margin: 0;
-  padding: 3rem 0; /* Trochę oddechu od góry i dołu */
-  flex-shrink: 0; /* Tytuł się nie kurczy */
+  
+  /* ZMIANA 1: Zwiększyłem padding, żeby obniżyć napis.
+    Było '3rem 0', teraz jest '5rem 0'. 
+    Możesz zmieniać '5rem', jeśli chcesz go jeszcze niżej.
+  */
+  padding: 7.5rem 0; 
+  
+  flex-shrink: 0; 
   z-index: 10;
   
-  /* Dodajemy tło, aby karty chowały się POD tytułem */
   background-color: #EAEAEA; 
-  /* Opcjonalny cień, aby ładnie oddzielić od kart */
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+  
+  /* ZMIANA 2: Usunąłem tę linię, aby pozbyć się cienia:
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+  */
 }
 
 /* Scroller (to jest nasz komponent ScrollStack) */
@@ -37,14 +43,8 @@
   overflow: hidden;
 }
 
-/* Nadpisujemy domyślny padding z ScrollStack.css, 
-   bo nie potrzebujemy już miejsca na animowany tytuł.
-*/
 .gramophone-scroller .scroll-stack-inner {
-  /* ZMIANA: Usuwamy 'padding' i 'padding-top'. 
-    Ustawimy go w ScrollStack.css, aby pasował do 'stackPosition'.
-  */
-  padding: 80vh 5rem 50rem; /* Tylko boczne i dolny */
+  padding: 80vh 5rem 50rem; 
 }
 
 /* Karta albumu (to jest itemClassName) */
@@ -55,8 +55,7 @@
   place-items: center;
   font-family: 'Antonio', sans-serif;
   
-  /* Zmieniamy domyślne style z ScrollStack.css */
   height: 15rem; 
-  margin: 0 0 20px 0; /* Usuwamy marginesy boczne, dodajemy dolny */
+  margin: 0 0 20px 0; 
   border-radius: 20px;
 }

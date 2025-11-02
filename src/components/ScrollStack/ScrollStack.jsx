@@ -152,7 +152,7 @@ const updateCardTransforms = useCallback((scrollTop) => {
   // --- Logika mapowania scrolla (z 'useSpring') ---
   const rawStackProgress = useTransform(
     scrollProgress, 
-    [0.75, 1.0], // Używamy zakresu 65%-100%
+    [0.65, 1.0], // Używamy zakresu 65%-100%
     [0, 1]      
   );
 

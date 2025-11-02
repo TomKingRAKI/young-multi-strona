@@ -2,7 +2,7 @@
 
 .newsong-section {
   /* "Długi" kontener do scrollowania */
-  height: 600vh; /* 3x wysokość ekranu */
+  height: 700vh; /* 3x wysokość ekranu */
   position: relative;
   background-color: #000;
   color: white;

@@ -32,44 +32,44 @@ const NewSong = forwardRef((props, ref) => {
 
   // 1. Tekst
   const textOpacity = useTransform(contentProgress, [0.05, 0.13], [0, 1]);
-  const textY = useTransform(contentProgress, [0.13, 0.32], ["0vh", "-30vh"]); 
+  const textY = useTransform(contentProgress, [0.10, 0.20], ["0vh", "-30vh"]); 
 
   // 2. Wideo Wjeżdża
-  const videoY = useTransform(contentProgress, [0.13, 0.32], ["100vh", "10vh"]);
+  const videoY = useTransform(contentProgress, [0.10, 0.20], ["100vh", "10vh"]);
 
   // 3. Pauza dla Wideo
   const videoScale = useTransform(
     contentProgress,
-    [0.32, 0.38, 0.52], 
+    [0.20, 0.25, 0.35], 
     [1, 1, 0.7]       
   );
   const videoX = useTransform(
     contentProgress,
-    [0.32, 0.38, 0.52], 
+    [0.20, 0.25, 0.35],
     ["0%", "0%", "-25%"] 
   );
 
   // 4. Linki 
   const linksOpacity = useTransform(
     contentProgress,
-    [0.52, 0.58],       
+    [0.35, 0.42],       
     [0, 1]
   );
   const linksX = useTransform(
     contentProgress,
-    [0.52, 0.58],       
+    [0.35, 0.42],       
     ["300vw", "100%"]
   );
   const linksY = useTransform(
     contentProgress,
-    [0.52, 0.58],       
+    [0.35, 0.42],       
     ["10vh", "10vh"]   
   );
 
   // 5. Animacja "Pociągu" (trackX) Z PAUZĄ
   const trackX = useTransform(
     contentProgress,
-    [0.58, 0.65, 0.8, 1.0],  // Dodaliśmy punkt '0.8'
+    [0.42, 0.47, 0.65, 1.0],  // Dodaliśmy punkt '0.8'
     ["0%", "0%", "-50%", "-50%"] // Pociąg dojeżdża do -50% i tam zostaje
   );
   // -----------------------------------------------------------
@@ -106,7 +106,11 @@ const NewSong = forwardRef((props, ref) => {
           {/* Cała dotychczasowa zawartość idzie TUTAJ */}
           <motion.div 
             className="newsong-text-wrapper" 
-            style={{ opacity: textOpacity, y: textY }}
+            initial={{ opacity: 0, y: 20 }} // Start: niewidoczny i lekko na dole
+            whileInView={{ opacity: 1, y: 0 }} // Koniec: widoczny na swojej pozycji
+            viewport={{ once: true, margin: "-200px" }} // Odpal raz, 200px przed wejściem
+            transition={{ duration: 0.8 }} // Czas trwania animacji wjazdu
+            style={{ y: textY }}
           >
             <h1 className="newsong-title">GDZIE MOJ DOM</h1>
             <h2 className="newsong-subtitle">OUT NOW</h2>
