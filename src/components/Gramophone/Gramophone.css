@@ -1,25 +1,27 @@
-/* Plik: /src/components/Gramophone/Gramophone.css (NOWA WERSJA 3.0) */
+/* Plik: /src/components/Gramophone/Gramophone.css (WERSJA Z POPRAWKĄ HOVERA) */
 
 .Gramophone-section {
   width: 100vw;
   height: 100vh;
   flex-shrink: 0; 
-  background-color: #EAEAEA;
   color: #111;
   font-family: 'Bernoru', sans-serif;
   display: flex;
   flex-direction: column;
   overflow: hidden; 
-  position: relative;
+  position: relative; 
+  background-color: #EAEAEA;
 }
 
-.gramophone-background {
+.gramophone-background-boxes {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -25%; 
+  left: 25%;
   width: 100%;
   height: 100%;
-  z-index: 1; /* Warstwa 1 (spód) */
+  z-index: 1;
+  display: flex; 
+  padding: 1rem; 
 }
 
 .gramophone-title-static {
@@ -30,48 +32,39 @@
   flex-shrink: 0; 
   z-index: 2;
   position: relative;
-  color: #ffffff;
+  color: #000000;
 }
 
 .gramophone-scroller {
   flex-grow: 1; 
   position: relative;
   z-index: 2;
+  
+  /* === ZMIANA 1: Ignoruj myszkę na pustej przestrzeni === */
+  pointer-events: none;
 }
 
 .gramophone-scroller .scroll-stack-inner {
-  /* ZMIANA 1: CENTROWANIE 
-    Zmieniliśmy boczny padding z '2rem' na '5vw' (5% szerokości ekranu). 
-    To daje responsywne marginesy po bokach.
-  */
   padding: 80vh 5vw 50rem 5vw; 
 }
 
-/* === NOWE STYLE KART === */
-
-/* ZMIANA 2: POPRAWKA WYSOKOŚCI 
-  Użyliśmy '.scroll-stack-card.album-card' (dwie klasy), aby mieć
-  pewność, że nadpiszemy 'height: 20rem' z pliku ScrollStack.css.
-*/
 .scroll-stack-card.album-card {
   font-family: 'Antonio', sans-serif;
-  
-  /* Karty są centrowane przez 'margin: 0 auto' i mają responsywne marginesy */
   max-width: 900px;
-  margin: 0 auto 20px auto; /* Centrowanie i dolny margines */
-  
-  /* Ta linijka naprawia "wylewanie się" okładki */
+  margin: 0 auto 20px auto;
   height: auto; 
-  
   min-height: 20rem; 
   padding: 2rem;
   border-radius: 20px;
   background-color: #ffffff;
   color: #111;
   display: block; 
+  
+  /* === ZMIANA 2: Włącz myszkę z powrotem (dla scrolla) === */
+  pointer-events: auto;
 }
 
-/* 2. Nagłówek (Tytuł + Rok) */
+/* ... (reszta stylów kart bez zmian) ... */
 .album-header {
   display: flex;
   justify-content: space-between;
@@ -91,15 +84,12 @@
   font-weight: 300;
   opacity: 0.8;
 }
-
-/* 3. Treść (Grid 3-kolumnowy) */
 .album-content {
   display: grid;
   grid-template-columns: 1fr 1.2fr 1fr; 
   gap: 1.5rem;
   align-items: flex-start;
 }
-
 .album-content h3 {
   font-family: 'Bernoru', sans-serif;
   margin: 0 0 0.5rem 0;
@@ -108,8 +98,6 @@
   text-transform: uppercase;
   opacity: 0.7;
 }
-
-/* Kolumna Okładki (Centrum) */
 .album-cover {
   display: grid;
   place-items: center;
@@ -131,8 +119,6 @@
   font-size: 5rem;
   color: #aaa;
 }
-
-/* Kolumna Tracklisty (Prawa) */
 .album-tracklist ul {
   margin: 0;
   padding: 0;
@@ -140,20 +126,13 @@
   font-size: 1.1rem;
   line-height: 1.6;
 }
-
-/* === ZMIANA 3: POPRAWIONE STYLE "AMBIENT" === */
-
-/* NOWA FALA (Gradient z okładki) */
 .album-style-nowa-fala {
-  /* Gradient z błękitu nieba/wody do beżu budynków */
   background: linear-gradient(135deg, #74a8c3 0%, #f3e5c9 70%);
   color: #111;
 }
 .album-style-nowa-fala .album-header {
   border-bottom-color: rgba(0, 0, 0, 0.1);
 }
-
-/* TRAPSTAR (Gradient z okładki) */
 .album-style-trapstar {
   background: linear-gradient(135deg, #1b2a3a 0%, #3a5c7c 60%, #c87c54 100%);
   color: #ffffff; 
@@ -164,20 +143,14 @@
 .album-style-trapstar .album-content h3 {
   opacity: 0.6;
 }
-
-/* TRAP AFTER DEATH (Biały z lekkim blaskiem) */
 .album-style-tad {
-  /* Zamiast białego, subtelny blask (biały -> jasnoszary) */
   background: radial-gradient(circle, #ffffff 60%, #e9e9e9 100%);
   color: #111;
 }
 .album-style-tad .album-header {
   border-bottom-color: rgba(0, 0, 0, 0.1);
 }
-
-/* TOXIC (Czerwony blask "Toxic") */
 .album-style-toxic {
-  /* Promienisty gradient od jaśniejszego do ciemniejszego czerwonego */
   background: radial-gradient(circle, #d93a3a 0%, #a41e1e 70%);
   color: #ffffff; 
 }

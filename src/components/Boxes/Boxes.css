@@ -1,0 +1,30 @@
+/* Plik: /src/components/Boxes/Boxes.css */
+
+/* To jest odpowiednik klas Tailwind */
+
+.boxes-row {
+  position: relative;
+  height: 2rem; /* h-8 */
+  width: 4rem; /* w-16 */
+  border-left: 1px solid #e5e5e5; /* border-l border-gray-200 */
+}
+
+.boxes-col {
+  position: relative;
+  height: 2rem; /* h-8 */
+  width: 4rem; /* w-16 */
+  border-top: 1px solid #e5e5e5; /* border-t border-gray-200 */
+  border-right: 1px solid #e5e5e5; /* border-r border-gray-200 */
+  background-color: #ffffff; /* bg-white */
+}
+
+.boxes-svg {
+  pointer-events: none;
+  position: absolute;
+  top: -14px;
+  left: -22px;
+  height: 1.5rem; /* h-6 */
+  width: 2.5rem; /* w-10 */
+  stroke-width: 1px;
+  color: #d4d4d4; /* text-gray-300 */
+}
