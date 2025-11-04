@@ -52,66 +52,67 @@ const albums = [
   },
 ];
 
-function Gramophone({ contentProgress }) {
+function Gramophone({ contentProgress, isMenuOpen }) {
   
   return (
     <div className="Gramophone-section">
 
       <Boxes className="gramophone-background-boxes" />
+      <div className="gramophone-content-world">
       
-      <h1 className="gramophone-title-static">
-        DYSKOGRAFIA
-      </h1>
+        <h1 className="gramophone-title-static">
+          DYSKOGRAFIA
+        </h1>
 
-      <ScrollStack 
-        className="gramophone-scroller"
-        itemDistance={20}       
-        itemStackDistance={20}  
-        baseScale={0.9}         
-        stackPosition="0%"     
-        scaleEndPosition="80%"  
-        scrollProgress={contentProgress}
-      >
-        {/* === ZMIANA 3: Nowa struktura wewnątrz karty === */}
-        {albums.map((album) => (
-          <ScrollStackItem 
-            key={album.id} 
-            // Dodajemy dynamiczną klasę CSS dla stylów
-            itemClassName={`album-card album-style-${album.styleId}`}
-          >
-            {/* 1. Nagłówek (Tytuł + Data) */}
-            <div className="album-header">
-              <h2>{album.title}</h2>
-              <p>{album.year}</p>
-            </div>
-            
-            {/* 2. Główna treść (3 kolumny) */}
-            <div className="album-content">
-              <div className="album-desc">
-                <h3>Osiągnięcia</h3>
-                <p>{album.desc}</p>
+        <ScrollStack 
+          className="gramophone-scroller"
+          itemDistance={20}       
+          itemStackDistance={20}  
+          baseScale={0.9}         
+          stackPosition="0%"     
+          scaleEndPosition="80%"  
+          scrollProgress={contentProgress}
+        >
+          {/* === ZMIANA 3: Nowa struktura wewnątrz karty === */}
+          {albums.map((album) => (
+            <ScrollStackItem 
+              key={album.id} 
+              // Dodajemy dynamiczną klasę CSS dla stylów
+              itemClassName={`album-card album-style-${album.styleId}`}
+            >
+              {/* 1. Nagłówek (Tytuł + Data) */}
+              <div className="album-header">
+                <h2>{album.title}</h2>
+                <p>{album.year}</p>
               </div>
               
-              <div className="album-cover">
-                {album.cover ? (
-                  <img src={album.cover} alt={`Okładka ${album.title}`} />
-                ) : (
-                  <div className="cover-placeholder">?</div>
-                )}
+              {/* 2. Główna treść (3 kolumny) */}
+              <div className="album-content">
+                <div className="album-desc">
+                  <h3>Osiągnięcia</h3>
+                  <p>{album.desc}</p>
+                </div>
+                
+                <div className="album-cover">
+                  {album.cover ? (
+                    <img src={album.cover} alt={`Okładka ${album.title}`} />
+                  ) : (
+                    <div className="cover-placeholder">?</div>
+                  )}
+                </div>
+                
+                <div className="album-tracklist">
+                  <h3>Tracklista</h3>
+                  <ul>
+                    {album.tracklist.map(track => <li key={track}>{track}</li>)}
+                  </ul>
+                </div>
               </div>
-              
-              <div className="album-tracklist">
-                <h3>Tracklista</h3>
-                <ul>
-                  {album.tracklist.map(track => <li key={track}>{track}</li>)}
-                </ul>
-              </div>
-            </div>
-          </ScrollStackItem>
-        ))}
-        
-      </ScrollStack>
-      
+            </ScrollStackItem>
+          ))}
+          
+        </ScrollStack>
+      </div>
     </div>
   );
 }

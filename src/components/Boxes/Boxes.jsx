@@ -16,12 +16,6 @@ export const BoxesCore = ({
 
   return (
     <div
-      style={{
-        transform: `translate(-40%,-60%) skewX(-48deg) skewY(14deg) scale(0.675) rotate(0deg) translateZ(0)`,
-      }}
-      // ZMIANA: Usunęliśmy funkcję 'cn' i klasy Tailwind
-      // Ta klasa 'className' jest teraz przekazywana z Gramophone.jsx
-      // (czyli 'gramophone-background-boxes')
       className={className} 
       {...rest}>
       {rows.map((_, i) => (

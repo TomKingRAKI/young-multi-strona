@@ -1,6 +1,6 @@
 // Plik: /src/components/ScrollStack/ScrollStack.jsx (NOWA OSTATECZNA WERSJA)
 
-import React, { useLayoutEffect, useRef, useCallback, Children, useState } from 'react';
+import React, { useLayoutEffect, useRef, useCallback, Children, useState, useEffect } from 'react';
 import { useTransform, useMotionValueEvent, useSpring } from 'framer-motion';
 import './ScrollStack.css';
 
@@ -20,6 +20,7 @@ const ScrollStack = ({
   rotationAmount = 0,
   blurAmount = 0,
   scrollProgress, 
+  isMenuOpen
 }) => {
   const scrollerRef = useRef(null);
   const cardsRef = useRef([]);
@@ -28,7 +29,7 @@ const ScrollStack = ({
 
   const cardTopsRef = useRef([]);
   const [simulatedScrollHeight, setSimulatedScrollHeight] = useState(0);
-  
+  const latestStackProgress = useRef(0);
   // ZMIANA: Nie potrzebujemy już 'endElementTopRef'
 
   // --- Funkcje pomocnicze (bez zmian) ---
@@ -207,11 +208,21 @@ const updateCardTransforms = useCallback((scrollTop) => {
 
   // --- Podpięcie 'stackProgress' (bez zmian) ---
   useMotionValueEvent(stackProgress, "change", (latest) => {
+    latestStackProgress.current = latest;
     // `simulatedScrollHeight` musi być dobrze policzone
     const virtualScrollTop = latest * simulatedScrollHeight;
     updateCardTransforms(virtualScrollTop);
   });
-  
+  useEffect(() => {
+    // Nasłuchujemy tylko na moment ZAMKNIĘCIA menu
+    if (isMenuOpen === false) {
+      // Menu zostało właśnie zamknięte.
+      // Wymuszamy ręczne przeliczenie pozycji kart,
+      // używając ostatniej zapisanej pozycji scrolla.
+      const virtualScrollTop = latestStackProgress.current * simulatedScrollHeight;
+      updateCardTransforms(virtualScrollTop);
+    }
+  }, [isMenuOpen, updateCardTransforms, simulatedScrollHeight]);
   // --- Render (bez zmian) ---
   return (
     <div className={`scroll-stack-scroller ${className}`.trim()} ref={scrollerRef}>

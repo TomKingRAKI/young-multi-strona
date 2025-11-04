@@ -52,7 +52,7 @@ function App() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [isThemeLocked]);
 
   // Logika motywu bez 'themeOverride'
   const effectiveTheme = (isMenuOpen || isThemeLocked) ? 'light' : headerTheme;
@@ -81,7 +81,11 @@ function App() {
         <main>
           <Hero scrollY={globalScrollY} /> 
           {/* Przekazujemy tylko ref, bez 'setThemeOverride' */}
-          <NewSong ref={newSongRef} />
+          <NewSong 
+            ref={newSongRef} 
+            setHeaderTheme={setHeaderTheme} 
+            isMenuOpen={isMenuOpen}
+          />
           
         </main>
       )}

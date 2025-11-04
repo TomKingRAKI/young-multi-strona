@@ -2,7 +2,7 @@
 
 // Usunęliśmy 'useEffect' z importu
 import React, { useRef, forwardRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import './NewSong.css';
 import Gramophone from '../Gramophone/Gramophone';
 import LiquidEther from '../LiquidEther/LiquidEther';
@@ -27,6 +27,21 @@ const NewSong = forwardRef((props, ref) => {
   const { scrollYProgress: contentProgress } = useScroll({
     target: scrollRef,
     offset: ["start start", "end end"] 
+  });
+  useMotionValueEvent(contentProgress, "change", (latest) => {
+    // W 'trackX' zdefiniowałeś, że pociąg rusza przy 0.47
+    // Gramophone (jasne tło) zaczyna się wtedy wsuwać.
+    
+    // Użyjemy 0.56 jako punktu "w połowie drogi"
+    // (0.47 + 0.65) / 2 = 0.56
+    
+    if (typeof props.setHeaderTheme === 'function') {
+      if (latest > 0.56) {
+        props.setHeaderTheme('dark');
+      } else {
+        props.setHeaderTheme('light');
+      }
+    }
   });
 
   // --- SEKWENCJA "POŚRODKU" (STABILNA) ---
@@ -147,7 +162,10 @@ const NewSong = forwardRef((props, ref) => {
         </motion.div> 
         {/* Koniec "Wagonu 1" */}
 
-        <Gramophone contentProgress={contentProgress} />
+        <Gramophone 
+          contentProgress={contentProgress} 
+          isMenuOpen={props.isMenuOpen} 
+        />
         {/* Koniec "Wagonu 2" */}
         
       </motion.div> 
