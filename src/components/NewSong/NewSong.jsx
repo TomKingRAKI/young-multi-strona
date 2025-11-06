@@ -11,6 +11,8 @@ import LiquidEther from '../LiquidEther/LiquidEther';
 const NewSong = forwardRef((props, ref) => {
   
   const scrollRef = useRef(null);
+  // OPTYMALIZACJA: Śledzimy poprzedni motyw, aby uniknąć niepotrzebnych aktualizacji
+  const previousThemeRef = useRef(null);
 
   // Animacja 1: Radius (bez zmian)
   const { scrollYProgress: radiusProgress } = useScroll({
@@ -28,6 +30,8 @@ const NewSong = forwardRef((props, ref) => {
     target: scrollRef,
     offset: ["start start", "end end"] 
   });
+  
+  // OPTYMALIZACJA: Aktualizujemy tylko gdy motyw rzeczywiście się zmienia
   useMotionValueEvent(contentProgress, "change", (latest) => {
     // W 'trackX' zdefiniowałeś, że pociąg rusza przy 0.47
     // Gramophone (jasne tło) zaczyna się wtedy wsuwać.
@@ -36,10 +40,18 @@ const NewSong = forwardRef((props, ref) => {
     // (0.47 + 0.65) / 2 = 0.56
     
     if (typeof props.setHeaderTheme === 'function') {
-      if (latest > 0.56) {
-        props.setHeaderTheme('dark');
-      } else {
-        props.setHeaderTheme('light');
+      // Gdy latest jest bardzo mały (< 0.05), jesteśmy jeszcze przed NewSong
+      // Resetujemy previousThemeRef, żeby przy następnym scrollu do NewSong motyw się zaktualizował
+      if (latest < 0.05) {
+        previousThemeRef.current = null; // Resetujemy, żeby wymusić aktualizację przy następnym scrollu
+        return; // Nie aktualizujemy motywu gdy jesteśmy przed NewSong
+      }
+      
+      const newTheme = latest > 0.56 ? 'dark' : 'light';
+      // Aktualizujemy tylko gdy motyw się zmienił
+      if (previousThemeRef.current !== newTheme) {
+        previousThemeRef.current = newTheme;
+        props.setHeaderTheme(newTheme);
       }
     }
   });

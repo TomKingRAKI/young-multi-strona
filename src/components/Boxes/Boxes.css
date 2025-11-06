@@ -4,8 +4,9 @@
 
 .boxes-row {
   position: relative;
+  display: flex; /* Kolumny obok siebie */
   height: 2rem; /* h-8 */
-  width: 4rem; /* w-16 */
+  width: auto; /* Szerokość dopasowuje się do zawartości */
   border-left: 1px solid #e5e5e5; /* border-l border-gray-200 */
 }
 
@@ -16,6 +17,13 @@
   border-top: 1px solid #e5e5e5; /* border-t border-gray-200 */
   border-right: 1px solid #e5e5e5; /* border-r border-gray-200 */
   background-color: #ffffff; /* bg-white */
+  /* OPTYMALIZACJA: CSS hover zamiast framer-motion - znacznie wydajniejsze */
+  transition: background-color 0s;
+  will-change: background-color;
+}
+
+.boxes-col:hover {
+  background-color: #e5e5e5; /* Tailwind 'gray-200' */
 }
 
 .boxes-svg {

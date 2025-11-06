@@ -35,24 +35,30 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  // OPTYMALIZACJA: Aktualizujemy globalScrollY i sprawdzamy pozycję dla motywu Hero
   useEffect(() => {
-    // To jest stara logika scrolla, która tylko częściowo działała
     const handleScroll = () => {
       globalScrollY.set(window.scrollY);
-      if (newSongRef.current) {
-        const rect = newSongRef.current.getBoundingClientRect();
-        if (rect.top < 100) { 
-          setHeaderTheme('light');
-        } else {
+      
+      // Sprawdzamy czy jesteśmy w sekcji Hero (przed NewSong)
+      // Hero ma height: 100vh, więc gdy scrollY < viewportHeight, jesteśmy w Hero
+      const viewportHeight = window.innerHeight;
+      if (window.scrollY < viewportHeight * 0.9) {
+        // Jesteśmy w Hero - ustawiamy motyw na 'dark' (czarne ikony)
+        if (headerTheme !== 'dark' && !isThemeLocked) {
           setHeaderTheme('dark');
         }
       }
     };
+    
+    // Sprawdzamy też przy załadowaniu
+    handleScroll();
+    
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [isThemeLocked]);
+  }, [headerTheme, isThemeLocked]);
 
   // Logika motywu bez 'themeOverride'
   const effectiveTheme = (isMenuOpen || isThemeLocked) ? 'light' : headerTheme;
