@@ -1,9 +1,10 @@
 // Plik: /src/components/Gramophone/Gramophone.jsx (NOWA WERSJA - ZOPTYMALIZOWANA)
 
 import React from 'react';
-import { useTransform, motion } from 'framer-motion';
+import { useTransform, motion, useMotionValue, useMotionValueEvent } from 'framer-motion';
 import './Gramophone.css';
 import ScrollStack, { ScrollStackItem } from '../ScrollStack/ScrollStack'; 
+import About from '../About/About';
 
 import nowaFalaCover from '../../assets/NowafalaCover.jpg'; 
 import trapstarCover from '../../assets/trapstarCover.jpg';
@@ -92,6 +93,63 @@ function Gramophone({ contentProgress, isMenuOpen }) {
     [scale3D, scale2D]
   );
 
+  // Animacja odwracania karty Toxic - zaczyna się po zakończeniu animacji perspektywy
+  // contentProgress w zakresie [0.95, 0.98] dla animacji flip
+  const flipProgress = useTransform(
+    contentProgress,
+    [0.95, 0.98], // Flip kończy się wcześniej, aby zostawić miejsce na zoom
+    [0, 1]
+  );
+
+  // Rotacja Y dla efektu flip (0deg -> 180deg)
+  const flipRotationY = useTransform(flipProgress, [0, 1], [0, 180]);
+  
+  // Opacity dla frontu i tyłu karty
+  const frontOpacity = useTransform(flipProgress, [0, 0.5, 1], [1, 1, 0]);
+  const backOpacity = useTransform(flipProgress, [0, 0.5, 1], [0, 0, 1]);
+
+  // Animacja przybliżania kamery do sekcji About
+  // Zaczyna się po zakończeniu flip i trwa dłużej
+  const zoomProgress = useTransform(
+    contentProgress,
+    [0.96, 1.0], // Zaczyna się tuż po flip, kończy na końcu scrolla
+    [0, 1]
+  );
+
+  // Scale dla przybliżenia kamery (1.0 -> 5.0) - większe przybliżenie
+  const cameraScale = useTransform(zoomProgress, [0, 1], [1, 5]);
+  
+  // Translate Y dla przybliżenia (centrowanie na sekcji About)
+  const cameraTranslateY = useTransform(zoomProgress, [0, 1], [0, -60]);
+  
+  // Opacity dla głównej zawartości Gramophone - znika podczas zoom
+  const gramophoneContentOpacity = useTransform(zoomProgress, [0.3, 0.7], [1, 0]);
+  
+  // Opacity dla sekcji About - pojawia się podczas zoom
+  const aboutLayerOpacity = useTransform(zoomProgress, [0, 0.5], [0, 1]);
+  
+  // Kombinacja opacity dla sekcji About (backOpacity lub aboutLayerOpacity - wyższa wartość)
+  const aboutFinalOpacity = useMotionValue(0);
+  useMotionValueEvent(backOpacity, "change", (latest) => {
+    const ao = aboutLayerOpacity.get();
+    aboutFinalOpacity.set(Math.max(latest, ao));
+  });
+  useMotionValueEvent(aboutLayerOpacity, "change", (latest) => {
+    const bo = backOpacity.get();
+    aboutFinalOpacity.set(Math.max(bo, latest));
+  });
+
+  // Kombinacja scale z perspektywy i zoom kamery
+  const combinedScale = useMotionValue(1);
+  useMotionValueEvent(scale, "change", (latest) => {
+    const cs = cameraScale.get();
+    combinedScale.set(latest * cs);
+  });
+  useMotionValueEvent(cameraScale, "change", (latest) => {
+    const s = scale.get();
+    combinedScale.set(s * latest);
+  });
+
   // OPTYMALIZACJA: Używamy motion.div z bezpośrednimi motion values zamiast state + useMotionValueEvent
   // To eliminuje re-rendery i działa bezpośrednio z motion values
 
@@ -116,10 +174,11 @@ function Gramophone({ contentProgress, isMenuOpen }) {
         style={{
           skewX: skewX,
           skewY: skewY,
-          scale: scale,
+          scale: combinedScale,
           x: '0%',
-          y: '0%',
+          y: useTransform(cameraTranslateY, (ty) => `${ty}vh`),
           z: 0,
+          opacity: gramophoneContentOpacity,
         }}
       >
       
@@ -157,10 +216,41 @@ function Gramophone({ contentProgress, isMenuOpen }) {
                 </div>
                 
                 <div className="album-cover">
-                  {album.cover ? (
-                    <img src={album.cover} alt={`Okładka ${album.title}`} />
+                  {album.id === 4 ? (
+                    // Specjalna animacja flip dla karty Toxic
+                    <div className="album-cover-flip-container">
+                      {/* Front - okładka albumu */}
+                      <motion.div
+                        className="album-cover-flip-front"
+                        style={{
+                          rotateY: flipRotationY,
+                          opacity: frontOpacity,
+                        }}
+                      >
+                        {album.cover ? (
+                          <img src={album.cover} alt={`Okładka ${album.title}`} />
+                        ) : (
+                          <div className="cover-placeholder">?</div>
+                        )}
+                      </motion.div>
+                      {/* Back - przezroczysty, aby pokazać sekcję About pod spodem */}
+                      <motion.div
+                        className="album-cover-flip-back"
+                        style={{
+                          rotateY: useTransform(flipRotationY, (ry) => ry - 180),
+                          opacity: backOpacity,
+                        }}
+                      >
+                        {/* Pusty div - sekcja About jest pod Gramophone, widoczna przez przezroczystość */}
+                      </motion.div>
+                    </div>
                   ) : (
-                    <div className="cover-placeholder">?</div>
+                    // Zwykłe okładki dla pozostałych albumów
+                    album.cover ? (
+                      <img src={album.cover} alt={`Okładka ${album.title}`} />
+                    ) : (
+                      <div className="cover-placeholder">?</div>
+                    )
                   )}
                 </div>
                 
@@ -175,6 +265,17 @@ function Gramophone({ contentProgress, isMenuOpen }) {
           ))}
           
         </ScrollStack>
+      </motion.div>
+
+      {/* Sekcja About pod Gramophone - widoczna przez przezroczysty odwrócony obrazek */}
+      <motion.div
+        className="gramophone-about-layer"
+        style={{
+          opacity: aboutFinalOpacity, // Pojawia się gdy obrazek się odwraca lub podczas zoom
+          scale: cameraScale, // Przybliża się razem z kamerą
+        }}
+      >
+        <About contentProgress={contentProgress} />
       </motion.div>
     </div>
   );

@@ -40,7 +40,7 @@
   top: 0;
   left: -10%; 
 
-  z-index: 2; 
+  z-index: 3; /* Wyżej niż About layer */
   /* Transform jest teraz kontrolowany przez JavaScript (animacja 3D -> 2D) */
   transform-origin: center center;
   display: flex;
@@ -210,4 +210,103 @@
 }
 .album-style-toxic .album-content h3 {
   opacity: 0.6;
+}
+
+/* Style dla efektu flip karty Toxic */
+.album-cover-flip-container {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1 / 1;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  /* Ważne: upewniamy się, że kontener ma właściwą perspektywę */
+  perspective-origin: center center;
+}
+
+.album-cover-flip-front,
+.album-cover-flip-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  border-radius: 10px;
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+
+.album-cover-flip-front {
+  transform: rotateY(0deg);
+}
+
+.album-cover-flip-back {
+  transform: rotateY(180deg);
+  /* Przezroczystość, aby pokazać sekcję About pod spodem */
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+  /* Dodajemy ramkę, aby było widać, że to odwrócony obrazek */
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.album-cover-flip-front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 
+    1px 1px 0px #bbb,
+    2px 2px 0px #bbb,
+    3px 3px 0px #bbb,
+    4px 4px 5px rgba(0, 0, 0, 0.2);
+}
+
+.album-cover-about-preview {
+  width: 100%;
+  height: 100%;
+  /* Usuwamy tło, bo sekcja About jest pod spodem */
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  overflow: hidden;
+  /* Przezroczystość, aby pokazać sekcję About pod spodem */
+  opacity: 0.7;
+}
+
+.album-cover-about-preview .about-section {
+  width: 100%;
+  height: 100%;
+  min-height: auto;
+  padding: 1rem;
+  font-size: 0.8rem;
+}
+
+.album-cover-about-preview .about-section h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+/* Sekcja About pod Gramophone */
+.gramophone-about-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* Pod gramophone-content-world (z-index: 3), ale nad tłem */
+  pointer-events: none;
+  transform-origin: center center;
+  overflow: hidden;
+}
+
+.gramophone-about-layer .about-section {
+  width: 100%;
+  height: 100%;
+  position: relative;
 }

@@ -1,0 +1,46 @@
+.about-section {
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0; /* Ważne dla flexbox - nie pozwala się kurczyć */
+  background-color: #000000;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bernoru', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-content {
+  max-width: 800px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.about-title {
+  font-size: 4rem;
+  margin: 0 0 3rem 0;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  text-shadow: 
+    2px 2px 0px #333,
+    4px 4px 0px #333,
+    6px 6px 10px rgba(0, 0, 0, 0.5);
+}
+
+.about-text {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #cccccc;
+}
+
+.about-text p {
+  margin: 0 0 1.5rem 0;
+}
+
+.about-text p:last-child {
+  margin-bottom: 0;
+}
+

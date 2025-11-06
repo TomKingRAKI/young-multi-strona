@@ -92,7 +92,6 @@ function App() {
             setHeaderTheme={setHeaderTheme} 
             isMenuOpen={isMenuOpen}
           />
-          
         </main>
       )}
     </>
