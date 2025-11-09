@@ -1,40 +1,48 @@
+// Plik: /src/components/About/About.jsx (NOWA, POPRAWIONA WERSJA)
+
 import React from 'react';
 import { motion, useTransform, useMotionValue } from 'framer-motion';
 import './About.css';
 
-function About({ contentProgress }) {
-  // Jeśli contentProgress nie jest przekazany (np. w podglądzie na karcie),
-  // tworzymy stałą wartość 1, aby sekcja była zawsze widoczna
+// Musi przyjmować 'externalOpacity'
+function About({ contentProgress, externalOpacity }) {
+
+  // Sprawdzamy, czy komponent jest kontrolowany z zewnątrz
+  const isExternallyControlled = (externalOpacity !== undefined);
+
+  // --- Logika wewnętrzna (dla podglądu lub gdy nie jest kontrolowany) ---
   const defaultProgress = useMotionValue(1);
   const progressValue = contentProgress || defaultProgress;
 
-  // Animacja pojawiania się sekcji About
-  // Zaczyna się gdy contentProgress osiągnie 0.95 (gdy zaczyna się flip)
-  // Zawsze używamy useTransform, ale jeśli contentProgress nie istnieje,
-  // progressValue będzie zawsze 1, więc animacja nie będzie działać
-  const aboutOpacity = useTransform(
+  const internalOpacity = useTransform(
     progressValue,
-    [0.95, 1.0],
+    [0.95, 1.0], 
     [0, 1]
   );
-
-  const aboutScale = useTransform(
+  const internalScale = useTransform(
     progressValue,
-    [0.95, 1.0],
+    [0.95, 1.0], 
     [0.8, 1]
   );
+  // --- Koniec logiki wewnętrznej ---
 
-  // Jeśli contentProgress nie istnieje, ustawiamy wartości na 1 (pełna widoczność)
-  // W przeciwnym razie używamy animowanych wartości
-  const finalOpacity = contentProgress ? aboutOpacity : 1;
-  const finalScale = contentProgress ? aboutScale : 1;
+  // Używamy 'externalOpacity' jeśli jest podane
+  const finalOpacity = isExternallyControlled 
+    ? externalOpacity 
+    : (contentProgress ? internalOpacity : 1);
+
+  // Jeśli jest kontrolowany, skalę ustawiamy na 1 (bo nie ma już inverseScale)
+  const finalScale = isExternallyControlled 
+    ? 1 
+    : (contentProgress ? internalScale : 1);
+
 
   return (
     <motion.section 
       className="about-section"
       style={{
-        opacity: finalOpacity,
-        scale: finalScale,
+        opacity: finalOpacity, // Używa poprawnej wartości
+        scale: finalScale,     // Używa poprawnej wartości
       }}
     >
       <div className="about-content">

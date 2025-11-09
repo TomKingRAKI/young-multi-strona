@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-mot
 import './NewSong.css';
 import Gramophone from '../Gramophone/Gramophone';
 import LiquidEther from '../LiquidEther/LiquidEther';
+import About from '../About/About';
 
 // Komponent nie przyjmuje już 'setThemeOverride'
 const NewSong = forwardRef((props, ref) => {
@@ -59,48 +60,80 @@ const NewSong = forwardRef((props, ref) => {
   // --- SEKWENCJA "POŚRODKU" (STABILNA) ---
 
   // 1. Tekst
-  const textOpacity = useTransform(contentProgress, [0.05, 0.13], [0, 1]);
-  const textY = useTransform(contentProgress, [0.10, 0.20], ["0vh", "-30vh"]); 
+  const textOpacity = useTransform(contentProgress, [0.05, 0.10], [0, 1]); // Szybciej
+  const textY = useTransform(contentProgress, [0.02, 0.08], ["0vh", "-30vh"]); // Szybciej i startuje wcześniej
 
   // 2. Wideo Wjeżdża
-  const videoY = useTransform(contentProgress, [0.10, 0.20], ["100vh", "10vh"]);
+  const videoY = useTransform(contentProgress, [0.02, 0.08], ["100vh", "10vh"]); // Szybciej, razem z tekstem
 
   // 3. Pauza dla Wideo
   const videoScale = useTransform(
     contentProgress,
-    [0.20, 0.25, 0.35], 
-    [1, 1, 0.7]       
+    [0.08, 0.10, 0.15], // Wcześniej, krótsza pauza, szybsza animacja
+    [1, 1, 0.7]
   );
   const videoX = useTransform(
     contentProgress,
-    [0.20, 0.25, 0.35],
-    ["0%", "0%", "-25%"] 
+    [0.08, 0.10, 0.15], // Wcześniej, krótsza pauza, szybsza animacja
+    ["0%", "0%", "-25%"]
   );
 
   // 4. Linki 
   const linksOpacity = useTransform(
     contentProgress,
-    [0.35, 0.42],       
+    [0.15, 0.20],       // Wcześniej i szybciej
     [0, 1]
   );
   const linksX = useTransform(
     contentProgress,
-    [0.35, 0.42],       
+    [0.15, 0.20],       // Wcześniej i szybciej
     ["300vw", "100%"]
   );
   const linksY = useTransform(
     contentProgress,
-    [0.35, 0.42],       
-    ["10vh", "10vh"]   
+    [0.15, 0.20],       // Wcześniej i szybciej
+    ["10vh", "10vh"]
   );
 
   // 5. Animacja "Pociągu" (trackX) Z PAUZĄ
   const trackX = useTransform(
     contentProgress,
-    [0.42, 0.47, 0.65, 1.0],  // Pociąg dojeżdża do -50% i tam zostaje
-    ["0%", "0%", "-50%", "-50%"] // Pociąg dojeżdża do -50% i tam zostaje
+    [0.20, 0.24, 0.35, 1.0],  // Wcześniej, krótsza pauza, szybsza animacja
+    ["0%", "0%", "-50%", "-50%"]
   );
   // -----------------------------------------------------------
+
+  // ZMIANA: Logika zoomu przeniesiona tutaj, aby skalować całą sekcję Gramophone
+  const gramophoneZoomProgress = useTransform(
+    contentProgress,
+    [0.64, 0.8], 
+    [0, 1]
+  );
+
+  const gramophoneScale = useTransform(gramophoneZoomProgress, [0, 1], [1, 15]);
+  const gramophoneTransformOrigin = useTransform(
+    gramophoneZoomProgress,
+    [0, 1],
+    ["50% 78%", "50% 78%"] // Zaczyna od środka, kończy niżej (na karcie)
+  );
+
+  const aboutClipPath = useTransform(
+    gramophoneZoomProgress, // Używamy progressu zoomu (0 -> 1)
+    [0.05, 1], // Od początku do końca zoomu
+    [
+        "circle(0% at 50% 62%)", 
+        "circle(150% at 50% 0%)" // Kończy jako gigantyczne kółko (150%) w tym samym punkcie
+    ]
+  );
+  
+  const aboutOpacity = useTransform(
+    gramophoneZoomProgress,
+    [0, 0.001], // Jak tylko zoom się ruszy (0 -> 0.001)
+    [0, 1]       // Natychmiast "włącz" opacity
+  );
+
+// Sprawiamy, że sekcja About jest klikalna tylko gdy jest widoczna
+const aboutPointerEvents = useTransform(gramophoneZoomProgress, (v) => (v > 0.1 ? 'auto' : 'none'));
 
 
   return (
@@ -116,6 +149,13 @@ const NewSong = forwardRef((props, ref) => {
         borderTopRightRadius: radius
       }}
     >
+      <div style={{ 
+      position: 'sticky', 
+      top: 0, 
+      height: '100vh', 
+      width: '100vw', 
+      overflow: 'hidden' 
+    }}>
       
       <motion.div 
         className="newsong-sticky-content"
@@ -177,12 +217,30 @@ const NewSong = forwardRef((props, ref) => {
         <Gramophone 
           contentProgress={contentProgress} 
           isMenuOpen={props.isMenuOpen} 
+          // ZMIANA: Przekazujemy nowe wartości jako propsy
+          zoomScale={gramophoneScale}
+          zoomOrigin={gramophoneTransformOrigin}
+          style={{
+            scale: gramophoneScale,
+            transformOrigin: gramophoneTransformOrigin,
+          }}
         />
         {/* Koniec "Wagonu 2" */}
         
       </motion.div> 
       {/* Koniec "Pociągu" */}
-
+      <motion.div 
+      className="newsong-about-layer"
+      style={{
+        opacity: aboutOpacity,
+        clipPath: aboutClipPath,
+        pointerEvents: aboutPointerEvents
+      }}
+    >
+      {/* Przekazujemy mu nasze opacity, żeby nadpisać jego logikę */}
+      <About externalOpacity={aboutOpacity} />
+    </motion.div>
+      </div>
     </motion.section>
   );
 });

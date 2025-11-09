@@ -4,8 +4,8 @@ import React, { useLayoutEffect, useRef, useCallback, Children, useState, useEff
 import { useTransform, useMotionValueEvent, useSpring } from 'framer-motion';
 import './ScrollStack.css';
 
-export const ScrollStackItem = ({ children, itemClassName = '' }) => (
-  <div className={`scroll-stack-card ${itemClassName}`.trim()}>{children}</div>
+export const ScrollStackItem = ({ children, itemClassName = '', style }) => (
+  <div className={`scroll-stack-card ${itemClassName}`.trim()} style={style}>{children}</div>
 );
 
 const ScrollStack = ({
@@ -153,7 +153,7 @@ const updateCardTransforms = useCallback((scrollTop) => {
   // --- Logika mapowania scrolla (z 'useSpring') ---
   const rawStackProgress = useTransform(
     scrollProgress, 
-    [0.65, 1.0], // Używamy zakresu 65%-100%
+    [0.35, 0.6], // Używamy zakresu 65%-100%
     [0, 1]      
   );
 

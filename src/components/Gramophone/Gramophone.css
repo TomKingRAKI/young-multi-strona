@@ -15,7 +15,7 @@
   font-family: 'Bernoru', sans-serif;
   overflow: hidden; 
   position: relative; 
-  background-color: #EAEAEA;
+  
   will-change: transform;
   transform: translateZ(0);
 }
@@ -31,7 +31,8 @@
   padding: 1rem; 
   /* Transform jest teraz kontrolowany przez JavaScript (animacja 3D -> 2D) */
   transform-origin: center center;
-  overflow: visible; /* Upewniamy się, że Boxes są widoczne */
+  overflow: visible;
+  pointer-events: none; /* Upewniamy się, że Boxes są widoczne */
 }
 .gramophone-content-world {
   position: absolute;
@@ -222,6 +223,8 @@
   transform-style: preserve-3d;
   /* Ważne: upewniamy się, że kontener ma właściwą perspektywę */
   perspective-origin: center center;
+  /* ZMIANA: Upewnij się, że kontener flip jest nad resztą treści karty */
+  z-index: 100;
 }
 
 .album-cover-flip-front,
@@ -246,11 +249,7 @@
 .album-cover-flip-back {
   transform: rotateY(180deg);
   /* Przezroczystość, aby pokazać sekcję About pod spodem */
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(1px);
-  -webkit-backdrop-filter: blur(1px);
-  /* Dodajemy ramkę, aby było widać, że to odwrócony obrazek */
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background-color: #000000;
 }
 
 .album-cover-flip-front img {
@@ -290,23 +289,4 @@
 .album-cover-about-preview .about-section h1 {
   font-size: 1.5rem;
   margin: 0;
-}
-
-/* Sekcja About pod Gramophone */
-.gramophone-about-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1; /* Pod gramophone-content-world (z-index: 3), ale nad tłem */
-  pointer-events: none;
-  transform-origin: center center;
-  overflow: hidden;
-}
-
-.gramophone-about-layer .about-section {
-  width: 100%;
-  height: 100%;
-  position: relative;
 }

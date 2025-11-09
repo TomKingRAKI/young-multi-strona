@@ -16,6 +16,9 @@
   max-width: 800px;
   padding: 2rem;
   text-align: center;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .about-title {

@@ -3,7 +3,7 @@
 .newsong-section {
   height: 2000vh; /* Zwiększona wysokość, aby umożliwić dokończenie animacji flip i zoom */
   position: relative;
-  background-color: #000;
+  
   color: white;
   z-index: 2; 
 }
@@ -15,6 +15,7 @@
   width: 200vw; /* 2 wagony: NewSong i Gramophone */
   background-color: transparent;
   display: flex;
+  z-index: 1;
 }
 
 .newsong-panel {
@@ -25,6 +26,7 @@
   place-items: center;
   overflow: hidden;
   position: relative; 
+  background-color: #000;
   /* Usunęliśmy stąd tło */
 }
 
@@ -127,4 +129,15 @@
 .streaming-link:hover {
   transform: scale(1.05);
   background-color: #ccc;
+}
+
+.newsong-about-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Ustawiamy go na wierzchu pociągu (który ma domyślny z-index) */
+  z-index: 10; 
+  /* About.css zajmie się czarnym tłem */
 }

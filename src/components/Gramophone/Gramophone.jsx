@@ -4,7 +4,6 @@ import React from 'react';
 import { useTransform, motion, useMotionValue, useMotionValueEvent } from 'framer-motion';
 import './Gramophone.css';
 import ScrollStack, { ScrollStackItem } from '../ScrollStack/ScrollStack'; 
-import About from '../About/About';
 
 import nowaFalaCover from '../../assets/NowafalaCover.jpg'; 
 import trapstarCover from '../../assets/trapstarCover.jpg';
@@ -54,15 +53,16 @@ const albums = [
   },
 ];
 
-function Gramophone({ contentProgress, isMenuOpen }) {
+function Gramophone({ contentProgress, isMenuOpen, style }) { // ZMIANA: Przyjmujemy 'style' z propsów
   
   // Animacja zmiany perspektywy z 3D na 2D po pokazaniu ostatniej karty (toxic)
   // ScrollStack używa contentProgress w zakresie [0.65, 1.0]
   // Karta TOXIC pojawia się jako ostatnia, więc animacja zaczyna się dopiero przy 0.95
-  // aby upewnić się, że karta jest już w pełni widoczna
+  // aby upewnić się, że karta jest już w pełni widoczn
+
   const perspectiveProgress = useTransform(
-    contentProgress,
-    [0.95, 1.0], // Zaczyna się bardzo późno, gdy TOXIC jest już widoczny
+   contentProgress,
+    [0.59, 0.65], // Zaczyna się bardzo późno, gdy TOXIC jest już widoczny
     [0, 1]
   );
 
@@ -97,7 +97,7 @@ function Gramophone({ contentProgress, isMenuOpen }) {
   // contentProgress w zakresie [0.95, 0.98] dla animacji flip
   const flipProgress = useTransform(
     contentProgress,
-    [0.95, 0.98], // Flip kończy się wcześniej, aby zostawić miejsce na zoom
+    [0.61, 0.65], // Flip kończy się wcześniej, aby zostawić miejsce na zoom
     [0, 1]
   );
 
@@ -108,53 +108,21 @@ function Gramophone({ contentProgress, isMenuOpen }) {
   const frontOpacity = useTransform(flipProgress, [0, 0.5, 1], [1, 1, 0]);
   const backOpacity = useTransform(flipProgress, [0, 0.5, 1], [0, 0, 1]);
 
-  // Animacja przybliżania kamery do sekcji About
-  // Zaczyna się po zakończeniu flip i trwa dłużej
+  // Animacja przybliżania - tylko do sterowania opacity
   const zoomProgress = useTransform(
     contentProgress,
-    [0.96, 1.0], // Zaczyna się tuż po flip, kończy na końcu scrolla
+    [0.64, 0.8], 
     [0, 1]
   );
-
-  // Scale dla przybliżenia kamery (1.0 -> 5.0) - większe przybliżenie
-  const cameraScale = useTransform(zoomProgress, [0, 1], [1, 5]);
-  
-  // Translate Y dla przybliżenia (centrowanie na sekcji About)
-  const cameraTranslateY = useTransform(zoomProgress, [0, 1], [0, -60]);
-  
-  // Opacity dla głównej zawartości Gramophone - znika podczas zoom
-  const gramophoneContentOpacity = useTransform(zoomProgress, [0.3, 0.7], [1, 0]);
-  
-  // Opacity dla sekcji About - pojawia się podczas zoom
-  const aboutLayerOpacity = useTransform(zoomProgress, [0, 0.5], [0, 1]);
-  
-  // Kombinacja opacity dla sekcji About (backOpacity lub aboutLayerOpacity - wyższa wartość)
-  const aboutFinalOpacity = useMotionValue(0);
-  useMotionValueEvent(backOpacity, "change", (latest) => {
-    const ao = aboutLayerOpacity.get();
-    aboutFinalOpacity.set(Math.max(latest, ao));
-  });
-  useMotionValueEvent(aboutLayerOpacity, "change", (latest) => {
-    const bo = backOpacity.get();
-    aboutFinalOpacity.set(Math.max(bo, latest));
-  });
-
-  // Kombinacja scale z perspektywy i zoom kamery
-  const combinedScale = useMotionValue(1);
-  useMotionValueEvent(scale, "change", (latest) => {
-    const cs = cameraScale.get();
-    combinedScale.set(latest * cs);
-  });
-  useMotionValueEvent(cameraScale, "change", (latest) => {
-    const s = scale.get();
-    combinedScale.set(s * latest);
-  });
 
   // OPTYMALIZACJA: Używamy motion.div z bezpośrednimi motion values zamiast state + useMotionValueEvent
   // To eliminuje re-rendery i działa bezpośrednio z motion values
 
   return (
-    <div className="Gramophone-section">
+    <motion.div 
+      className="Gramophone-section" 
+      style={style}
+    >
 
       <motion.div 
         className="gramophone-background-boxes"
@@ -165,6 +133,7 @@ function Gramophone({ contentProgress, isMenuOpen }) {
           x: '0%',
           y: '0%',
           z: 0,
+          
         }}
       >
         <Boxes />
@@ -174,11 +143,9 @@ function Gramophone({ contentProgress, isMenuOpen }) {
         style={{
           skewX: skewX,
           skewY: skewY,
-          scale: combinedScale,
+          scale: scale, // ZMIANA: Już nie łączymy skali, główna skala jest na Gramophone-section
           x: '0%',
-          y: useTransform(cameraTranslateY, (ty) => `${ty}vh`),
-          z: 0,
-          opacity: gramophoneContentOpacity,
+         
         }}
       >
       
@@ -268,16 +235,7 @@ function Gramophone({ contentProgress, isMenuOpen }) {
       </motion.div>
 
       {/* Sekcja About pod Gramophone - widoczna przez przezroczysty odwrócony obrazek */}
-      <motion.div
-        className="gramophone-about-layer"
-        style={{
-          opacity: aboutFinalOpacity, // Pojawia się gdy obrazek się odwraca lub podczas zoom
-          scale: cameraScale, // Przybliża się razem z kamerą
-        }}
-      >
-        <About contentProgress={contentProgress} />
-      </motion.div>
-    </div>
+    </motion.div>
   );
 }
 
