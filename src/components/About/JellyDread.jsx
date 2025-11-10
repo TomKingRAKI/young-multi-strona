@@ -74,10 +74,23 @@ export function JellyDread({
     }
   );
 
-  // Handlery (bez zmian)
+  // Transformacje dla uchwytu - pozycjonujemy go względem końcówki dreda
+  // SVG jest offsetowane o -500px, więc pozycja (500, 500) w SVG = (0, 0) w kontenerze
+  // Używamy useMotionValue dla pozycji uchwytu, żeby móc ją kontrolować
+  // Pozycja startowa: końcówka dreda jest na (500, 640), więc uchwyt na (0, 140)
+  const handleX = useMotionValue(0);
+  const handleY = useMotionValue(initialTipY);
+
+  // Handlery - aktualizujemy zarówno końcówkę dreda jak i pozycję uchwytu
   const handleDrag = (event, info) => {
+    // Aktualizujemy końcówkę dreda używając offset (względem początku drag)
     tipX.set(anchorX + info.offset.x);
     tipY.set(anchorY + initialTipY + info.offset.y);
+    
+    // Aktualizujemy pozycję uchwytu - użyjemy offset, bo to jest względne przesunięcie
+    handleX.set(info.offset.x);
+    handleY.set(initialTipY + info.offset.y);
+    
     if (onDragReport) onDragReport(info.offset.x);
   };
 
@@ -86,30 +99,63 @@ export function JellyDread({
     if (onDragStart) onDragStart();
   };
 
-  const handleDragEnd = () => {
+  // ZMIANA: Dodajemy argumenty `event` i `info` do handleDragEnd
+  const handleDragEnd = (event, info) => {
     isDraggingRef.current = false;
     if (onDragEnd) onDragEnd();
+
+    // Animujemy końcówkę dreda z powrotem na miejsce (tak jak było)
     animate(tipX, anchorX, { ...springConfig, duration: 0.5 });
     animate(tipY, anchorY + initialTipY, { ...springConfig, duration: 0.5 });
+
+    // KLUCZOWA ZMIANA: Resetujemy pozycję uchwytu, żeby wrócił na swoje miejsce
+    // Używamy animate, żeby był płynny powrót (synchronizuje się z końcówką przez useEffect)
+    animate(handleX, 0, { ...springConfig, duration: 0.5 });
+    animate(handleY, initialTipY, { ...springConfig, duration: 0.5 });
   };
 
-  // Transformacje dla uchwytu (bez zmian)
-  const handleX = useTransform(tipX, (v) => v - CANVAS_CENTER);
-  const handleY = useTransform(tipY, (v) => v - CANVAS_CENTER);
+  // Synchronizujemy pozycję uchwytu z końcówką dreda (tylko gdy nie przeciągamy)
+  // Gdy końcówka wraca na miejsce, uchwyt też powinien wrócić
+  useEffect(() => {
+    const unsubX = tipX.onChange((v) => {
+      // Aktualizujemy pozycję uchwytu tylko gdy nie przeciągamy
+      if (!isDraggingRef.current) {
+        // Końcówka jest na pozycji v, więc uchwyt powinien być na (v - CANVAS_CENTER)
+        // Ale ponieważ używamy offset podczas drag, resetujemy do 0
+        handleX.set(v - CANVAS_CENTER);
+      }
+    });
+    const unsubY = tipY.onChange((v) => {
+      // Aktualizujemy pozycję uchwytu tylko gdy nie przeciągamy
+      if (!isDraggingRef.current) {
+        // Końcówka jest na pozycji v, więc uchwyt powinien być na (v - CANVAS_CENTER)
+        handleY.set(v - CANVAS_CENTER);
+      }
+    });
 
+    return () => {
+      unsubX();
+      unsubY();
+    };
+  }, [tipX, tipY, handleX, handleY]);
 
   return (
     <div className="jelly-dread-container">
-      {/* Uchwyt (bez zmian) */}
+      {/* Uchwyt - pozycjonowany względem końcówki dreda */}
       <motion.div
         className="jelly-dread-handle"
-        drag
+        drag // Przywracamy `drag`, żeby w ogóle dało się przeciągać
+        dragMomentum={false} // Wyłączamy "pęd", żeby element nie leciał dalej po puszczeniu
+        dragSnapToOrigin={false} // Nie resetuj automatycznie, robimy to ręcznie
         dragConstraints={{ left: -150, right: 150, top: -50, bottom: 100 }}
         dragElastic={0.2}
         onDrag={handleDrag}
         onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        style={{ x: handleX, y: handleY }}
+        onDragEnd={handleDragEnd} // onDragEnd teraz otrzymuje `info`
+        style={{ 
+          x: handleX,
+          y: handleY
+        }}
       />
 
       {/* SVG (bez zmian) */}

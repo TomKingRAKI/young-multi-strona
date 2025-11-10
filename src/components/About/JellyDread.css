@@ -23,13 +23,13 @@
 
 .jelly-dread-handle {
   /* Niewidzialny uchwyt, który łapiemy */
-  width: 80px; /* Zwiększony obszar łapania */
-  height: 80px;
+  width: 35px; /* Zmniejszony obszar łapania */
+  height: 50px;
   border-radius: 50%;
   /* background-color: rgba(255, 0, 0, 0.5); /* Włącz to, żeby zobaczyć uchwyt */
   position: absolute;
-  top: -40px; /* Centrujemy uchwyt */
-  left: -40px;
+  top: -40px; /* Centrujemy uchwyt (połowa width/height) */
+  left: -18px;
   cursor: grab;
   z-index: 11; /* Nad dredem SVG */
 }

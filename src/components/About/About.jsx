@@ -6,7 +6,7 @@ import './About.css'; // Ten plik też zaraz zaktualizujemy
 import { JellyDread } from './JellyDread';
 
 // 1. Zaimportuj swoje 'head.png'
-import headImg from '../../assets/head.png';
+import headImg from '../../assets/head.jpg';
 
 // 2. Wklejamy tu wszystkie 10 ciekawostek
 const factsLeft = [
