@@ -1,0 +1,39 @@
+/* Plik: /src/components/About/JellyDread.css */
+
+.jelly-dread-container {
+  /* Ten kontener jest "szpilką" na desce */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+}
+
+.jelly-dread-svg {
+  /* Płótno SVG leży na wierzchu */
+  position: absolute;
+  top: -500px; 
+  left: -500px;
+  width: 1000px;
+  height: 1000px;
+  overflow: visible;
+  pointer-events: none; /* Ignoruje myszkę, żeby dało się kliknąć uchwyt */
+  z-index: 10;
+}
+
+.jelly-dread-handle {
+  /* Niewidzialny uchwyt, który łapiemy */
+  width: 80px; /* Zwiększony obszar łapania */
+  height: 80px;
+  border-radius: 50%;
+  /* background-color: rgba(255, 0, 0, 0.5); /* Włącz to, żeby zobaczyć uchwyt */
+  position: absolute;
+  top: -40px; /* Centrujemy uchwyt */
+  left: -40px;
+  cursor: grab;
+  z-index: 11; /* Nad dredem SVG */
+}
+
+.jelly-dread-handle:active {
+  cursor: grabbing;
+}

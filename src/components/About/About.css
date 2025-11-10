@@ -1,49 +1,95 @@
+/* Plik: /src/components/About/About.css (ZAKTUALIZOWANY) */
+
 .about-section {
   width: 100vw;
   height: 100vh;
-  flex-shrink: 0; /* Ważne dla flexbox - nie pozwala się kurczyć */
+  flex-shrink: 0;
   background-color: #000000;
   color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Bernoru', sans-serif;
   position: relative;
   overflow: hidden;
+
+  /* Używamy grid, aby wycentrować awatara i tekst */
+  display: grid;
+  place-items: center;
 }
 
+/* KONTENER NA AWATARA */
+.about-avatar-container {
+  /* To jest nasza "deska", na której wieszamy dredy */
+  position: relative;
+  width: 1000px; /* Dopasuj do rozmiaru głowy */
+  height: 960px;
+  grid-area: 1 / 1; /* Leży w komórce gridu */
+  z-index: 10;
+  /*background-color: rgba(0, 255, 0, 0.1); /* Włącz, żeby zobaczyć obszar */
+}
+
+.about-head {
+  /* Obrazek głowy jako tło */
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1000px; /* Dopasuj rozmiar głowy */
+  height: auto;
+  pointer-events: none; /* Głowa nie jest klikalna */
+  z-index: 1; /* Pod dredami */
+}
+
+/* (Style dla dredów są w JellyDread.css) */
+
+/* TYTUŁ "O MNIE" */
 .about-content {
-  max-width: 800px;
+  grid-area: 1 / 1; /* Ta sama komórka co awatar */
   padding: 2rem;
   text-align: center;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transform: translateZ(0);
+  z-index: 5; /* Pod dredami (10), ale nad głową (1) */
+  pointer-events: none; /* Nieblokowalny */
 }
 
 .about-title {
-  font-size: 4rem;
-  margin: 0 0 3rem 0;
+  font-family: 'Bernoru', sans-serif;
+  font-size: 6rem;
+  margin: 0;
   color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  text-shadow: 
-    2px 2px 0px #333,
-    4px 4px 0px #333,
-    6px 6px 10px rgba(0, 0, 0, 0.5);
+  text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+  /* Przesuwamy tytuł w dół, żeby był za głową */
+  transform: translateY(-300px);
 }
 
-.about-text {
-  font-size: 1.2rem;
-  line-height: 1.8;
-  color: #cccccc;
+/* OKIENKA Z CIEKAWOSTKAMI */
+.about-info-box {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  padding: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #000;
+  border-radius: 10px;
+  z-index: 100; /* Na samym wierzchu */
+  font-family: 'Antonio', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.about-text p {
-  margin: 0 0 1.5rem 0;
+.info-left {
+  left: 5%;
 }
 
-.about-text p:last-child {
-  margin-bottom: 0;
+.info-right {
+  right: 5%;
 }
 
+.jelly-dread-wrapper {
+  /* To jest "szpilka", którą wbijamy w deskę */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  /* Z-index jest teraz tutaj */
+  z-index: 10;
+}
