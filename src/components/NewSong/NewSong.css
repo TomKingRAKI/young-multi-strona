@@ -1,18 +1,20 @@
 /* Plik: /src/components/NewSong/NewSong.css (NOWA, POPRAWIONA WERSJA) */
 
 .newsong-section {
-  height: 2000vh; /* Zwiększona wysokość, aby umożliwić dokończenie animacji flip i zoom */
+  height: 1500vh;
+  /* Zmniejszona wysokość dla szybszego scrolla */
   position: relative;
-  
+
   color: white;
-  z-index: 2; 
+  z-index: 2;
 }
 
 .newsong-sticky-content {
   position: sticky;
   top: 0;
   height: 100vh;
-  width: 200vw; /* 2 wagony: NewSong i Gramophone */
+  width: 200vw;
+  /* 2 wagony: NewSong i Gramophone */
   background-color: transparent;
   display: flex;
   z-index: 1;
@@ -21,11 +23,11 @@
 .newsong-panel {
   width: 100vw;
   height: 100vh;
-  flex-shrink: 0; 
+  flex-shrink: 0;
   display: grid;
   place-items: center;
   overflow: hidden;
-  position: relative; 
+  position: relative;
   background-color: #000;
   /* Usunęliśmy stąd tło */
 }
@@ -38,15 +40,15 @@
   left: 0;
   width: 100%;
   height: 100%;
-  
+
   /* ZMIANA 1: Ustawia tło na najniższą warstwę *wewnątrz* panelu */
-  z-index: 0; 
-  
+  z-index: 0;
+
   /* ZMIANA 2: Mówi siatce (grid), żeby umieściła tło 
      w tej samej komórce (1 / 1) co resztę treści.
      To naprawia problem "podwyższenia".
   */
-  grid-area: 1 / 1; 
+  grid-area: 1 / 1;
 }
 
 /* === KONIEC ZMIAN === */
@@ -57,15 +59,16 @@
 .video-container,
 .links-container {
   grid-area: 1 / 1;
-  opacity: 0; 
-  position: relative; /* Ważne, aby z-index zadziałał */
+  opacity: 0;
+  position: relative;
+  /* Ważne, aby z-index zadziałał */
 }
 
 /* --- Style dla Tekstu --- */
 .newsong-text-wrapper {
   text-align: center;
   /* z-index: 2 jest > 0 (tła), więc jest widoczny i nad tłem */
-  z-index: 2; 
+  z-index: 2;
 }
 
 .newsong-title {
@@ -87,15 +90,15 @@
 /* --- Style dla Wideo --- */
 .video-container {
   width: 100%;
-  max-width: 1000px; 
+  max-width: 1000px;
   /* z-index: 1 jest > 0 (tła) */
-  z-index: 1; 
+  z-index: 1;
 }
 
 .video-placeholder {
   width: 100%;
   background-color: #333;
-  aspect-ratio: 16 / 9; 
+  aspect-ratio: 16 / 9;
   display: grid;
   place-items: center;
   font-family: 'Antonio', sans-serif;
@@ -109,7 +112,7 @@
   flex-direction: column;
   gap: 1.5rem;
   /* z-index: 3 jest > 0 (tła) */
-  z-index: 3; 
+  z-index: 3;
 }
 
 .streaming-link {
@@ -122,7 +125,7 @@
   text-decoration: none;
   border-radius: 50px;
   text-align: center;
-  min-width: 250px; 
+  min-width: 250px;
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
@@ -138,6 +141,6 @@
   width: 100%;
   height: 100%;
   /* Ustawiamy go na wierzchu pociągu (który ma domyślny z-index) */
-  z-index: 10; 
+  z-index: 10;
   /* About.css zajmie się czarnym tłem */
 }

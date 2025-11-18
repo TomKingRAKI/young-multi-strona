@@ -19,7 +19,7 @@ const ScrollStack = ({
   baseScale = 0.85,
   rotationAmount = 0,
   blurAmount = 0,
-  scrollProgress, 
+  scrollProgress,
   isMenuOpen
 }) => {
   const scrollerRef = useRef(null);
@@ -41,7 +41,7 @@ const ScrollStack = ({
       // Mapujemy odwrotnie
       return 1 - (scrollTop - end) / (start - end);
     }
-    
+
     if (scrollTop < start) return 0;
     if (scrollTop > end) return 1;
     return (scrollTop - start) / (end - start);
@@ -66,9 +66,9 @@ const ScrollStack = ({
       return cardTopsRef.current[i] || 0;
     }, []
   );
-  
+
   // --- ZMIANA: CAŁA NOWA LOGIKA AKTUALIZACJI ---
-const updateCardTransforms = useCallback((scrollTop) => {
+  const updateCardTransforms = useCallback((scrollTop) => {
     if (!cardsRef.current.length || isUpdatingRef.current) return;
     isUpdatingRef.current = true;
 
@@ -84,10 +84,10 @@ const updateCardTransforms = useCallback((scrollTop) => {
     cardsRef.current.forEach((card, i) => {
       if (!card) return;
 
-      const cardTop = getElementOffset(i); 
+      const cardTop = getElementOffset(i);
       const triggerStart = cardTop - scaleEndPositionPx;
       const triggerEnd = cardTop - stackPositionPx - (itemStackDistance * i);
-      
+
       // To jest nasz "główny" postęp animacji (od 0.0 do 1.0)
       const overallProgress = calculateProgress(scrollTop, triggerStart, triggerEnd);
 
@@ -98,7 +98,7 @@ const updateCardTransforms = useCallback((scrollTop) => {
 
       // ETAP 1: Translacja (Dzieje się w pierwszej połowie animacji: 0.0 -> 0.5)
       // Mapujemy overallProgress [0, 0.5] na translateProgress [0, 1]
-      const translateProgress = Math.min(1, overallProgress / 0.5); 
+      const translateProgress = Math.min(1, overallProgress / 0.5);
 
       // ETAP 2: Skalowanie (Dzieje się w drugiej połowie animacji: 0.5 -> 1.0)
       // Mapujemy overallProgress [0.5, 1.0] na scaleProgress [0, 1]
@@ -115,10 +115,10 @@ const updateCardTransforms = useCallback((scrollTop) => {
       // 2. Translacja Y (Dół -> Góra) - Używa teraz 'translateProgress'
       const totalTranslate = -(cardTop - (stackPositionPx + itemStackDistance * i));
       const translateY = translateProgress * totalTranslate;
-      
+
       // Reszta (Rotację też podpinamy pod 'scaleProgress', aby działo się to na górze)
       const rotation = rotationAmount ? i * rotationAmount * scaleProgress : 0;
-      let blur = 0; 
+      let blur = 0;
 
       // --- Zastosowanie transformacji (bez zmian) ---
       const newTransform = {
@@ -145,16 +145,16 @@ const updateCardTransforms = useCallback((scrollTop) => {
 
     isUpdatingRef.current = false;
   }, [
-    itemScale, itemStackDistance, stackPosition, scaleEndPosition, baseScale, 
-    rotationAmount, blurAmount, 
+    itemScale, itemStackDistance, stackPosition, scaleEndPosition, baseScale,
+    rotationAmount, blurAmount,
     calculateProgress, parsePercentage, getScrollData, getElementOffset
   ]);
 
   // --- Logika mapowania scrolla (z 'useSpring') ---
   const rawStackProgress = useTransform(
-    scrollProgress, 
+    scrollProgress,
     [0.35, 0.6], // Używamy zakresu 65%-100%
-    [0, 1]      
+    [0, 1]
   );
 
   const stackProgress = useSpring(rawStackProgress, {
@@ -171,30 +171,32 @@ const updateCardTransforms = useCallback((scrollTop) => {
     if (!innerContent) return;
     const cards = Array.from(scroller.querySelectorAll('.scroll-stack-card'));
     if (cards.length === 0) return;
-    
+
     cardsRef.current = cards;
-    
+
     const tops = [];
     cards.forEach((card, i) => {
       // Usunęliśmy 'itemDistance' stąd
       card.style.willChange = 'transform, filter';
       card.style.transformOrigin = 'top center';
-      
+
       // === ZMIANA: Karta 0 jest na spodzie (zIndex: 1), Karta 3 na wierzchu (zIndex: 4)
       card.style.zIndex = i + 1;
-      
-      const cardTop = card.offsetTop; 
+
+      const cardTop = card.offsetTop;
       tops.push(cardTop);
     });
     cardTopsRef.current = tops;
-    
+
     const scrollHeight = innerContent.scrollHeight;
     const clientHeight = scroller.clientHeight;
     setSimulatedScrollHeight(scrollHeight - clientHeight);
-    
-    // Nie potrzebujemy już 'endEl'
-    
-    updateCardTransforms(0); 
+
+    // ZMIANA: Zamiast 0, używamy aktualnego postępu, jeśli jest dostępny
+    const currentProgress = latestStackProgress.current;
+    const initialVirtualScrollTop = currentProgress * (scrollHeight - clientHeight);
+
+    updateCardTransforms(initialVirtualScrollTop);
 
     return () => {
       cardsRef.current = [];
@@ -203,7 +205,7 @@ const updateCardTransforms = useCallback((scrollTop) => {
       isUpdatingRef.current = false;
     };
   }, [
-    itemDistance, updateCardTransforms, children 
+    itemDistance, updateCardTransforms, children
   ]);
 
   // --- Podpięcie 'stackProgress' (bez zmian) ---

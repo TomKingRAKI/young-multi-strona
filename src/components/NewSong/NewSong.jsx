@@ -11,7 +11,7 @@ import CloudTransition from '../CloudTransition/CloudTransition';
 
 // Komponent nie przyjmuje już 'setThemeOverride'
 const NewSong = forwardRef((props, ref) => {
-  
+
   const scrollRef = useRef(null);
   // OPTYMALIZACJA: Śledzimy poprzedni motyw, aby uniknąć niepotrzebnych aktualizacji
   const previousThemeRef = useRef(null);
@@ -19,28 +19,28 @@ const NewSong = forwardRef((props, ref) => {
   // Animacja 1: Radius (bez zmian)
   const { scrollYProgress: radiusProgress } = useScroll({
     target: scrollRef,
-    offset: ["start end", "start start"] 
+    offset: ["start end", "start start"]
   });
   const radius = useTransform(
     radiusProgress,
-    [0, 1], 
+    [0, 1],
     ["100px", "0px"]
   );
 
   // Animacja 2: Wewnętrzna (bez zmian)
   const { scrollYProgress: contentProgress } = useScroll({
     target: scrollRef,
-    offset: ["start start", "end end"] 
+    offset: ["start start", "end end"]
   });
-  
+
   // OPTYMALIZACJA: Aktualizujemy tylko gdy motyw rzeczywiście się zmienia
   useMotionValueEvent(contentProgress, "change", (latest) => {
     // W 'trackX' zdefiniowałeś, że pociąg rusza przy 0.47
     // Gramophone (jasne tło) zaczyna się wtedy wsuwać.
-    
-    // Użyjemy 0.56 jako punktu "w połowie drogi"
-    // (0.47 + 0.65) / 2 = 0.56
-    
+
+    // Użyjemy 0.75 jako punktu "w połowie drogi" (dostosowane do nowych timingów)
+    // (0.65 + 0.85) / 2 = 0.75
+
     if (typeof props.setHeaderTheme === 'function') {
       // Gdy latest jest bardzo mały (< 0.05), jesteśmy jeszcze przed NewSong
       // Resetujemy previousThemeRef, żeby przy następnym scrollu do NewSong motyw się zaktualizował
@@ -48,8 +48,8 @@ const NewSong = forwardRef((props, ref) => {
         previousThemeRef.current = null; // Resetujemy, żeby wymusić aktualizację przy następnym scrollu
         return; // Nie aktualizujemy motywu gdy jesteśmy przed NewSong
       }
-      
-      const newTheme = latest > 0.56 ? 'dark' : 'light';
+
+      const newTheme = latest > 0.75 ? 'dark' : 'light';
       // Aktualizujemy tylko gdy motyw się zmienił
       if (previousThemeRef.current !== newTheme) {
         previousThemeRef.current = newTheme;
@@ -107,7 +107,7 @@ const NewSong = forwardRef((props, ref) => {
   // ZMIANA: Logika zoomu przeniesiona tutaj, aby skalować całą sekcję Gramophone
   const gramophoneZoomProgress = useTransform(
     contentProgress,
-    [0.64, 0.8], 
+    [0.65, 0.85], // Wcześniej: [0.40, 0.60]. Przesuwamy PO scroll stacku (0.60) i flipie (0.65)
     [0, 1]
   );
 
@@ -122,132 +122,132 @@ const NewSong = forwardRef((props, ref) => {
     gramophoneZoomProgress, // Używamy progressu zoomu (0 -> 1)
     [0.05, 1], // Od początku do końca zoomu
     [
-        "circle(0% at 50% 62%)", 
-        "circle(150% at 50% 0%)" // Kończy jako gigantyczne kółko (150%) w tym samym punkcie
+      "circle(0% at 50% 62%)",
+      "circle(150% at 50% 0%)" // Kończy jako gigantyczne kółko (150%) w tym samym punkcie
     ]
   );
-  
+
   const aboutOpacity = useTransform(
     gramophoneZoomProgress,
     [0, 0.001], // Jak tylko zoom się ruszy (0 -> 0.001)
     [0, 1]       // Natychmiast "włącz" opacity
   );
 
-// Sprawiamy, że sekcja About jest klikalna tylko gdy jest widoczna
-const aboutPointerEvents = useTransform(gramophoneZoomProgress, (v) => (v > 0.1 ? 'auto' : 'none'));
+  // Sprawiamy, że sekcja About jest klikalna tylko gdy jest widoczna
+  const aboutPointerEvents = useTransform(gramophoneZoomProgress, (v) => (v > 0.1 ? 'auto' : 'none'));
 
-const cloudProgress = useTransform(
+  const cloudProgress = useTransform(
     contentProgress,
-    [0.8, 1.0], // Używamy ostatnie 10% scrolla
+    [0.85, 1.0], // Wcześniej: [0.75, 1.0]. Zaczynamy po zoomie
     [0, 1]      // na animację chmur (0 -> 1)
   );
 
 
   return (
-    <motion.section 
+    <motion.section
       ref={(node) => {
         scrollRef.current = node;
         if (typeof ref === 'function') ref(node);
         else if (ref) ref.current = node;
-      }} 
+      }}
       className="newsong-section"
       style={{
         borderTopLeftRadius: radius,
         borderTopRightRadius: radius
       }}
     >
-      <div style={{ 
-      position: 'sticky', 
-      top: 0, 
-      height: '100vh', 
-      width: '100vw', 
-      overflow: 'hidden' 
-    }}>
-      
-      <motion.div 
-        className="newsong-sticky-content"
-        style={{
-          x: trackX 
-        }}
-      >
-        
-        <motion.div 
-          className="newsong-panel"
+      <div style={{
+        position: 'sticky',
+        top: 0,
+        height: '100vh',
+        width: '100vw',
+        overflow: 'hidden'
+      }}>
+
+        <motion.div
+          className="newsong-sticky-content"
           style={{
-            borderTopLeftRadius: radius,
-            borderTopRightRadius: radius
+            x: trackX
           }}
         >
 
-          <LiquidEther
-            className="newsong-liquid-background" // Dajemy mu klasę do stylowania
-            colors={[ '#ffffffff', '#e4e4e4ff', '#cacacaff' ]} // Kolory z Twojego przykładu
-            mouseForce={13}
-            cursorSize={65}
-            isViscous={false}
-            autoDemo={true}      // Niech sam się porusza
-            autoSpeed={0.5}
-            autoIntensity={2.2}
+          <motion.div
+            className="newsong-panel"
+            style={{
+              borderTopLeftRadius: radius,
+              borderTopRightRadius: radius
+            }}
+          >
+
+            <LiquidEther
+              className="newsong-liquid-background" // Dajemy mu klasę do stylowania
+              colors={['#ffffffff', '#e4e4e4ff', '#cacacaff']} // Kolory z Twojego przykładu
+              mouseForce={13}
+              cursorSize={65}
+              isViscous={false}
+              autoDemo={true}      // Niech sam się porusza
+              autoSpeed={0.5}
+              autoIntensity={2.2}
+            />
+            {/* Cała dotychczasowa zawartość idzie TUTAJ */}
+            <motion.div
+              className="newsong-text-wrapper"
+              initial={{ opacity: 0, y: 20 }} // Start: niewidoczny i lekko na dole
+              whileInView={{ opacity: 1, y: 0 }} // Koniec: widoczny na swojej pozycji
+              viewport={{ once: true, margin: "-200px" }} // Odpal raz, 200px przed wejściem
+              transition={{ duration: 0.8 }} // Czas trwania animacji wjazdu
+              style={{ y: textY }}
+            >
+              <h1 className="newsong-title">GDZIE MOJ DOM</h1>
+              <h2 className="newsong-subtitle">OUT NOW</h2>
+            </motion.div>
+
+            <motion.div
+              className="video-container"
+              style={{ opacity: 1, y: videoY, x: videoX, scale: videoScale }}
+            >
+              <div className="video-placeholder">VIDEO</div>
+            </motion.div>
+
+            <motion.div
+              className="links-container"
+              style={{ opacity: linksOpacity, x: linksX, y: linksY }}
+            >
+              <a href="#" className="streaming-link" target="_blank">SPOTIFY</a>
+              <a href="#" className="streaming-link" target="_blank">APPLE MUSIC</a>
+              <a href="#" className="streaming-link" target="_blank">YOUTUBE MUSIC</a>
+              <a href="#" className="streaming-link" target="_blank">TIDAL</a>
+            </motion.div>
+          </motion.div>
+          {/* Koniec "Wagonu 1" */}
+
+          <Gramophone
+            contentProgress={contentProgress}
+            isMenuOpen={props.isMenuOpen}
+            // ZMIANA: Przekazujemy nowe wartości jako propsy
+            zoomScale={gramophoneScale}
+            zoomOrigin={gramophoneTransformOrigin}
+            style={{
+              scale: gramophoneScale,
+              transformOrigin: gramophoneTransformOrigin,
+            }}
           />
-          {/* Cała dotychczasowa zawartość idzie TUTAJ */}
-          <motion.div 
-            className="newsong-text-wrapper" 
-            initial={{ opacity: 0, y: 20 }} // Start: niewidoczny i lekko na dole
-            whileInView={{ opacity: 1, y: 0 }} // Koniec: widoczny na swojej pozycji
-            viewport={{ once: true, margin: "-200px" }} // Odpal raz, 200px przed wejściem
-            transition={{ duration: 0.8 }} // Czas trwania animacji wjazdu
-            style={{ y: textY }}
-          >
-            <h1 className="newsong-title">GDZIE MOJ DOM</h1>
-            <h2 className="newsong-subtitle">OUT NOW</h2>
-          </motion.div>
-          
-          <motion.div 
-            className="video-container" 
-            style={{ opacity: 1, y: videoY, x: videoX, scale: videoScale }}
-          >
-            <div className="video-placeholder">VIDEO</div>
-          </motion.div>
+          {/* Koniec "Wagonu 2" */}
 
-          <motion.div 
-            className="links-container" 
-            style={{ opacity: linksOpacity, x: linksX, y: linksY }}
-          >
-            <a href="#" className="streaming-link" target="_blank">SPOTIFY</a>
-            <a href="#" className="streaming-link" target="_blank">APPLE MUSIC</a>
-            <a href="#" className="streaming-link" target="_blank">YOUTUBE MUSIC</a>
-            <a href="#" className="streaming-link" target="_blank">TIDAL</a>
-          </motion.div>
-        </motion.div> 
-        {/* Koniec "Wagonu 1" */}
-
-        <Gramophone 
-          contentProgress={contentProgress} 
-          isMenuOpen={props.isMenuOpen} 
-          // ZMIANA: Przekazujemy nowe wartości jako propsy
-          zoomScale={gramophoneScale}
-          zoomOrigin={gramophoneTransformOrigin}
+        </motion.div>
+        {/* Koniec "Pociągu" */}
+        <motion.div
+          className="newsong-about-layer"
           style={{
-            scale: gramophoneScale,
-            transformOrigin: gramophoneTransformOrigin,
+            opacity: aboutOpacity,
+            clipPath: aboutClipPath,
+            pointerEvents: aboutPointerEvents
           }}
-        />
-        {/* Koniec "Wagonu 2" */}
-        
-      </motion.div> 
-      {/* Koniec "Pociągu" */}
-      <motion.div 
-      className="newsong-about-layer"
-      style={{
-        opacity: aboutOpacity,
-        clipPath: aboutClipPath,
-        pointerEvents: aboutPointerEvents
-      }}
-    >
-      {/* Przekazujemy mu nasze opacity, żeby nadpisać jego logikę */}
-      <About externalOpacity={aboutOpacity} />
-    </motion.div>
-    <CloudTransition progress={cloudProgress} />
+        >
+          {/* Przekazujemy mu nasze opacity, żeby nadpisać jego logikę */}
+          <About externalOpacity={aboutOpacity} />
+        </motion.div>
+        <CloudTransition progress={cloudProgress} />
       </div>
     </motion.section>
   );
