@@ -1,12 +1,15 @@
 import React from 'react';
 import './Merch.css';
 
-function Merch() {
+const Merch = () => {
   return (
-    <section className="Merch-section">
-      <h1>Merch Section</h1>
+    <section className="merch-section">
+      <div className="merch-content">
+        <h1>MERCH</h1>
+        <p>Już wkrótce.</p>
+      </div>
     </section>
   );
-}
+};
 
 export default Merch;

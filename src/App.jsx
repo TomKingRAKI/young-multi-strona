@@ -7,6 +7,7 @@ import Preloader from './components/Preloader/Preloader';
 import NewSong from './components/NewSong/NewSong';
 import Header from './components/Header/Header';
 import MenuOverlay from './components/MenuOverlay/MenuOverlay';
+import Merch from './components/Merch/Merch';
 import { motionValue } from 'framer-motion';
 
 const globalScrollY = motionValue(0);
@@ -92,6 +93,7 @@ function App() {
             setHeaderTheme={setHeaderTheme} 
             isMenuOpen={isMenuOpen}
           />
+          <Merch />
         </main>
       )}
     </>

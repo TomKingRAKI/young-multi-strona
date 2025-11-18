@@ -1,0 +1,28 @@
+.merch-section {
+  /* Ważne: Sekcja Merch musi mieć tło pasujące do chmur,
+     aby przejście było płynne. */
+  background-color: #ffffff; 
+  color: #000000;
+  height: 100vh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  position: relative;
+  /* Ustawiamy z-index, aby być "pod" NewSong podczas przejścia */
+  z-index: 1; 
+}
+
+.merch-content {
+  text-align: center;
+  font-family: 'Bernoru', sans-serif;
+}
+
+.merch-content h1 {
+  font-size: 6rem;
+  margin: 0;
+}
+
+.merch-content p {
+  font-family: 'Antonio', sans-serif;
+  font-size: 1.5rem;
+}

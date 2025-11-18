@@ -7,6 +7,7 @@ import './NewSong.css';
 import Gramophone from '../Gramophone/Gramophone';
 import LiquidEther from '../LiquidEther/LiquidEther';
 import About from '../About/About';
+import CloudTransition from '../CloudTransition/CloudTransition';
 
 // Komponent nie przyjmuje już 'setThemeOverride'
 const NewSong = forwardRef((props, ref) => {
@@ -135,6 +136,12 @@ const NewSong = forwardRef((props, ref) => {
 // Sprawiamy, że sekcja About jest klikalna tylko gdy jest widoczna
 const aboutPointerEvents = useTransform(gramophoneZoomProgress, (v) => (v > 0.1 ? 'auto' : 'none'));
 
+const cloudProgress = useTransform(
+    contentProgress,
+    [0.8, 1.0], // Używamy ostatnie 10% scrolla
+    [0, 1]      // na animację chmur (0 -> 1)
+  );
+
 
   return (
     <motion.section 
@@ -240,6 +247,7 @@ const aboutPointerEvents = useTransform(gramophoneZoomProgress, (v) => (v > 0.1 
       {/* Przekazujemy mu nasze opacity, żeby nadpisać jego logikę */}
       <About externalOpacity={aboutOpacity} />
     </motion.div>
+    <CloudTransition progress={cloudProgress} />
       </div>
     </motion.section>
   );
