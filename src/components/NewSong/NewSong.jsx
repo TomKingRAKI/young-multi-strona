@@ -7,7 +7,7 @@ import './NewSong.css';
 import Gramophone from '../Gramophone/Gramophone';
 import LiquidEther from '../LiquidEther/LiquidEther';
 import About from '../About/About';
-import CloudTransition from '../CloudTransition/CloudTransition';
+import SmokeTransition from '../SmokeTransition/SmokeTransition';
 
 // Komponent nie przyjmuje już 'setThemeOverride'
 const NewSong = forwardRef((props, ref) => {
@@ -141,6 +141,8 @@ const NewSong = forwardRef((props, ref) => {
     [0.85, 1.0], // Wcześniej: [0.75, 1.0]. Zaczynamy po zoomie
     [0, 1]      // na animację chmur (0 -> 1)
   );
+  const smokeZIndex = useTransform(contentProgress, [0, 0.8, 0.81, 1], [0, 0, 100, 100]);
+  const smokeOpacity = useTransform(contentProgress, [0.7, 0.8], [0, 1]);
 
 
   return (
@@ -247,7 +249,24 @@ const NewSong = forwardRef((props, ref) => {
           {/* Przekazujemy mu nasze opacity, żeby nadpisać jego logikę */}
           <About externalOpacity={aboutOpacity} />
         </motion.div>
-        <CloudTransition progress={cloudProgress} />
+        <motion.div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none', // Klikamy przez dym
+
+            /* TU JEST ZMIANA: */
+            zIndex: smokeZIndex,   // Skacze z 0 na 100 pod koniec
+            opacity: smokeOpacity,
+            mixBlendMode: 'screen'  // Płynnie się pojawia przed skokiem
+          }}
+        >
+          {/* Przekazujemy progress do sterowania czasem wideo */}
+          <SmokeTransition progress={cloudProgress} />
+        </motion.div>
       </div>
     </motion.section>
   );

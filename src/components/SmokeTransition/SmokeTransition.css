@@ -1,0 +1,27 @@
+.smoke-transition-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    /* TO JEST TA KLUCZOWA LINIJKA: */
+    mix-blend-mode: screen;
+
+    z-index: 50;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.smoke-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Rozciąga wideo na cały ekran bez pasków */
+    display: block;
+
+    /* Opcjonalnie: jeśli czerń wideo nie jest idealnie czarna, 
+     można użyć mix-blend-mode: screen, ale przy przejściu 
+     z About (czarne) do Merch (białe) tryb 'normal' jest lepszy,
+     bo dym ma po prostu zakryć ekran. */
+}

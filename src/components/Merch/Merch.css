@@ -1,28 +1,176 @@
+/* Plik: /src/components/Merch/Merch.css */
+
 .merch-section {
-  /* Ważne: Sekcja Merch musi mieć tło pasujące do chmur,
-     aby przejście było płynne. */
-  background-color: #ffffff; 
+  /* Białe tło - kontrast po dymie */
+  background-color: #ffffff;
   color: #000000;
-  height: 100vh;
+  min-height: 100vh;
+  /* Co najmniej wysokość ekranu */
   width: 100%;
-  display: grid;
-  place-items: center;
+  padding: 120px 5vw;
+  /* Odstępy góra/dół, boki */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
-  /* Ustawiamy z-index, aby być "pod" NewSong podczas przejścia */
-  z-index: 1; 
+  box-sizing: border-box;
+  z-index: 1;
+  /* Pod NewSong w strukturze */
 }
 
-.merch-content {
+/* --- NAGŁÓWEK --- */
+.merch-header {
   text-align: center;
+  margin-bottom: 100px;
+}
+
+.merch-title {
   font-family: 'Bernoru', sans-serif;
-}
-
-.merch-content h1 {
-  font-size: 6rem;
+  /* Twój font nagłówkowy */
+  font-size: clamp(3rem, 6vw, 8rem);
+  /* Skaluje się z ekranem */
   margin: 0;
+  letter-spacing: -2px;
+  line-height: 0.9;
 }
 
-.merch-content p {
+.merch-subtitle {
   font-family: 'Antonio', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  letter-spacing: 6px;
+  color: #888;
+  margin-top: 1rem;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* --- GRID PRODUKTÓW --- */
+.products-grid {
+  display: grid;
+  /* Automatyczne kolumny: min 350px szerokości */
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 60px;
+  /* Odstępy między kartami */
+  width: 100%;
+  max-width: 1600px;
+}
+
+/* --- EFEKT FOCUS (Magia CSS) --- */
+/* Gdy najedziemy na GRID, wszystkie karty, które NIE są hoverowane, gasną */
+.products-grid:hover .product-card:not(:hover) {
+  opacity: 0.4;
+  filter: blur(3px) grayscale(100%);
+  transform: scale(0.98);
+  transition: all 0.4s ease;
+}
+
+/* --- KARTA PRODUKTU --- */
+.product-card {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Kontener na zdjęcie */
+.product-image-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1.2;
+  /* Format portretowy (lekki prostokąt) */
+  background-color: #f5f5f5;
+  /* Bardzo jasny szary pod ciuchem */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  border-radius: 4px;
+  /* Minimalne zaokrąglenie */
+}
+
+.product-img {
+  width: 90%;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+  /* Cień pod ciuchem */
+}
+
+/* Hover na kartę: Zdjęcie rośnie i się obraca */
+.product-card:hover .product-img {
+  transform: scale(1.12) rotate(-2deg);
+  filter: drop-shadow(0 25px 30px rgba(0, 0, 0, 0.2));
+}
+
+/* Naklejka SOLD OUT */
+.status-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #000;
+  color: #fff;
+  padding: 5px 10px;
+  font-family: 'Antonio', sans-serif;
+  font-weight: bold;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+/* Przycisk ZOBACZ */
+.shop-btn {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  /* Schowany na dole */
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 15px 40px;
+  font-family: 'Antonio', sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Hover na kartę: Przycisk wjeżdża */
+.product-card:hover .shop-btn {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* --- INFO NA DOLE KARTY --- */
+.product-info {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-family: 'Antonio', sans-serif;
+}
+
+.product-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  /* Gruby Antonio */
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.product-status {
+  display: block;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #666;
+  /* Szary kolor statusu */
+}
+
+.product-price {
+  font-size: 1.4rem;
+  font-weight: 400;
 }
