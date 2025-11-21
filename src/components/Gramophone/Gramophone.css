@@ -1,21 +1,18 @@
 /* Plik: /src/components/Gramophone/Gramophone.css (WERSJA Z POPRAWKĄ HOVERA) */
 :root {
-  --gramophone-3d-transform: 
-    translate(0%, 0%)
-    skewX(-25deg) 
-    skewY(7deg) 
-    scale(0.85)
-    translateZ(0);
+  --gramophone-3d-transform:
+    translate(0%, 0%) skewX(-25deg) skewY(7deg) scale(0.85) translateZ(0);
 }
+
 .Gramophone-section {
   width: 100vw;
   height: 100vh;
-  flex-shrink: 0; 
+  flex-shrink: 0;
   color: #111;
   font-family: 'Bernoru', sans-serif;
-  overflow: hidden; 
-  position: relative; 
-  
+  overflow: hidden;
+  position: relative;
+  background-color: #ffffff;
   will-change: transform;
   transform: translateZ(0);
 }
@@ -28,20 +25,23 @@
   left: -50%;
   z-index: 1;
   /* Usunęliśmy display: flex - Boxes wewnątrz mają własną strukturę */
-  padding: 1rem; 
+  padding: 1rem;
   /* Transform jest teraz kontrolowany przez JavaScript (animacja 3D -> 2D) */
   transform-origin: center center;
   overflow: visible;
-  pointer-events: none; /* Upewniamy się, że Boxes są widoczne */
+  pointer-events: none;
+  /* Upewniamy się, że Boxes są widoczne */
 }
+
 .gramophone-content-world {
   position: absolute;
   width: 120%;
   height: 100%;
   top: 0;
-  left: -10%; 
+  left: -10%;
 
-  z-index: 3; /* Wyżej niż About layer */
+  z-index: 3;
+  /* Wyżej niż About layer */
   /* Transform jest teraz kontrolowany przez JavaScript (animacja 3D -> 2D) */
   transform-origin: center center;
   display: flex;
@@ -53,10 +53,10 @@
   font-size: 6rem;
   text-align: center;
   margin: 0;
-  padding: 7.5rem 0; 
-  flex-shrink: 0; 
+  padding: 7.5rem 0;
+  flex-shrink: 0;
   color: #000000;
-  text-shadow: 
+  text-shadow:
     1px 1px 0 #444,
     2px 2px 0 #444,
     3px 3px 0 #444,
@@ -64,36 +64,37 @@
     5px 5px 0 #444,
     6px 6px 0 #444,
     7px 7px 5px rgba(0, 0, 0, 0.3);
-    pointer-events: none;
+  pointer-events: none;
 }
 
 .scroll-stack-scroller.gramophone-scroller {
-  flex-grow: 1; 
+  flex-grow: 1;
   position: relative;
-  pointer-events: none; /* Ignoruj myszkę na pustej przestrzeni */
-  
+  pointer-events: none;
+  /* Ignoruj myszkę na pustej przestrzeni */
+
   /* Kluczowa zmiana, która teraz na 100% nadpisze 'hidden' */
   overflow-x: visible;
   overflow-y: visible;
 }
 
 .gramophone-scroller .scroll-stack-inner {
-  padding: 80vh 5vw 50rem 5vw; 
+  padding: 80vh 5vw 50rem 5vw;
 }
 
 .scroll-stack-card.album-card {
   font-family: 'Antonio', sans-serif;
   max-width: 900px;
   margin: 0 auto 20px auto;
-  height: auto; 
-  min-height: 20rem; 
+  height: auto;
+  min-height: 20rem;
   padding: 2rem;
   border-radius: 20px;
   background-color: #ffffff;
   color: #111;
-  display: block; 
-  
-  box-shadow: 
+  display: block;
+
+  box-shadow:
     1px 1px 0px #bbb,
     2px 2px 0px #bbb,
     3px 3px 0px #bbb,
@@ -113,27 +114,31 @@
   margin-bottom: 1.5rem;
   font-family: 'Bernoru', sans-serif;
 }
+
 .album-header h2 {
   margin: 0;
   font-size: 2.5rem;
-  color: #111; 
-  text-shadow: 
+  color: #111;
+  text-shadow:
     1px 1px 0 #555,
     2px 2px 0 #555,
-    3px 3px 2px rgba(0,0,0,0.1);
+    3px 3px 2px rgba(0, 0, 0, 0.1);
 }
+
 .album-header p {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 300;
   opacity: 0.8;
 }
+
 .album-content {
   display: grid;
-  grid-template-columns: 1fr 1.2fr 1fr; 
+  grid-template-columns: 1fr 1.2fr 1fr;
   gap: 1.5rem;
   align-items: flex-start;
 }
+
 .album-content h3 {
   font-family: 'Bernoru', sans-serif;
   margin: 0 0 0.5rem 0;
@@ -141,25 +146,29 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   opacity: 0.7;
-  color: #333; /* Lekko ciemniejszy dla lepszego kontrastu cienia */
-  text-shadow: 
+  color: #333;
+  /* Lekko ciemniejszy dla lepszego kontrastu cienia */
+  text-shadow:
     1px 1px 0 #888,
-    2px 2px 1px rgba(0,0,0,0.1);
+    2px 2px 1px rgba(0, 0, 0, 0.1);
 }
+
 .album-cover {
   display: grid;
   place-items: center;
 }
+
 .album-cover img {
   width: 100%;
   max-width: 300px;
   border-radius: 10px;
-  box-shadow: 
+  box-shadow:
     1px 1px 0px #bbb,
     2px 2px 0px #bbb,
     3px 3px 0px #bbb,
     4px 4px 5px rgba(0, 0, 0, 0.2);
 }
+
 .cover-placeholder {
   width: 100%;
   max-width: 300px;
@@ -171,6 +180,7 @@
   font-size: 5rem;
   color: #aaa;
 }
+
 .album-tracklist ul {
   margin: 0;
   padding: 0;
@@ -178,37 +188,47 @@
   font-size: 1.1rem;
   line-height: 1.6;
 }
+
 .album-style-nowa-fala {
   background: linear-gradient(135deg, #74a8c3 0%, #f3e5c9 70%);
   color: #111;
 }
+
 .album-style-nowa-fala .album-header {
   border-bottom-color: rgba(0, 0, 0, 0.1);
 }
+
 .album-style-trapstar {
   background: linear-gradient(135deg, #1b2a3a 0%, #3a5c7c 60%, #c87c54 100%);
-  color: #ffffff; 
+  color: #ffffff;
 }
+
 .album-style-trapstar .album-header {
   border-bottom-color: rgba(255, 255, 255, 0.2);
 }
+
 .album-style-trapstar .album-content h3 {
   opacity: 0.6;
 }
+
 .album-style-tad {
   background: radial-gradient(circle, #ffffff 60%, #e9e9e9 100%);
   color: #111;
 }
+
 .album-style-tad .album-header {
   border-bottom-color: rgba(0, 0, 0, 0.1);
 }
+
 .album-style-toxic {
   background: radial-gradient(circle, #d93a3a 0%, #a41e1e 70%);
-  color: #ffffff; 
+  color: #ffffff;
 }
+
 .album-style-toxic .album-header {
   border-bottom-color: rgba(255, 255, 255, 0.2);
 }
+
 .album-style-toxic .album-content h3 {
   opacity: 0.6;
 }
@@ -257,7 +277,7 @@
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
-  box-shadow: 
+  box-shadow:
     1px 1px 0px #bbb,
     2px 2px 0px #bbb,
     3px 3px 0px #bbb,

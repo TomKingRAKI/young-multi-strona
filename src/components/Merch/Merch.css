@@ -1,62 +1,81 @@
 /* Plik: /src/components/Merch/Merch.css */
 
-.merch-section {
-  /* Białe tło - kontrast po dymie */
+/* 1. KONTENER SCROLLA (To on nadaje długość sekwencji) */
+.merch-scroll-container {
+  height: 350vh;
+  /* Długość scrollowania - im więcej, tym wolniejsza animacja */
   background-color: #ffffff;
-  color: #000000;
-  min-height: 100vh;
-  /* Co najmniej wysokość ekranu */
+  position: relative;
+  z-index: 1;
+}
+
+/* 2. STICKY WRAPPER (To co widzimy na ekranie) */
+.merch-sticky-wrapper {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  /* Zawsze na cały ekran */
   width: 100%;
-  padding: 120px 5vw;
-  /* Odstępy góra/dół, boki */
+  overflow: hidden;
+  /* Ukrywamy elementy wylatujące poza ekran */
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
+  justify-content: center;
+  padding: 0 5vw;
   box-sizing: border-box;
-  z-index: 1;
-  /* Pod NewSong w strukturze */
 }
 
-/* --- NAGŁÓWEK --- */
+/* --- RESZTA STYLÓW (Podobna do poprzedniej wersji, ale bez marginesów layoutu) --- */
+
 .merch-header {
   text-align: center;
-  margin-bottom: 100px;
+  margin-bottom: 40px;
+  transform-origin: center center;
+  /* Ważne do skalowania tytułu */
 }
 
 .merch-title {
   font-family: 'Bernoru', sans-serif;
-  /* Twój font nagłówkowy */
-  font-size: clamp(3rem, 6vw, 8rem);
-  /* Skaluje się z ekranem */
+  font-size: clamp(2.5rem, 5vw, 6rem);
   margin: 0;
   letter-spacing: -2px;
   line-height: 0.9;
+  color: #000;
 }
 
 .merch-subtitle {
   font-family: 'Antonio', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1rem;
   letter-spacing: 6px;
   color: #888;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   text-transform: uppercase;
   font-weight: 700;
 }
 
-/* --- GRID PRODUKTÓW --- */
+/* GRID */
 .products-grid {
   display: grid;
-  /* Automatyczne kolumny: min 350px szerokości */
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 60px;
-  /* Odstępy między kartami */
+  grid-template-columns: repeat(3, 1fr);
+  /* Wymuszamy 3 kolumny obok siebie */
+  gap: 30px;
   width: 100%;
-  max-width: 1600px;
+  max-width: 1400px;
+  /* Ważne: align-items, żeby produkty były równo */
+  align-items: start;
 }
 
-/* --- EFEKT FOCUS (Magia CSS) --- */
-/* Gdy najedziemy na GRID, wszystkie karty, które NIE są hoverowane, gasną */
+/* Responsive dla mobilek - żeby się nie rozjechało */
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+    /* Na telefonie jeden pod drugim */
+  }
+}
+
+/* EFEKT FOCUS (Zostaje taki sam, bo jest super) */
 .products-grid:hover .product-card:not(:hover) {
   opacity: 0.4;
   filter: blur(3px) grayscale(100%);
@@ -64,113 +83,130 @@
   transition: all 0.4s ease;
 }
 
-/* --- KARTA PRODUKTU --- */
 .product-card {
   position: relative;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* Usunąłem transition tutaj dla transform, bo Framer Motion przejmuje kontrolę nad x/y/rotate */
+  /* Zostawiamy transition tylko dla efektów hover */
+  transition: filter 0.4s ease, opacity 0.4s ease;
 }
 
-/* Kontener na zdjęcie */
+/* --- WNĘTRZE KARTY (Zostaje bez zmian) --- */
 .product-image-wrapper {
   width: 100%;
-  aspect-ratio: 1 / 1.2;
-  /* Format portretowy (lekki prostokąt) */
-  background-color: #f5f5f5;
-  /* Bardzo jasny szary pod ciuchem */
+  aspect-ratio: 1 / 1.1;
+  /* Lekki pion, wygląda lepiej z tłem */
+
+  /* PRZYWRACAMY TŁO: */
+  background-color: #f0f0f0;
+  border-radius: 12px;
+  /* Ładne zaokrąglenie okna */
+
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
   position: relative;
-  border-radius: 4px;
-  /* Minimalne zaokrąglenie */
+
+  /* Płynne przejście dla tła */
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: visible;
+  /* Żeby produkt mógł wyskoczyć poza ramkę */
 }
 
 .product-img {
-  width: 90%;
+  width: 80%;
   height: auto;
   object-fit: contain;
-  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* Lekki cień rzucany na "okno" */
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
-  /* Cień pod ciuchem */
+  z-index: 2;
+  /* Produkt nad tłem */
 }
 
-/* Hover na kartę: Zdjęcie rośnie i się obraca */
+.product-card:hover .product-image-wrapper {
+  background-color: #e6e6e6;
+  /* Ciemnieje */
+  transform: scale(0.97);
+  /* "Wciska się" w głąb */
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+  /* Cień wewnętrzny (głębia) */
+}
+
+/* B. Co się dzieje z PRODUKTEM po najechaniu? */
 .product-card:hover .product-img {
-  transform: scale(1.12) rotate(-2deg);
-  filter: drop-shadow(0 25px 30px rgba(0, 0, 0, 0.2));
+  /* Wylatuje mocno do przodu i się obraca */
+  transform: scale(1.25) rotate(-4deg) translateY(-10px);
+  /* Rzuca mocniejszy cień, bo jest "wyżej" */
+  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.25));
 }
 
-/* Naklejka SOLD OUT */
 .status-badge {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 0;
+  right: 10px;
   background-color: #000;
   color: #fff;
-  padding: 5px 10px;
+  padding: 4px 8px;
   font-family: 'Antonio', sans-serif;
   font-weight: bold;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   letter-spacing: 1px;
 }
 
-/* Przycisk ZOBACZ */
 .shop-btn {
   position: absolute;
-  bottom: 30px;
+  bottom: 20px;
   left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  /* Schowany na dole */
+  transform: translateX(-50%) translateY(20px);
   background: #000;
   color: #fff;
   border: none;
-  padding: 15px 40px;
+  padding: 12px 30px;
   font-family: 'Antonio', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bold;
   text-transform: uppercase;
   cursor: pointer;
   opacity: 0;
   transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Hover na kartę: Przycisk wjeżdża */
 .product-card:hover .shop-btn {
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%) translateY(-10px);
   opacity: 1;
 }
 
-/* --- INFO NA DOLE KARTY --- */
 .product-info {
-  margin-top: 25px;
+  margin-top: 10px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   font-family: 'Antonio', sans-serif;
+  padding: 0 10px;
 }
 
 .product-name {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 800;
-  /* Gruby Antonio */
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 1px;
+  color: #000;
 }
 
 .product-status {
   display: block;
-  font-size: 0.85rem;
-  margin-top: 5px;
+  font-size: 0.75rem;
+  margin-top: 2px;
   font-weight: 600;
   letter-spacing: 2px;
   color: #666;
-  /* Szary kolor statusu */
 }
 
 .product-price {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 400;
+  color: #000;
 }

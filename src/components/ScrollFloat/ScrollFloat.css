@@ -1,0 +1,21 @@
+.scroll-float {
+    overflow: hidden;
+    margin: 0;
+    /* Reset marginesów */
+}
+
+.scroll-float-text {
+    display: inline-block;
+    /* Używamy Twojego fontu */
+    font-family: 'Bernoru', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    /* Dopasowane do Merch */
+    font-weight: 900;
+    text-align: center;
+    line-height: 1;
+    letter-spacing: -2px;
+}
+
+.char {
+    display: inline-block;
+}

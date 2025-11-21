@@ -8,6 +8,7 @@ import NewSong from './components/NewSong/NewSong';
 import Header from './components/Header/Header';
 import MenuOverlay from './components/MenuOverlay/MenuOverlay';
 import Merch from './components/Merch/Merch';
+import Contact from './components/Contact/Contact';
 import { motionValue } from 'framer-motion';
 
 const globalScrollY = motionValue(0);
@@ -18,7 +19,7 @@ function App() {
   const newSongRef = useRef(null);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
+
   // Tu była logika z 'isThemeLocked', która jest OK
   const [isThemeLocked, setIsThemeLocked] = useState(false);
 
@@ -32,7 +33,7 @@ function App() {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000); 
+    const timer = setTimeout(() => setIsLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -40,7 +41,7 @@ function App() {
   useEffect(() => {
     const handleScroll = () => {
       globalScrollY.set(window.scrollY);
-      
+
       // Sprawdzamy czy jesteśmy w sekcji Hero (przed NewSong)
       // Hero ma height: 100vh, więc gdy scrollY < viewportHeight, jesteśmy w Hero
       const viewportHeight = window.innerHeight;
@@ -51,10 +52,10 @@ function App() {
         }
       }
     };
-    
+
     // Sprawdzamy też przy załadowaniu
     handleScroll();
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -69,31 +70,32 @@ function App() {
       <AnimatePresence>
         {isLoading && <Preloader />}
       </AnimatePresence>
-      
-      <Header 
-        headerTheme={effectiveTheme} 
+
+      <Header
+        headerTheme={effectiveTheme}
         onMenuClick={openMenu}
         onCloseClick={closeMenu}
         isMenuOpen={isMenuOpen}
       />
-      
-      <AnimatePresence 
-        mode='wait' 
+
+      <AnimatePresence
+        mode='wait'
         onExitComplete={() => setIsThemeLocked(false)} // Odblokuj motyw
       >
-        {isMenuOpen && <MenuOverlay />} 
+        {isMenuOpen && <MenuOverlay />}
       </AnimatePresence>
-      
+
       {!isLoading && (
         <main>
-          <Hero scrollY={globalScrollY} /> 
+          <Hero scrollY={globalScrollY} />
           {/* Przekazujemy tylko ref, bez 'setThemeOverride' */}
-          <NewSong 
-            ref={newSongRef} 
-            setHeaderTheme={setHeaderTheme} 
+          <NewSong
+            ref={newSongRef}
+            setHeaderTheme={setHeaderTheme}
             isMenuOpen={isMenuOpen}
           />
           <Merch />
+          <Contact />
         </main>
       )}
     </>

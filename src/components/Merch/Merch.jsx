@@ -1,18 +1,19 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import './Merch.css';
+import ScrollFloat from '../ScrollFloat/ScrollFloat'; // <--- IMPORTUJEMY NOWY NAPIS
+
+// Importy zdjęć (pamiętaj o swoich ścieżkach!)
 import hoodieImg from '../../assets/hoodie1.png';
 import hoodie1Img from '../../assets/hoodie2.png';
 import teeImg from '../../assets/tshirt.png';
 
-// Tutaj wpisz dane swoich produktów
 const products = [
   {
     id: 1,
     name: "YFL PATCH HOODIE",
     price: "499,00 ZŁ",
     status: "WYPRZEDANE",
-    // Zmień ten link na import swojego zdjęcia, np. import hoodie1 from '../../assets/hoodie1.png'
     image: hoodieImg,
   },
   {
@@ -32,70 +33,100 @@ const products = [
 ];
 
 const Merch = () => {
+  const targetRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start start", "end end"]
+  });
+
+  // --- ZWOLNIONE ANIMACJE (Większy zakres liczb = wolniejszy ruch) ---
+
+  // A. Produkt 1 (Lewy):
+  // Wcześniej: [0, 0.25] -> Szybko
+  // Teraz: [0, 0.5] -> Dwa razy wolniej
+  const x1 = useTransform(scrollYProgress, [0, 0.5], ["-100vw", "0vw"]);
+  const r1 = useTransform(scrollYProgress, [0, 0.5], [-45, 0]);
+  const o1 = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+
+  // B. Produkt 2 (Środkowy):
+  const y2 = useTransform(scrollYProgress, [0.1, 0.6], ["100vh", "0vh"]); // Startuje ciut później, kończy później
+  const s2 = useTransform(scrollYProgress, [0.1, 0.6], [0.5, 1]);
+  const o2 = useTransform(scrollYProgress, [0.1, 0.4], [0, 1]);
+
+  // C. Produkt 3 (Prawy):
+  const x3 = useTransform(scrollYProgress, [0, 0.5], ["100vw", "0vw"]);
+  const r3 = useTransform(scrollYProgress, [0, 0.5], [45, 0]);
+  const o3 = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+
+
   return (
-    <section className="merch-section">
+    <section ref={targetRef} className="merch-scroll-container">
 
-      {/* Nagłówek sekcji */}
-      <motion.div
-        className="merch-header"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        <h1 className="merch-title">SELECTED GOODS</h1>
-        <p className="merch-subtitle">YOUNG FAMILY LABEL • SEASON 2025</p>
-      </motion.div>
+      <div className="merch-sticky-wrapper">
 
-      {/* Grid z produktami */}
-      <div className="products-grid">
-        {products.map((product, index) => (
-          <motion.div
-            key={product.id}
-            className="product-card"
-            // Animacja wjazdu kafelków (jeden po drugim)
-            initial={{ opacity: 0, y: 100 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{
-              duration: 0.6,
-              delay: index * 0.2, // Opóźnienie tworzy efekt "fali"
-              ease: "backOut"
-            }}
+        {/* --- TUTAJ WSTAWIAMY NOWY ANIMOWANY NAPIS --- */}
+        <div style={{ marginBottom: '40px', textAlign: 'center' }}>
+          <ScrollFloat
+            animationDuration={1}
+            ease='back.inOut(2)'
+            scrollStart='center bottom+=50%'
+            scrollEnd='bottom bottom-=40%'
+            stagger={0.05} // Im wyższa liczba, tym większe opóźnienie między literkami
           >
-            <div className="product-image-wrapper">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="product-img"
-              />
+            SELECTED GOODS
+          </ScrollFloat>
 
-              {/* Przycisk pojawia się po najechaniu */}
-              <button className="shop-btn">
-                ZOBACZ DROP
-              </button>
+          <motion.p
+            className="merch-subtitle"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            YOUNG FAMILY LABEL • SEASON 2025
+          </motion.p>
+        </div>
 
-              {/* Opcjonalnie: Naklejka statusu na obrazku */}
-              {product.status === "WYPRZEDANE" && (
-                <div className="status-badge">SOLD OUT</div>
-              )}
-            </div>
+        <div className="products-grid">
 
-            <div className="product-info">
-              <div className="info-left">
-                <h3 className="product-name">{product.name}</h3>
-                <span className="product-status">{product.status}</span>
-              </div>
-              <div className="info-right">
-                <span className="product-price">{product.price}</span>
-              </div>
-            </div>
+          {/* PRODUKT 1 */}
+          <motion.div className="product-card" style={{ x: x1, rotate: r1, opacity: o1 }}>
+            <ProductContent product={products[0]} />
           </motion.div>
-        ))}
-      </div>
 
+          {/* PRODUKT 2 */}
+          <motion.div className="product-card" style={{ y: y2, scale: s2, opacity: o2 }}>
+            <ProductContent product={products[1]} />
+          </motion.div>
+
+          {/* PRODUKT 3 */}
+          <motion.div className="product-card" style={{ x: x3, rotate: r3, opacity: o3 }}>
+            <ProductContent product={products[2]} />
+          </motion.div>
+
+        </div>
+      </div>
     </section>
   );
 };
+
+const ProductContent = ({ product }) => (
+  <>
+    <div className="product-image-wrapper">
+      <img src={product.image} alt={product.name} className="product-img" />
+      <button className="shop-btn">ZOBACZ DROP</button>
+      {product.status === "WYPRZEDANE" && <div className="status-badge">SOLD OUT</div>}
+    </div>
+    <div className="product-info">
+      <div className="info-left">
+        <h3 className="product-name">{product.name}</h3>
+        <span className="product-status">{product.status}</span>
+      </div>
+      <div className="info-right">
+        <span className="product-price">{product.price}</span>
+      </div>
+    </div>
+  </>
+);
 
 export default Merch;

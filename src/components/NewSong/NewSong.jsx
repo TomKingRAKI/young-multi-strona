@@ -207,18 +207,41 @@ const NewSong = forwardRef((props, ref) => {
             <motion.div
               className="video-container"
               style={{ opacity: 1, y: videoY, x: videoX, scale: videoScale }}
+              onClick={() => window.open('https://youtu.be/TWOJ_LINK', '_blank')}
             >
-              <div className="video-placeholder">VIDEO</div>
+              <div className="video-thumbnail-wrapper">
+                {/* 1. Statyczna okładka (JPG) */}
+                <img
+                  src="https://img.youtube.com/vi/TWOJE_ID/maxresdefault.jpg"
+                  className="video-thumb-img"
+                  alt="Thumbnail"
+                />
+
+                {/* 2. Wideo Loop na Hover (MP4/WEBM bez dźwięku) */}
+                <video
+                  src="/assets/preview-loop.mp4" // WRZUĆ TU SWÓJ PLIK!
+                  className="video-preview-loop"
+                  muted
+                  loop
+                  autoPlay
+                  playsInline
+                />
+
+                {/* 3. Przycisk Play */}
+                <div className="play-button">
+                  <div className="play-icon"></div>
+                </div>
+              </div>
             </motion.div>
 
             <motion.div
               className="links-container"
               style={{ opacity: linksOpacity, x: linksX, y: linksY }}
             >
-              <a href="#" className="streaming-link" target="_blank">SPOTIFY</a>
-              <a href="#" className="streaming-link" target="_blank">APPLE MUSIC</a>
-              <a href="#" className="streaming-link" target="_blank">YOUTUBE MUSIC</a>
-              <a href="#" className="streaming-link" target="_blank">TIDAL</a>
+              <PlatformLink name="SPOTIFY" />
+              <PlatformLink name="APPLE MUSIC" />
+              <PlatformLink name="YOUTUBE MUSIC" />
+              <PlatformLink name="TIDAL" />
             </motion.div>
           </motion.div>
           {/* Koniec "Wagonu 1" */}
@@ -271,5 +294,12 @@ const NewSong = forwardRef((props, ref) => {
     </motion.section>
   );
 });
+
+const PlatformLink = ({ name }) => (
+  <a href="#" className="streaming-link" target="_blank">
+    <span>{name}</span>
+    <span className="link-arrow">↗</span>
+  </a>
+);
 
 export default NewSong;
