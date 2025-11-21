@@ -1,260 +1,306 @@
-/* Plik: /src/components/NewSong/NewSong.css (NOWA, POPRAWIONA WERSJA) */
+/* Plik: /src/components/NewSong/NewSong.css */
 
 .newsong-section {
   height: 1500vh;
-  /* Zmniejszona wysokość dla szybszego scrolla */
   position: relative;
-
   color: white;
   z-index: 2;
+  background-color: #050505;
+  /* Baza */
 }
 
-.newsong-sticky-content {
+.newsong-sticky-viewport {
   position: sticky;
   top: 0;
   height: 100vh;
-  width: 200vw;
-  /* 2 wagony: NewSong i Gramophone */
-  background-color: transparent;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.newsong-train-track {
   display: flex;
-  z-index: 1;
+  width: 200vw;
+  /* 2 panele obok siebie */
+  height: 100vh;
 }
 
 .newsong-panel {
   width: 100vw;
   height: 100vh;
   flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  /* Grid centruje wszystkie warstwy (tło, tekst, video) na środku */
   display: grid;
   place-items: center;
-  overflow: hidden;
-  position: relative;
-  background-color: #000;
-  /* Usunęliśmy stąd tło */
+  grid-template-areas: "stack";
+
 }
 
-/* === ZMIANY SĄ TUTAJ === */
-
-.newsong-liquid-background {
+/* --- NOWE TŁO: INDUSTRIAL --- */
+.industrial-bg {
+  grid-area: stack;
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  /* ZMIANA 1: Ustawia tło na najniższą warstwę *wewnątrz* panelu */
+  inset: 0;
   z-index: 0;
-
-  /* ZMIANA 2: Mówi siatce (grid), żeby umieściła tło 
-     w tej samej komórce (1 / 1) co resztę treści.
-     To naprawia problem "podwyższenia".
-  */
-  grid-area: 1 / 1;
+  background-color: #0a0a0a;
+  overflow: hidden;
 }
 
-/* === KONIEC ZMIAN === */
-
-
-/* Wspólne style dla "warstw" animacji */
-.newsong-text-wrapper,
-.video-container,
-.links-container {
-  grid-area: 1 / 1;
-  opacity: 0;
-  position: relative;
-  /* Ważne, aby z-index zadziałał */
+/* Szum (Noise) - daje teksturę betonu/filmu */
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  pointer-events: none;
 }
 
-/* --- Style dla Tekstu --- */
+/* Siatka techniczna */
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 100px 100px;
+  /* Rozmiar kratek */
+  pointer-events: none;
+}
+
+/* Reflektor na środku (Spotlight) */
+.spotlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.8) 70%);
+  pointer-events: none;
+}
+
+/* --- TYPOGRAFIA --- */
 .newsong-text-wrapper {
-  text-align: center;
-  /* z-index: 2 jest > 0 (tła), więc jest widoczny i nad tłem */
+  grid-area: stack;
   z-index: 2;
+  /* Nad tłem, ale pod wideo jeśli najedzie */
+  text-align: center;
+  mix-blend-mode: overlay;
+  /* Tekst fajnie przenika */
+  pointer-events: none;
 }
 
 .newsong-title {
   font-family: 'Bernoru', sans-serif;
-  font-size: 6rem;
-  margin: 0;
+  /* GIGANTYCZNY FONT SKALOWANY EKRANEM */
+  font-size: clamp(3rem, 8vw, 120px);
+  line-height: 0.8;
   color: #fff;
+  margin: 0;
+  text-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
 }
 
 .newsong-subtitle {
   font-family: 'Antonio', sans-serif;
-  font-weight: 700;
-  font-size: 2rem;
-  letter-spacing: 4px;
-  color: #aaa;
-  margin: 0;
+  font-size: 1.2vw;
+  letter-spacing: 0.5em;
+  color: #fff;
+  opacity: 0.7;
+  margin-top: 1rem;
+  background: #000;
+  display: inline-block;
+  padding: 0.5em 1em;
 }
 
-/* --- Style dla Wideo --- */
+/* --- WIDEO (TERAZ DUŻE) --- */
 .video-container {
+  grid-area: stack;
+  z-index: 10;
+
+  /* ZMIANA: Zamiast 55vw dajemy max-width */
   width: 100%;
-  max-width: 800px;
-  /* Troszkę mniejsze, żeby nie przytłaczało */
-  z-index: 1;
+  max-width: 700px;
+  /* Rozsądny rozmiar laptopowy */
+  aspect-ratio: 16/9;
+
   position: relative;
+  background: #000;
+  border: 1px solid #333;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   cursor: pointer;
-  /* Efekt "szklanej ramki" */
-  padding: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(5px);
+  transition: border-color 0.3s;
+}
+
+.video-container:hover {
+  border-color: #fff;
 }
 
 .video-thumbnail-wrapper {
-  position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   overflow: hidden;
-  background-color: #000;
+  position: relative;
 }
 
-/* Statyczna okładka */
-.video-thumb-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-/* Wideo (GIF) na hover - domyślnie ukryte */
+.video-thumb-img,
 .video-preview-loop {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.5s ease;
 }
 
-/* Hover na kontenerze -> pokaż wideo, ukryj thumb */
-.video-container:hover .video-preview-loop {
-  opacity: 1;
+/* TECH DETAILS (Narożniki i REC) */
+.tech-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #fff;
+  z-index: 20;
+  pointer-events: none;
+  transition: all 0.3s;
 }
 
-.video-container:hover .video-thumb-img {
-  opacity: 0;
+.tl {
+  top: -1px;
+  left: -1px;
+  border-right: 0;
+  border-bottom: 0;
 }
 
-/* Przycisk PLAY */
+.br {
+  bottom: -1px;
+  right: -1px;
+  border-left: 0;
+  border-top: 0;
+}
+
+.video-container:hover .tl {
+  transform: translate(-5px, -5px);
+}
+
+.video-container:hover .br {
+  transform: translate(5px, 5px);
+}
+
+.rec-label {
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  font-family: monospace;
+  color: #ff0000;
+  font-size: 1rem;
+  z-index: 20;
+  animation: blink 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+/* BUTTON PLAY */
 .play-button {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  width: 8vw;
+  /* Skalowalne */
+  height: 8vw;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   display: grid;
   place-items: center;
-  transition: all 0.3s ease;
-  pointer-events: none;
-  /* Żeby nie blokował hovera */
-  z-index: 2;
-}
-
-.video-container:hover .play-button {
-  background: #fff;
-  border-color: #fff;
-  transform: translate(-50%, -50%) scale(1.1);
+  transition: 0.3s;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
 }
 
 .play-icon {
   width: 0;
   height: 0;
   border-style: solid;
-  border-width: 10px 0 10px 18px;
+  border-width: 1.5vw 0 1.5vw 2.5vw;
   border-color: transparent transparent transparent #fff;
-  transition: border-color 0.3s ease;
+}
+
+.video-container:hover .play-button {
+  background: #fff;
+  transform: translate(-50%, -50%) scale(1.1);
 }
 
 .video-container:hover .play-icon {
   border-color: transparent transparent transparent #000;
 }
 
-.video-placeholder {
-  width: 100%;
-  background-color: #333;
-  aspect-ratio: 16 / 9;
-  display: grid;
-  place-items: center;
-  font-family: 'Antonio', sans-serif;
-  font-size: 3rem;
-  border-radius: 12px;
-}
-
-/* --- Style dla Linków --- */
+/* --- LINKI (WIĘKSZE) --- */
 .links-container {
+  grid-area: stack;
+  z-index: 11;
+
+  /* SZEROKOŚĆ LINKÓW */
+  width: 280px;
+
   display: flex;
   flex-direction: column;
-  gap: 0;
-  /* Złączymy je, żeby wyglądały jak lista */
-  z-index: 3;
-  width: 300px;
 }
 
 .streaming-link {
-  font-family: 'Bernoru', sans-serif;
-  /* Zmiana fontu na bardziej "logo-like" */
-  font-size: 1.5rem;
-  color: #fff;
-  background-color: transparent;
-  padding: 1rem 1.5rem;
-  text-decoration: none;
-  text-align: left;
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-bottom: none;
-  /* Żeby nie dublować linii */
-  transition: all 0.3s ease;
-  overflow: hidden;
-  /* Do efektu hover */
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1rem 1.5rem;
+  border: 1px solid #333;
+  border-bottom: none;
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  font-family: 'Bernoru', sans-serif;
+  font-size: 1.5vw;
+  /* Skalowalny font */
+  position: relative;
+  transition: 0.2s;
+  overflow: hidden;
 }
 
 .streaming-link:last-child {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid #333;
 }
 
+/* Hover Effect: Biały pasek wjeżdża */
 .streaming-link::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #fff;
+  inset: 0;
+  background: #fff;
   transform: translateX(-100%);
-  /* Schowane po lewej */
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  z-index: -1;
+  transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 0;
 }
 
 .streaming-link:hover::before {
   transform: translateX(0);
-  /* Wjazd na pełną szerokość */
+}
+
+.streaming-link span {
+  position: relative;
+  z-index: 1;
 }
 
 .streaming-link:hover {
   color: #000;
-  /* Tekst zmienia się na czarny */
-  padding-left: 2rem;
-  /* Lekkie przesunięcie tekstu */
+  padding-left: 2.5rem;
 }
 
 .link-arrow {
-  font-size: 1rem;
   opacity: 0;
   transform: translateX(-20px);
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
 .streaming-link:hover .link-arrow {
@@ -268,7 +314,25 @@
   left: 0;
   width: 100%;
   height: 100%;
-  /* Ustawiamy go na wierzchu pociągu (który ma domyślny z-index) */
   z-index: 10;
-  /* About.css zajmie się czarnym tłem */
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .newsong-text-wrapper {
+    margin-bottom: 20vh;
+  }
+
+  .newsong-title {
+    font-size: 15vw;
+  }
+
+  .video-container {
+    width: 90vw;
+  }
+
+  .links-container {
+    width: 80vw;
+    margin-top: 20px;
+  }
 }
