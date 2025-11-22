@@ -1,7 +1,9 @@
 // Plik: /src/App.jsx
 
-import React, { useState, useEffect, useRef } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
+
+// Importy komponentów
 import Hero from './components/Hero/Hero';
 import Preloader from './components/Preloader/Preloader';
 import NewSong from './components/NewSong/NewSong';
@@ -9,61 +11,71 @@ import Header from './components/Header/Header';
 import MenuOverlay from './components/MenuOverlay/MenuOverlay';
 import Merch from './components/Merch/Merch';
 import Contact from './components/Contact/Contact';
-import { motionValue } from 'framer-motion';
-
-const globalScrollY = motionValue(0);
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [headerTheme, setHeaderTheme] = useState('dark');
-  const newSongRef = useRef(null);
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [headerTheme, setHeaderTheme] = useState('light');
 
-  // Tu była logika z 'isThemeLocked', która jest OK
-  const [isThemeLocked, setIsThemeLocked] = useState(false);
+  const { scrollY } = useScroll();
 
-  const openMenu = () => {
-    setIsMenuOpen(true);
-    setIsThemeLocked(true); // Zablokuj motyw na 'light'
-  };
+  // === MIEJSCE NA TWOJE LICZBY ===
+  // Wpisz tutaj liczby, które odczytasz z konsoli:
+  const START_GRAMO = 5000; // <--- WPISZ TU POCZĄTEK BIAŁEGO GRAMOFONU (np. 5500)
+  const KONIEC_GRAMO = 10000; // <--- WPISZ TU KONIEC GRAMOFONU / START ABOUT (np. 11000)
 
-  const closeMenu = () => {
-    setIsMenuOpen(false); // Rozpocznij animację 'exit'
-  };
+  // Reszta liczb, które już podałeś:
+  const MERCH_START = 13892;
+  const CONTACT_START = 18330;
+
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const vh = window.innerHeight;
+
+    // Pokaż aktualną pozycję w konsoli, żebyś mógł spisać liczby
+    console.log("AKTUALNY SCROLL:", Math.round(latest));
+
+    // 1. HERO (Szare) -> LIGHT
+    if (latest < vh * 0.9) {
+      if (headerTheme !== 'light') setHeaderTheme('light');
+    }
+
+    // 2. NEW SONG: INDUSTRIAL (Ciemne) -> DARK
+    // Od końca Hero do początku Gramofonu
+    else if (latest >= vh * 0.9 && latest < START_GRAMO) {
+      if (headerTheme !== 'dark') setHeaderTheme('dark');
+    }
+
+    // 3. NEW SONG: GRAMOPHONE (Białe) -> LIGHT  <--- TU JEST NAPRAWA
+    else if (latest >= START_GRAMO && latest < KONIEC_GRAMO) {
+      if (headerTheme !== 'light') setHeaderTheme('light');
+    }
+
+    // 4. NEW SONG: ABOUT (Ciemne) -> DARK
+    // Od końca Gramofonu do początku Merchu
+    else if (latest >= KONIEC_GRAMO && latest < MERCH_START) {
+      if (headerTheme !== 'dark') setHeaderTheme('dark');
+    }
+
+    // 5. MERCH (Białe wideo) -> LIGHT
+    else if (latest >= MERCH_START && latest < CONTACT_START) {
+      if (headerTheme !== 'light') setHeaderTheme('light');
+    }
+
+    // 6. CONTACT (Ciemne) -> DARK
+    else {
+      if (headerTheme !== 'dark') setHeaderTheme('dark');
+    }
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
-  // OPTYMALIZACJA: Aktualizujemy globalScrollY i sprawdzamy pozycję dla motywu Hero
-  useEffect(() => {
-    const handleScroll = () => {
-      globalScrollY.set(window.scrollY);
-
-      // Sprawdzamy czy jesteśmy w sekcji Hero (przed NewSong)
-      // Hero ma height: 100vh, więc gdy scrollY < viewportHeight, jesteśmy w Hero
-      const viewportHeight = window.innerHeight;
-      if (window.scrollY < viewportHeight * 0.9) {
-        // Jesteśmy w Hero - ustawiamy motyw na 'dark' (czarne ikony)
-        if (headerTheme !== 'dark' && !isThemeLocked) {
-          setHeaderTheme('dark');
-        }
-      }
-    };
-
-    // Sprawdzamy też przy załadowaniu
-    handleScroll();
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [headerTheme, isThemeLocked]);
-
-  // Logika motywu bez 'themeOverride'
-  const effectiveTheme = (isMenuOpen || isThemeLocked) ? 'light' : headerTheme;
+  const openMenu = () => setIsMenuOpen(true);
+  const closeMenu = () => setIsMenuOpen(false);
+  const currentTheme = isMenuOpen ? 'dark' : headerTheme;
 
   return (
     <>
@@ -72,28 +84,20 @@ function App() {
       </AnimatePresence>
 
       <Header
-        headerTheme={effectiveTheme}
+        theme={currentTheme}
         onMenuClick={openMenu}
         onCloseClick={closeMenu}
         isMenuOpen={isMenuOpen}
       />
 
-      <AnimatePresence
-        mode='wait'
-        onExitComplete={() => setIsThemeLocked(false)} // Odblokuj motyw
-      >
+      <AnimatePresence mode='wait'>
         {isMenuOpen && <MenuOverlay />}
       </AnimatePresence>
 
       {!isLoading && (
         <main>
-          <Hero scrollY={globalScrollY} />
-          {/* Przekazujemy tylko ref, bez 'setThemeOverride' */}
-          <NewSong
-            ref={newSongRef}
-            setHeaderTheme={setHeaderTheme}
-            isMenuOpen={isMenuOpen}
-          />
+          <Hero scrollY={scrollY} />
+          <NewSong isMenuOpen={isMenuOpen} />
           <Merch />
           <Contact />
         </main>

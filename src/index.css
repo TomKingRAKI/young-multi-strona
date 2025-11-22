@@ -1,8 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Antonio:wght@700&display=swap');
+
 body {
   margin: 0;
-  background-color: #111; /* Ciemne tło na wszelki wypadek */
-  font-family: 'Anton', sans-serif; /* Ustawiamy czcionkę globalnie */
+  background-color: #111;
+  font-family: 'Anton', sans-serif;
   overflow-x: hidden;
+
+  /* Istniejące u Ciebie: */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+
+  /* DODAJ TO: */
+  -webkit-backface-visibility: hidden;
+  /* Czasami pomaga, czasami szkodzi - warto przetestować */
+  -moz-backface-visibility: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+a,
+li {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Wyłączenie sprzętowej akceleracji dla samego tekstu, jeśli nie jest animowany */
+  transform: translateZ(0);
 }

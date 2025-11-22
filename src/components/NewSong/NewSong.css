@@ -159,7 +159,7 @@
   z-index: 10;
 
   /* ZMIANA: Zamiast 55vw dajemy max-width */
-  width: 100%;
+  width: 120%;
   max-width: 700px;
   /* Rozsądny rozmiar laptopowy */
   aspect-ratio: 16/9;

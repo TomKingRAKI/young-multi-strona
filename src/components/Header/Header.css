@@ -5,52 +5,43 @@
   top: 0;
   left: 0;
   width: 100%;
-  
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
-  padding: 2.5rem 3rem; 
+
+  padding: 2.5rem 3rem;
   box-sizing: border-box;
   z-index: 1000;
-  
-  /* ZMIANA: Usunęliśmy 'transition' dla tła */
-}
 
-/* ZMIANA: CAŁA klasa .header-container.scrolled została USUNIĘTA */
+  background-color: transparent;
+
+  /* Płynna zmiana kolorów, gdy przejeżdżasz między sekcjami */
+  transition: color 0.3s ease-out;
+}
 
 /* --- LOGO --- */
 .header-logo {
-  height: 80px; 
+  height: 80px;
   width: auto;
   cursor: pointer;
-  transition: filter 0.4s ease-in-out; /* Animacja zmiany koloru (zostaje) */
+  transition: filter 0.3s ease-out;
 }
 
-/* --- HAMBURGER --- */
-.header-menu-icon {
-  font-size: 2.5rem; 
-  cursor: pointer;
-  transition: color 0.4s ease-in-out; /* Animacja zmiany koloru (zostaje) */
+/* --- STYL DLA JASNEGO MOTYWU (Czarne ikony na jasnym tle) --- */
+.header-light .header-logo {
+  filter: none;
+  /* Logo jest oryginalnie czarne, więc nic nie robimy */
 }
 
-
-/* --- MAGIA ZMIANY KOLORÓW (zostaje bez zmian) --- */
-
-/* Motyw CIEMNY (dla jasnego tła, czyli Hero) */
-.header-container.theme-dark .header-logo {
-  /* Używasz czarnego logo, więc 'invert(0)' = czarny */
-  filter: invert(0); 
-}
-.header-container.theme-dark .header-menu-icon {
-  color: #000; /* Czarny hamburger */
+.header-light .hamburger-wrapper {
+  /* Hamburger sam obsłuży kolor, tutaj tylko dla porządku */
 }
 
-/* Motyw JASNY (dla ciemnego tła, czyli NewSong) */
-.header-container.theme-light .header-logo {
-  /* 'invert(1)' zamieni twoje czarne logo na BIAŁE */
-  filter: invert(1); 
+/* --- STYL DLA CIEMNEGO MOTYWU (Białe ikony na ciemnym/czerwonym tle) --- */
+.header-dark .header-logo {
+  filter: invert(1);
+  /* Odwracamy czarne logo na białe */
 }
-.header-container.theme-light .header-menu-icon {
-  color: #fff; /* Biały hamburger */
-}
+
+/* Tu nie musimy nic więcej pisać, React przekaże kolor do hamburgera */

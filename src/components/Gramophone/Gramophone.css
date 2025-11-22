@@ -13,8 +13,8 @@
   overflow: hidden;
   position: relative;
   background-color: #ffffff;
-  will-change: transform;
-  transform: translateZ(0);
+  -webkit-font-smoothing: subpixel-antialiased;
+  transform: translate3d(0, 0, 0);
 }
 
 .gramophone-background-boxes {
@@ -245,6 +245,7 @@
   perspective-origin: center center;
   /* ZMIANA: Upewnij się, że kontener flip jest nad resztą treści karty */
   z-index: 100;
+  transform: translateZ(0.1px);
 }
 
 .album-cover-flip-front,

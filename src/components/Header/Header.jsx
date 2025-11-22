@@ -3,32 +3,33 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import './Header.css';
-import logoYFL from '../../assets/logoyflczarne.png'; 
-import HamburgerMenuIcon from '../HamburgerMenuIcon/HamburgerMenuIcon'; // ZMIANA: Importujemy nowy komponent
+import logoYFL from '../../assets/logoyflczarne.png';
+import HamburgerMenuIcon from '../HamburgerMenuIcon/HamburgerMenuIcon';
 
-// ZMIANA: Teraz przyjmujemy 'isMenuOpen'
-function Header({ headerTheme, onMenuClick, isMenuOpen, onCloseClick }) {
-
-  const headerClasses = [
-    "header-container",
-    headerTheme === 'light' ? "theme-light" : "theme-dark"
-  ].join(" ");
+// Dodajemy prop 'theme' ('light' lub 'dark')
+function Header({ onMenuClick, isMenuOpen, onCloseClick, theme = 'light' }) {
 
   return (
-    <motion.nav 
-      className={headerClasses}
+    <motion.nav
+      // Dodajemy klasę dynamicznie: header-light lub header-dark
+      className={`header-container header-${theme}`}
       initial={{ y: -60, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, delay: 0.8 }}
     >
       <img src={logoYFL} alt="YFL Logo" className="header-logo" />
-      
-      {/* ZMIANA: Renderujemy nowy komponent HamburgerMenuIcon */}
-      <HamburgerMenuIcon 
-        isOpen={isMenuOpen} // Przekazujemy stan menu
-        onClick={isMenuOpen ? onCloseClick : onMenuClick} // Zmieniamy akcję kliknięcia
-        theme={headerTheme} // Przekazujemy motyw koloru
-      />
+
+      <div className="header-menu-icon-wrapper">
+        {/* Używamy naszego nowego hamburgera */}
+        {/* Ważne: musimy zaktualizować Hamburger.css, żeby używał currentColor, 
+            albo możemy zrobić to prymitywnie CSS-em w headerze, 
+            ALE najprościej przekazać klasę do wrappera powyżej (co zrobiliśmy w CSS) */}
+
+        <HamburgerMenuIcon
+          isOpen={isMenuOpen}
+          onClick={isMenuOpen ? onCloseClick : onMenuClick}
+        />
+      </div>
     </motion.nav>
   );
 }
