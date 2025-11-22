@@ -72,8 +72,15 @@
 .spotlight {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.8) 70%);
+  /* ZMIANA: Zmniejszamy jasność środka (z 0.08 na 0.02 lub wcale) */
+  background: radial-gradient(circle at 50% 40%,
+      rgba(255, 255, 255, 0.02) 0%,
+      /* Bardzo słabe światło */
+      rgba(0, 0, 0, 0.9) 60%,
+      /* Szybkie przejście w czerń */
+      rgba(20, 0, 0, 0.4) 100%);
   pointer-events: none;
+  mix-blend-mode: soft-light;
 }
 
 /* --- TYPOGRAFIA --- */
@@ -82,19 +89,56 @@
   z-index: 2;
   /* Nad tłem, ale pod wideo jeśli najedzie */
   text-align: center;
-  mix-blend-mode: overlay;
+  mix-blend-mode: normal;
   /* Tekst fajnie przenika */
   pointer-events: none;
 }
 
 .newsong-title {
   font-family: 'Bernoru', sans-serif;
-  /* GIGANTYCZNY FONT SKALOWANY EKRANEM */
   font-size: clamp(3rem, 8vw, 120px);
-  line-height: 0.8;
-  color: #fff;
+  line-height: 0.9;
   margin: 0;
-  text-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+
+  /* --- KLUCZ DO METALU (HARD CHROME) --- */
+  /* 180deg = z góry na dół */
+  background-image: linear-gradient(180deg,
+
+      /* GÓRA (NIEBO) */
+      #ffffff 0%,
+      /* Start: Biały błysk */
+      #a0a0a0 45%,
+      /* Koniec nieba: Szare srebro */
+
+      /* HORYZONT (OSTRE CIĘCIE) */
+      #000000 50%,
+      /* Czerń - to daje efekt "odbicia ziemi" */
+      #444444 50.1%,
+      /* Lekko jaśniej zaraz pod kreską */
+
+      /* DÓŁ (ZIEMIA) */
+      #cccccc 100%
+      /* Koniec: Jasne srebro */
+    );
+
+  /* Wycinamy gradient w kształt liter */
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  /* Ważne: Kolor tekstu musi być przezroczysty, żeby tło było widać */
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  /* --- EFEKTY 3D --- */
+  /* Cienki biały obrys (dodaje ostrości) */
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+
+  /* Cień pod spodem (odrywa napis od tła) */
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.8));
+
+  /* Upewniamy się, że warstwy się nie gryzą */
+  position: relative;
+  z-index: 10;
 }
 
 .newsong-subtitle {
@@ -242,30 +286,38 @@
 .links-container {
   grid-area: stack;
   z-index: 11;
-
-  /* SZEROKOŚĆ LINKÓW */
-  width: 280px;
-
+  width: 300px;
+  /* Troszkę szersze */
   display: flex;
   flex-direction: column;
+  gap: 15px;
 }
 
 .streaming-link {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.5rem;
+  padding: 15px 25px;
+
+  /* Tło: Półprzezroczysta czerń */
+  background: rgba(10, 10, 10, 0.8);
+
+  /* Ramka: Metaliczna szarość */
   border: 1px solid #333;
-  border-bottom: none;
-  background: #000;
-  color: #fff;
+  border-left: 4px solid #555;
+  /* Akcent po lewej */
+
+  color: #ccc;
   text-decoration: none;
   font-family: 'Bernoru', sans-serif;
-  font-size: 1.5vw;
-  /* Skalowalny font */
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+
   position: relative;
-  transition: 0.2s;
-  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* Subtelny cień */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
 .streaming-link:last-child {
@@ -273,19 +325,7 @@
 }
 
 /* Hover Effect: Biały pasek wjeżdża */
-.streaming-link::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: #fff;
-  transform: translateX(-100%);
-  transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1);
-  z-index: 0;
-}
 
-.streaming-link:hover::before {
-  transform: translateX(0);
-}
 
 .streaming-link span {
   position: relative;
@@ -293,19 +333,27 @@
 }
 
 .streaming-link:hover {
-  color: #000;
-  padding-left: 2.5rem;
+  transform: translateX(10px);
+  border-color: #fff;
+  border-left-color: #ff0000;
+  /* Czerwony akcent */
+
+  /* Tło lekko jaśniejsze, ale PRZEZROCZYSTE, żeby widzieć tekst */
+  background: rgba(255, 255, 255, 0.1);
+
+  color: #fff;
+  /* Biały tekst */
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
 }
 
 .link-arrow {
-  opacity: 0;
-  transform: translateX(-20px);
+  opacity: 0.3;
   transition: 0.3s;
 }
 
 .streaming-link:hover .link-arrow {
   opacity: 1;
-  transform: translateX(0);
+  color: #ff0000;
 }
 
 .newsong-about-layer {

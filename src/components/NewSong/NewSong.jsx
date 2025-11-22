@@ -40,20 +40,22 @@ const NewSong = forwardRef((props, ref) => {
 
   // --- SEKWENCJA RUCHU (ZOSTAWIAMY ORYGINALNĄ) ---
   // 1. Tekst
-  const textOpacity = useTransform(contentProgress, [0.00, 0.10], [0, 1]);
-  const textY = useTransform(contentProgress, [0.00, 0.08], ["0vh", "-25vh"]); // Wyżej, żeby zrobić miejsce
+  const textY = useTransform(contentProgress, [0, 0.07], ["0vh", "-25vh"]);
 
-  // 2. Wideo Wjeżdża
-  const videoY = useTransform(contentProgress, [0.02, 0.08], ["150vh", "10vh"]);
+  // 2. Wideo
+  // Startuje z dołu (100vh).
+  // Kończy na 15vh (zamiast 5vh) - dzięki temu będzie niżej, pod headerem.
+  const videoY = useTransform(contentProgress, [0, 0.07], ["100vh", "15vh"]);
 
-  // 3. Rozłożenie na boki (Video w lewo, Linki w prawo)
-  const videoScale = useTransform(contentProgress, [0.08, 0.15], [1, 0.9]); // Mniejsza redukcja skali
-  const videoX = useTransform(contentProgress, [0.08, 0.15], ["0%", "-20%"]); // Przesuwamy wideo w lewo
+  const videoScale = useTransform(contentProgress, [0.08, 0.12], [1, 0.9]);
+  const videoX = useTransform(contentProgress, [0.08, 0.12], ["0%", "-40%"]);
 
-  // 4. Linki Wjeżdżają
-  const linksOpacity = useTransform(contentProgress, [0.12, 0.18], [0, 1]);
-  const linksX = useTransform(contentProgress, [0.12, 0.18], ["50vw", "25vw"]); // Z prawej do środka-prawej
-  const linksY = useTransform(contentProgress, [0.12, 0.18], ["5vh", "5vh"]);
+  // 3. Linki
+  const linksOpacity = useTransform(contentProgress, [0.13, 0.18], [0, 1]);
+  // X: Wjeżdżają z prawej
+  const linksX = useTransform(contentProgress, [0.13, 0.18], ["50vw", "15vw"]);
+  // Y: Ustawiamy stałe 15vh (tak samo jak wideo), żeby były w jednej linii
+  const linksY = useTransform(contentProgress, [0.13, 0.18], ["15vh", "15vh"]);
 
   // 5. Pociąg odjeżdża
   const trackX = useTransform(contentProgress, [0.20, 0.24, 0.35, 1.0], ["0%", "0%", "-50%", "-50%"]);
@@ -95,7 +97,7 @@ const NewSong = forwardRef((props, ref) => {
             {/* TYTUŁ */}
             <motion.div
               className="newsong-text-wrapper"
-              style={{ y: textY, opacity: textOpacity }}
+              style={{ y: textY }}
             >
               <h1 className="newsong-title">GDZIE MOJ DOM</h1>
               <h2 className="newsong-subtitle">OUT NOW • STREAMING EVERYWHERE</h2>
