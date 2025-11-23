@@ -1,60 +1,332 @@
 /* Plik: /src/components/Preloader/Preloader.css */
 
+/* --- GŁÓWNY KONTENER --- */
 .preloader {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  
-  /* ZMIANA: Tło jest teraz jednolicie czarne */
-  background-color: #000;
-  
+  /* Ciemniejsze, bardziej eleganckie tło */
+  background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
   display: grid;
   place-items: center;
   z-index: 1000;
+  overflow: hidden;
+  /* Ważne dla efektów tła */
 }
 
-/* ZMIANA: Nowa klasa, która jest logiem */
-.shimmer-logo {
-  /* 1. USTAW ROZMIAR SWOJEGO LOGO */
-  /* Musisz dopasować te wartości do rozmiaru swojego pliku YFL */
-  width: 200px;
-  height: 160px; 
-  /* (Możesz też użyć 'height: 80px; aspect-ratio: 1 / 1;' jeśli jest kwadratowe) */
+/* Dodanie tekstury "ziarna" (noise) dla efektu premium */
+.preloader::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E");
+  animation: noiseAnimation 0.2s infinite;
+  pointer-events: none;
+  opacity: 0.4;
+}
 
-  /* 2. ZMIANA: "Mroczny" gradient (metaliczny/szary) */
-  /* To jest TŁO tego diva */
-  background: linear-gradient(
-    -45deg, 
-    #222,  /* Bardzo ciemny szary */
-    #fff,  /* Biały (blask) */
-    #555,  /* Średni szary */
-    #222   /* Bardzo ciemny szary */
-  );
+@keyframes noiseAnimation {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  10% {
+    transform: translate(-1%, -1%);
+  }
+
+  20% {
+    transform: translate(-2%, 1%);
+  }
+
+  30% {
+    transform: translate(1%, -2%);
+  }
+
+  40% {
+    transform: translate(-1%, 3%);
+  }
+
+  50% {
+    transform: translate(-2%, 1%);
+  }
+
+  60% {
+    transform: translate(3%, 0);
+  }
+
+  70% {
+    transform: translate(0, 2%);
+  }
+
+  80% {
+    transform: translate(-3%, 0);
+  }
+
+  90% {
+    transform: translate(2%, 1%);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Kontener centrujący logo i tekst */
+.loader-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* --- LOGO I EFEKTY --- */
+
+/* Poświata pod logo */
+.logo-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 250px;
+  height: 250px;
+  /* Subtelne białe światło */
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0) 60%);
+  filter: blur(30px);
+  animation: pulseGlow 4s ease-in-out infinite alternate;
+  z-index: -1;
+}
+
+@keyframes pulseGlow {
+  0% {
+    opacity: 0.4;
+    scale: 0.8;
+  }
+
+  100% {
+    opacity: 1;
+    scale: 1.2;
+  }
+}
+
+/* Twoje oryginalne logo z gradientem shimmer */
+.shimmer-logo {
+  width: 200px;
+  height: 160px;
+  position: relative;
+  /* Dodane */
+
+  background: linear-gradient(-45deg,
+      #222,
+      #fff,
+      #555,
+      #222);
   background-size: 400% 400%;
-  
-  /* 3. MAGIA: Używamy logo jako MASKI */
-  /* Gradient będzie widoczny tylko tam, gdzie logo nie jest przezroczyste */
-  /* Ścieżka jest względna od pliku CSS do pliku logo */
-  mask-image: url('../../assets/logoyflbiale.png'); 
+
+  mask-image: url('../../assets/logoyflbiale.png');
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
 
-  /* To samo dla starszych przeglądarek (Chrome/Safari) */
   -webkit-mask-image: url('../../assets/logoyflbiale.png');
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
 
-  /* 4. Animuj tło (gradient) */
   animation: gradient-flow 3s ease-in-out infinite;
 }
 
-/* Animacja poruszania się gradientu (trochę wolniejsza i płynniejsza) */
+/* --- NOWE ELEMENTY --- */
+
+/* Tekst pod logo */
+.loading-text {
+  margin-top: 25px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: monospace;
+  /* Lub inny pasujący font */
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  animation: textPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes textPulse {
+  0% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 0.7;
+  }
+}
+
+/* Cieniutki pasek postępu na dole */
+.bottom-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  /* Będzie animowane w JSX */
+  /* Ten sam gradient co w logo */
+  background: linear-gradient(90deg, #222, #fff, #555, #222);
+  background-size: 200% 100%;
+  animation: gradient-flow 2s linear infinite;
+}
+
 @keyframes gradient-flow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+/* --- WARNING MODAL (Lekki lifting) --- */
+.warning-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 500px;
+  width: 90%;
+  z-index: 1005;
+}
+
+.warning-content {
+  /* Bardziej 'szklany' efekt */
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(30px) saturate(0);
+  /* saturate(0) robi czarno-białe tło za szkłem */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 40px 30px;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.8),
+    0 0 100px rgba(255, 255, 255, 0.03) inset;
+  text-align: center;
+}
+
+.warning-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  /* Ikona też czarno-biała */
+  filter: grayscale(1) brightness(1.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Reszta stylów warning pozostaje podobna, tylko kolory bardziej stonowane */
+.warning-content h2 {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.warning-content p {
+  color: #aaaaaa;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.warning-suggestion {
+  color: #dddddd;
+  font-weight: 500;
+  font-style: italic;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+}
+
+/* Przyciski bardziej monochromatyczne */
+.btn-primary {
+  /* Czarno-biały gradient */
+  background: linear-gradient(135deg, #333 0%, #777 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #444 0%, #888 100%);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* Reszta btn-secondary i media queries bez zmian z poprzedniego pliku */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@media (max-width: 600px) {
+  .warning-content {
+    padding: 30px 20px;
+  }
+
+  .warning-icon {
+    font-size: 48px;
+  }
+
+  .warning-content h2 {
+    font-size: 20px;
+  }
+
+  .warning-content p {
+    font-size: 14px;
+  }
+
+  .warning-buttons {
+    flex-direction: column;
+  }
+
+  .warning-buttons button {
+    width: 100%;
+  }
 }
