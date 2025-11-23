@@ -252,6 +252,201 @@
     justify-content: space-between;
     padding: 0 5vw;
     font-family: 'Antonio', sans-serif;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%) rotate(-5deg);
+    opacity: 0.1;
+    pointer-events: none;
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: 0;
+}
+
+.marquee-text {
+    font-family: 'Antonio', sans-serif;
+    font-size: 10rem;
+    font-weight: 900;
+    display: inline-block;
+}
+
+.contact-grid {
+    display: grid;
+    /* Dajemy tekstowi 50% miejsca, reszta dla zdjęcia */
+    grid-template-columns: 1fr 1fr;
+    width: 90%;
+    max-width: 1600px;
+    margin: 0 auto;
+    align-items: center;
+    z-index: 2;
+    height: 100%;
+    position: relative;
+}
+
+.section-label {
+    font-family: 'Antonio', sans-serif;
+    color: #666;
+    letter-spacing: 4px;
+    margin-bottom: 2rem;
+}
+
+.contact-link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* Do lewej */
+    gap: 20px;
+    /* Odstęp strzałki od tekstu */
+
+    font-family: 'Bernoru', sans-serif;
+    /* Zmniejszamy font: min 2rem, max 4rem (było 5rem) */
+    font-size: clamp(2rem, 3.5vw, 4rem);
+
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    /* Delikatniejsza linia */
+    padding: 1rem 0;
+    transition: color 0.3s, border-color 0.3s, padding-left 0.3s;
+    width: fit-content;
+    /* Linia tylko pod tekstem */
+}
+
+.contact-link:hover {
+    color: #ff0000;
+    border-color: #ff0000;
+    padding-left: 20px;
+    /* Lekkie przesunięcie w prawo */
+}
+
+.link-arrow {
+    font-size: 2rem;
+    transform: rotate(0deg);
+    transition: transform 0.3s;
+}
+
+.contact-link:hover .link-arrow {
+    transform: rotate(45deg);
+}
+
+.coordinates-box {
+    margin-top: 3rem;
+    font-family: 'Courier New', monospace;
+    color: #444;
+    font-size: 0.9rem;
+}
+
+.coords-text {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+}
+
+.socials-row {
+    display: flex;
+    gap: 20px;
+    margin-top: 4rem;
+}
+
+.social-btn {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Antonio', sans-serif;
+    font-weight: bold;
+}
+
+.multi-visual-container {
+    position: absolute;
+    /* OBNIŻENIE: Dajemy 15% od góry, żeby nie dotykał sufitu */
+    top: 10%;
+    /* WYPCHNIĘCIE: Minusowa wartość wyrzuca go za prawą krawędź ekranu */
+    right: -12%;
+
+    /* SZEROKOŚĆ: Zmniejszamy do 45%, żeby nie wchodził na tekst po lewej */
+    width: 50%;
+    height: 100%;
+    /* Nie na całą wysokość, kończymy niżej */
+
+    z-index: 1;
+    /* Pod tekstem */
+    pointer-events: auto;
+    /* Żeby hover działał na kontenerze */
+
+    display: flex;
+    align-items: flex-end;
+    /* Trzymaj się dołu */
+    justify-content: flex-end;
+    /* Trzymaj się prawej */
+}
+
+.giant-bg-text {
+    position: absolute;
+    font-family: 'Bernoru', sans-serif;
+    font-size: 15rem;
+    color: #111;
+    z-index: 0;
+    margin: 0;
+    line-height: 0.8;
+    bottom: 15%;
+    /* Podnosimy napis do góry (żeby nie był ucięty) */
+    right: 80%;
+}
+
+.multi-blend {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom right;
+
+    /* --- ZMIANA 1: WYWALAMY MIX-BLEND-MODE --- */
+    /* mix-blend-mode: lighten;  <-- USUŃ TĘ LINIJKĘ! */
+    /* Dzięki temu zdjęcie będzie solidne (nieprzezroczyste) i zakryje napisy */
+
+    /* --- ZMIANA 2: ZOSTAWIAMY MASKĘ TYLKO NA DOLE/LEWEJ --- */
+    /* Żeby krawędzie ładnie zanikały, ale środek był pełny */
+    mask-image: linear-gradient(to right, transparent 0%, black 15%, black 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 100%);
+
+    /* Stylówa (kontrast) */
+    filter: grayscale(100%) contrast(1.1) brightness(0.9);
+
+    /* ZMIANA 3: OPACITY MUSI BYĆ 1 */
+    opacity: 1;
+
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    /* ZMIANA 4: Z-INDEX */
+    /* Upewnij się, że jest wyższy niż napisów w tle */
+    z-index: 10;
+    position: relative;
+    /* Potrzebne, żeby z-index zadziałał */
+}
+
+/* EFEKT HOVER - Jak najedziesz na sekcję */
+.multi-visual-container:hover .multi-blend {
+    filter: grayscale(0%) contrast(1.1) brightness(1.1);
+    transform: scale(1.05) translateX(-20px);
+    opacity: 1;
+
+    /* BIAŁA/SZARA POŚWIATA */
+    drop-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    z-index: 20;
+}
+
+.main-footer {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5vw;
+    font-family: 'Antonio', sans-serif;
     font-size: 0.8rem;
     color: #444;
     box-sizing: border-box;
@@ -267,5 +462,147 @@
     .contact-grid {
         grid-template-columns: 1fr;
         /* Jedna kolumna */
+    }
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .contact-link {
+        font-size: clamp(1.8rem, 3vw, 3.5rem);
+    }
+
+    .marquee-text {
+        font-size: 8rem;
+    }
+
+    .giant-bg-text {
+        font-size: 12rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .contact-wrapper {
+        height: 200vh;
+        /* Skróć trochę dla lepszego tempa */
+    }
+
+    .section-label {
+        font-size: 0.85rem;
+        letter-spacing: 3px;
+        margin-bottom: 1.5rem;
+    }
+
+    .contact-link {
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+        padding: 0.8rem 0;
+        gap: 15px;
+    }
+
+    .link-arrow {
+        font-size: 1.5rem;
+    }
+
+    .marquee-text {
+        font-size: 5rem;
+    }
+
+    .coordinates-box {
+        margin-top: 2rem;
+        font-size: 0.8rem;
+    }
+
+    .coords-text {
+        font-size: 1rem;
+    }
+
+    .socials-row {
+        margin-top: 3rem;
+        gap: 15px;
+    }
+
+    .social-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 0.9rem;
+    }
+
+    .multi-visual-container {
+        right: -20%;
+        width: 60%;
+        opacity: 0.2;
+    }
+
+    .giant-bg-text {
+        font-size: 8rem;
+        bottom: 10%;
+        right: 70%;
+    }
+
+    .main-footer {
+        font-size: 0.7rem;
+        padding: 0 3vw;
+    }
+}
+
+/* Mobile Small */
+@media (max-width: 480px) {
+    .contact-wrapper {
+        height: 180vh;
+    }
+
+    .section-label {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+    }
+
+    .contact-link {
+        font-size: clamp(1.2rem, 6vw, 2rem);
+        padding: 0.6rem 0;
+        gap: 10px;
+    }
+
+    .link-arrow {
+        font-size: 1.2rem;
+    }
+
+    .marquee-text {
+        font-size: 4rem;
+    }
+
+    .coordinates-box {
+        margin-top: 1.5rem;
+    }
+
+    .coords-text {
+        font-size: 0.9rem;
+    }
+
+    .socials-row {
+        margin-top: 2.5rem;
+        gap: 12px;
+    }
+
+    .social-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 0.85rem;
+    }
+
+    .multi-visual-container {
+        display: none;
+        /* Ukryj całkowicie na bardzo małych ekranach */
+    }
+
+    .giant-bg-text {
+        font-size: 6rem;
+    }
+
+    .main-footer {
+        font-size: 0.65rem;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        text-align: center;
     }
 }

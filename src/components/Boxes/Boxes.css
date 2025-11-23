@@ -4,26 +4,37 @@
 
 .boxes-row {
   position: relative;
-  display: flex; /* Kolumny obok siebie */
-  height: 2rem; /* h-8 */
-  width: auto; /* Szerokość dopasowuje się do zawartości */
-  border-left: 1px solid #e5e5e5; /* border-l border-gray-200 */
+  display: flex;
+  /* Kolumny obok siebie */
+  height: 2rem;
+  /* h-8 */
+  width: auto;
+  /* Szerokość dopasowuje się do zawartości */
+  border-left: 1px solid #e5e5e5;
+  /* border-l border-gray-200 */
 }
 
 .boxes-col {
   position: relative;
-  height: 2rem; /* h-8 */
-  width: 4rem; /* w-16 */
-  border-top: 1px solid #e5e5e5; /* border-t border-gray-200 */
-  border-right: 1px solid #e5e5e5; /* border-r border-gray-200 */
-  background-color: #ffffff; /* bg-white */
+  height: 2rem;
+  /* h-8 */
+  width: 4rem;
+  /* w-16 */
+  border-top: 1px solid #e5e5e5;
+  /* border-t border-gray-200 */
+  border-right: 1px solid #e5e5e5;
+  /* border-r border-gray-200 */
+  background-color: #ffffff;
+  /* bg-white */
   /* OPTYMALIZACJA: CSS hover zamiast framer-motion - znacznie wydajniejsze */
-  transition: background-color 0s;
+  transition: background-color 1s ease-out;
   will-change: background-color;
 }
 
 .boxes-col:hover {
-  background-color: #e5e5e5; /* Tailwind 'gray-200' */
+  background-color: #e5e5e5;
+  /* Tailwind 'gray-200' */
+  transition-duration: 0s;
 }
 
 .boxes-svg {
@@ -31,8 +42,43 @@
   position: absolute;
   top: -14px;
   left: -22px;
-  height: 1.5rem; /* h-6 */
-  width: 2.5rem; /* w-10 */
+  height: 1.5rem;
+  /* h-6 */
+  width: 2.5rem;
+  /* w-10 */
   stroke-width: 1px;
-  color: #d4d4d4; /* text-gray-300 */
+  color: #d4d4d4;
+  /* text-gray-300 */
+}
+
+/* --- RESPONSIVE DESIGN --- */
+
+/* Mobile Small - Ukryj boxes lub zmniejsz je drastycznie dla wydajności */
+@media (max-width: 768px) {
+  .boxes-row {
+    height: 1.5rem;
+    border-left: 0.5px solid #e5e5e5;
+  }
+
+  .boxes-col {
+    height: 1.5rem;
+    width: 3rem;
+    border-top: 0.5px solid #e5e5e5;
+    border-right: 0.5px solid #e5e5e5;
+  }
+
+  .boxes-svg {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .boxes-row {
+    height: 1rem;
+  }
+
+  .boxes-col {
+    height: 1rem;
+    width: 2rem;
+  }
 }

@@ -311,3 +311,149 @@
   font-size: 1.5rem;
   margin: 0;
 }
+
+/* --- RESPONSIVE DESIGN --- */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .gramophone-title-static {
+    font-size: 4.5rem;
+    padding: 5rem 0;
+    text-shadow:
+      1px 1px 0 #444,
+      2px 2px 0 #444,
+      3px 3px 0 #444,
+      4px 4px 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .album-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
+
+  .album-cover {
+    grid-column: 1 / -1;
+  }
+
+  .scroll-stack-card.album-card {
+    padding: 1.5rem;
+  }
+
+  .album-header h2 {
+    font-size: 2rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .gramophone-title-static {
+    font-size: 3rem;
+    padding: 4rem 0;
+    text-shadow:
+      1px 1px 0 #444,
+      2px 2px 0 #444,
+      3px 3px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .gram ophone-scroller .scroll-stack-inner {
+    padding: 40vh 3vw 30rem 3vw;
+  }
+
+  .scroll-stack-card.album-card {
+    padding: 1.2rem;
+    box-shadow:
+      1px 1px 0px #bbb,
+      2px 2px 0px #bbb,
+      3px 3px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .album-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .album-header h2 {
+    font-size: 1.8rem;
+    text-shadow:
+      1px 1px 0 #555,
+      2px 2px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .album-header p {
+    font-size: 1.2rem;
+  }
+
+  .album-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .album-content h3 {
+    font-size: 1rem;
+    text-shadow:
+      1px 1px 0 #888;
+  }
+
+  .album-cover img {
+    max-width: 250px;
+    box-shadow:
+      1px 1px 0px #bbb,
+      2px 2px 0px #bbb,
+      3px 3px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .cover-placeholder {
+    max-width: 250px;
+    font-size: 4rem;
+  }
+
+  .album-tracklist ul {
+    font-size: 1rem;
+  }
+}
+
+/* Mobile Small */
+@media (max-width: 480px) {
+  .gramophone-title-static {
+    font-size: 2.5rem;
+    padding: 3rem 0;
+    text-shadow:
+      1px 1px 0 #444,
+      2px 2px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .gramophone-scroller .scroll-stack-inner {
+    padding: 30vh 2vw 20rem 2vw;
+  }
+
+  .scroll-stack-card.album-card {
+    padding: 1rem;
+    margin-bottom: 15px;
+  }
+
+  .album-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .album-header p {
+    font-size: 1rem;
+  }
+
+  .album-cover img {
+    max-width: 200px;
+  }
+
+  .cover-placeholder {
+    max-width: 200px;
+    font-size: 3rem;
+  }
+
+  .album-tracklist ul {
+    font-size: 0.9rem;
+  }
+
+  .album-cover-flip-container {
+    max-width: 200px;
+  }
+}

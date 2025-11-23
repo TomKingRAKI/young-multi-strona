@@ -70,7 +70,7 @@
   position: relative;
   display: grid;
   place-items: center;
-  /* Usunięto style hover/trigger */
+  /* Usuniięto style hover/trigger */
 }
 
 .hero-cutout-image {
@@ -116,4 +116,63 @@
   font-size: 2.5rem;
   cursor: pointer;
   color: rgb(0, 0, 0);
+}
+
+/* --- RESPONSIVE DESIGN --- */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .text-young {
+    font-size: 20vw;
+    text-shadow:
+      3px 3px 0px #333333,
+      6px 6px 0px #666666,
+      9px 9px 0px #999999;
+  }
+
+  .text-multi {
+    font-size: 8vw;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .text-young {
+    font-size: 22vw;
+    transform: translateY(-30%);
+    text-shadow:
+      2px 2px 0px #333333,
+      4px 4px 0px #666666;
+  }
+
+  .text-multi {
+    font-size: 10vw;
+    transform: translateY(70%);
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+  }
+
+  .hero-section {
+    perspective: 800px;
+  }
+}
+
+/* Mobile Small */
+@media (max-width: 480px) {
+  .text-young {
+    font-size: 25vw;
+    transform: translateY(-28%);
+    text-shadow:
+      2px 2px 0px #333333,
+      3px 3px 0px #666666;
+  }
+
+  .text-multi {
+    font-size: 12vw;
+    transform: translateY(65%);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  }
+
+  .hero-section {
+    perspective: 600px;
+  }
 }

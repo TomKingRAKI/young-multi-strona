@@ -108,7 +108,7 @@ const NewSong = forwardRef((props, ref) => {
             <motion.div
               className="video-container"
               style={{ y: videoY, x: videoX, scale: videoScale }}
-              onClick={() => window.open('https://youtu.be/TWOJ_LINK', '_blank')}
+              onClick={() => window.open('https://www.youtube.com/watch?v=A0I1MrojmJE&list=RDA0I1MrojmJE&start_radio=1', '_blank')}
             >
               {/* Ozdobniki techniczne */}
               <div className="tech-corner tl"></div>
@@ -117,7 +117,7 @@ const NewSong = forwardRef((props, ref) => {
 
               <div className="video-thumbnail-wrapper">
                 <img
-                  src="https://img.youtube.com/vi/TWOJE_ID/maxresdefault.jpg"
+                  src="https://img.youtube.com/vi/A0I1MrojmJE/maxresdefault.jpg"
                   className="video-thumb-img"
                   alt="Thumbnail"
                 />

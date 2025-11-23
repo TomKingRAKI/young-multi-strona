@@ -21,8 +21,8 @@ const albums = [
     year: '2017',
     styleId: 'nowa-fala',
     cover: nowaFalaCover,
-    desc: 'Debiutancki album, który uzyskał status złotej płyty.',
-    tracklist: ['1. Intro', '2. Nowa Fala', '3. Sport', '4. ...']
+    desc: 'Oficjalny debiut, który zadebiutował na 1. miejscu OLiS. Przełomowy moment przejścia z YouTube do rapu. Album finalnie pokrył się Platyną, a single takie jak "Plecak" czy "Pytasz mnie" stały się wiralami.',
+    tracklist: ['1. Nowa Fala', '2. Pytasz mnie', '3. Plecak', '4. Pogba', '5. Diamenty (feat. Bedoes)', '6. ....']
   },
   {
     id: 2,
@@ -30,8 +30,8 @@ const albums = [
     year: '2018',
     styleId: 'trapstar',
     cover: trapstarCover,
-    desc: 'Album ugruntowujący pozycję na scenie, platynowa płyta.',
-    tracklist: ['1. Trapstar', '2. Diamenty', '3. Skan', '4. ...']
+    desc: 'Album ugruntowujący pozycję na scenie newschoolu. Dojrzalsze brzmienie i mocni goście – m.in. Peja (na tracku "Podziały"), Bedoes i Żabson. Projekt ponownie trafił na szczyt listy OLiS.',
+    tracklist: ['1. Trapstar', '2. Skrzydła', '3. Podziały (feat. Peja)', '4. Kosmita (feat. Żabson)', '5. Kiedy odejdę (feat. Bedoes)', '6. ....']
   },
   {
     id: 3,
@@ -39,8 +39,8 @@ const albums = [
     year: '2019',
     styleId: 'tad',
     cover: tadCover,
-    desc: 'Mroczniejszy koncept album, status podwójnej platyny.',
-    tracklist: ['1. TAD', '2. Demony', '3. Nie wiem', '4. ...']
+    desc: 'Mroczny, spójny materiał wyprodukowany w całości przez Fast Life Sharky’ego. Mniej komercyjny, nastawiony na cięższy trap i eksperymenty. Gościnnie m.in. Żabson i Aleshen.',
+    tracklist: ['1. 9 żyć', '2. Skate 3', '3. Torba', '4. Modelki (feat. Aleshen)', '5. K4fle! (feat. Żabson)', '6. ....']
   },
   {
     id: 4,
@@ -48,8 +48,8 @@ const albums = [
     year: '2021',
     styleId: 'toxic',
     cover: toxicCover,
-    desc: 'Eksperymentalne brzmienia, diamentowa płyta.',
-    tracklist: ['1. Toxic', '2. Chemia', '3. Od nowa', '4. ...']
+    desc: 'Wielki powrót w stylu rage/hyperpop po przerwie wydawniczej. Album uzyskał status Platynowej Płyty. Gościnnie pojawili się m.in. White 2115, White Widow i Miszel.',
+    tracklist: ['1. Toxic Luv (feat. White 2115)', '2. Bez serca', '3. Beksa', '4. Oscar (feat. White Widow)', '5. Sól', '6. ....']
   },
 ];
 
@@ -178,7 +178,7 @@ function Gramophone({ contentProgress, isMenuOpen, style }) { // ZMIANA: Przyjmu
               {/* 2. Główna treść (3 kolumny) */}
               <div className="album-content">
                 <div className="album-desc">
-                  <h3>Osiągnięcia</h3>
+                  <h3>Opis</h3>
                   <p>{album.desc}</p>
                 </div>
 
