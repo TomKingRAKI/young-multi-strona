@@ -8,7 +8,7 @@ import { JellyDread } from './JellyDread';
 import { FaceFeatures } from './FaceFeatures';
 import { SpeechBubble } from './SpeechBubble';
 
-import headImg from '../../assets/head.jpg';
+import headImg from '../../assets/head1.png';
 
 // (Twoje tablice factsLeft i factsRight pozostają bez zmian...)
 const factsLeft = [
@@ -138,29 +138,52 @@ function About({ externalOpacity }) {
       className="about-section"
       style={{ opacity: externalOpacity }}
       onMouseMove={handleMouseMove}
-      onClick={handleSectionClick} // Kliknięcie zamyka dymek
+      onClick={handleSectionClick} // Kliknięcie w tło zamyka dymek
     >
-      <div className="about-avatar-container">
-        {/* Warstwa 1: Obrazek głowy (czarna sylwetka) */}
-        <img src={headImg} alt="Young Multi" className="about-head" style={{ zIndex: 1 }} />
 
-        {/* Warstwa 2: NOWY KOMPONENT TWARZY (Oczy i Usta) */}
-        {/* Z-index 5 sprawia, że jest nad głową, ale pod dredami (które mają z-index 10) */}
+      {/* 1. WARSTWA TŁA: TYTUŁ "O MNIE" */}
+      {/* Przeniesiony na początek, żeby był "za" głową */}
+      <div className="about-content">
+        <h1 className="about-title">O MNIE</h1>
+      </div>
+
+      {/* 2. WARSTWA ŚRODKOWA: GŁOWA I DREDY */}
+      <div className="about-avatar-container">
+        {/* A. Zdjęcie głowy */}
+        <img
+          src={headImg}
+          alt="Young Multi"
+          className="about-head"
+          style={{ zIndex: 1 }}
+        />
+
+        {/* B. Komponent Twarzy (Oczy i Usta) */}
         <FaceFeatures
           mousePos={mousePos}
           mouthState={currentMouthState}
         />
 
-        {/* Warstwa 3: Interaktywne Dredy */}
+        {/* C. Interaktywne Dredy */}
         {dreadPositions.map((pos, i) => (
-          <motion.div key={i} className="jelly-dread-wrapper" style={{ x: pos.x, y: pos.y, zIndex: 10 }}>
+          <motion.div
+            key={i}
+            className="jelly-dread-wrapper"
+            style={{ x: pos.x, y: pos.y, zIndex: 10 }}
+          >
             <JellyDread
               dreadId={`dread-gradient-${i}`}
-              onDragStart={handleDragStart} // Dodajemy handler startu
+              onDragStart={handleDragStart}
               onDragReport={handleDragReport}
               onDragEnd={handleDragEnd}
             >
-              <linearGradient id={`dread-gradient-${i}`} gradientUnits="userSpaceOnUse" x1="0" y1="500" x2="0" y2="700" spreadMethod="pad" colorInterpolation="sRGB">
+              {/* Definicja gradientu przekazywana jako children (dla kompatybilności z Twoim plikiem) */}
+              <linearGradient
+                id={`dread-gradient-${i}`}
+                gradientUnits="userSpaceOnUse"
+                x1="0" y1="500" x2="0" y2="700"
+                spreadMethod="pad"
+                colorInterpolation="sRGB"
+              >
                 <stop offset="0%" stopColor="#000000" />
                 <stop offset="20%" stopColor="#000000" />
                 <stop offset="50%" stopColor="#ffffff" />
@@ -171,6 +194,7 @@ function About({ externalOpacity }) {
         ))}
       </div>
 
+      {/* 3. WARSTWA WIERZCHNIA: DYMEK */}
       <AnimatePresence>
         {activeInfo && (
           <SpeechBubble
@@ -181,9 +205,7 @@ function About({ externalOpacity }) {
           />
         )}
       </AnimatePresence>
-      <div className="about-content">
-        <h1 className="about-title">O MNIE</h1>
-      </div>
+
     </motion.section>
   );
 }

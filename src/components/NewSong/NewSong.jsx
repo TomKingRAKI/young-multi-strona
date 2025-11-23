@@ -17,7 +17,7 @@ const NewSong = forwardRef((props, ref) => {
   const { scrollYProgress: radiusProgress } = useScroll({
     target: scrollRef, offset: ["start end", "start start"]
   });
-  const radius = useTransform(radiusProgress, [0, 1], ["0px", "0px"]); // Ostre rogi pasują bardziej do industrialu!
+  const radius = useTransform(radiusProgress, [0, 1], ["20px", "0px"]); // Ostre rogi pasują bardziej do industrialu!
 
   const { scrollYProgress: contentProgress } = useScroll({
     target: scrollRef, offset: ["start start", "end end"]
