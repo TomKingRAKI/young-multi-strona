@@ -77,6 +77,47 @@ function App() {
   const closeMenu = () => setIsMenuOpen(false);
   const currentTheme = isMenuOpen ? 'dark' : headerTheme;
 
+  // --- NOWA FUNKCJA NAWIGACJI ---
+  const handleSectionClick = (sectionId) => {
+    let targetScroll = 0;
+    const vh = window.innerHeight;
+
+    switch (sectionId) {
+      case 'home':
+        targetScroll = 0;
+        break;
+      case 'nowa-piosenka':
+        targetScroll = vh; // Start of New Song (after Hero)
+        break;
+      case 'dyskolgrafia':
+        targetScroll = START_GRAMO + 660; // Offset to reach full view
+        break;
+      case 'o-mnie':
+        targetScroll = KONIEC_GRAMO + 1500; // Offset to skip reveal animation
+        break;
+      case 'merch':
+        targetScroll = MERCH_START + 3000; // Offset to avoid white screen
+        break;
+      case 'kontakt':
+        targetScroll = CONTACT_START;
+        break;
+      default:
+        targetScroll = 0;
+    }
+
+    // 1. Scroll to target
+    window.scrollTo({
+      top: targetScroll,
+
+    });
+
+    // 2. Wait for scroll to finish (approx) then close menu
+    // Smooth scroll duration depends on distance, but 1200ms is usually enough for long scrolls.
+    setTimeout(() => {
+      setIsMenuOpen(false);
+    }, 300);
+  };
+
   return (
     <>
       <AnimatePresence>
@@ -91,7 +132,7 @@ function App() {
       />
 
       <AnimatePresence mode='wait'>
-        {isMenuOpen && <MenuOverlay />}
+        {isMenuOpen && <MenuOverlay onSectionClick={handleSectionClick} />}
       </AnimatePresence>
 
       {!isLoading && (

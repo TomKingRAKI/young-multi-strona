@@ -73,6 +73,7 @@ const NewSong = forwardRef((props, ref) => {
 
   return (
     <motion.section
+      id="nowa-piosenka"
       ref={(node) => {
         scrollRef.current = node;
         if (typeof ref === 'function') ref(node);

@@ -7,14 +7,16 @@
   width: 100%;
   height: 100vh;
   background-color: #000;
-  z-index: 999; /* Wysoko, ale niżej niż header (który ma 1000) */
+  z-index: 999;
+  /* Wysoko, ale niżej niż header (który ma 1000) */
 }
 
 
 /* Siatka 50/50 */
 .menu-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Dwie równe kolumny */
+  grid-template-columns: 1fr 1fr;
+  /* Dwie równe kolumny */
   width: 100%;
   height: 100%;
 }
@@ -22,7 +24,8 @@
 /* --- LEWA STRONA (Obrazek) --- */
 .menu-image-side {
   display: grid;
-  place-items: center; /* Wyśrodkuj pudełko z obrazkiem */
+  place-items: center;
+  /* Wyśrodkuj pudełko z obrazkiem */
   padding: 4rem;
   box-sizing: border-box;
   overflow: hidden;
@@ -30,9 +33,10 @@
 
 .menu-image-container {
   width: 80%;
-  height: 80%; /* Obrazek zajmuje 80% wysokości kolumny */
+  height: 80%;
+  /* Obrazek zajmuje 80% wysokości kolumny */
   position: relative;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 
@@ -45,7 +49,8 @@
   background-image: url('/menu-image.jpg');
   background-size: cover;
   background-position: center;
-  filter: grayscale(100%); /* Filtr jest tylko tutaj! */
+  filter: grayscale(100%);
+  /* Filtr jest tylko tutaj! */
   pointer-events: none;
   z-index: 1;
 }
@@ -56,14 +61,17 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center; /* Linki wyrównane do lewej */
+  align-items: center;
+  /* Linki wyrównane do lewej */
   overflow: hidden;
 }
 
 .menu-link {
-  font-family: 'Antonio', sans-serif; /* Czcionka Antonio */
+  font-family: 'Antonio', sans-serif;
+  /* Czcionka Antonio */
   font-weight: 700;
-  font-size: 5rem; /* Duże, czytelne linki */
+  font-size: 5rem;
+  /* Duże, czytelne linki */
   color: #fff;
   text-decoration: none;
   text-align: center;
@@ -74,8 +82,56 @@
   -webkit-text-fill-color: transparent;
   background-position: 100% 0;
   transition: background-position 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
 }
 
 .menu-link:hover {
   background-position: 0 0;
+}
+
+/* --- TRANSITION SCREEN --- */
+.menu-transition-container {
+  position: absolute;
+  /* Ważne: musi przykryć grid */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  /* Czarne tło, żeby nie było widać przewijania pod spodem */
+  z-index: 10;
+  color: #fff;
+}
+
+.transition-label {
+  font-family: 'Antonio', sans-serif;
+  font-size: 10vw;
+  /* Bardzo duży tekst, skaluje się z oknem */
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.transition-progress-bar {
+  width: 30vw;
+  /* Pasek szeroki na 30% ekranu */
+  height: 2px;
+  /* Bardzo cienki, elegancki pasek */
+  background-color: #333;
+  border-radius: 0;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.transition-progress-fill {
+  height: 100%;
+  background-color: #fff;
 }

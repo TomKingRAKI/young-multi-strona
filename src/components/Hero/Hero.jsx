@@ -90,7 +90,7 @@ function Hero({ scrollY }) {
         </motion.h2>
 
       </motion.div>
-    </motion.section>
+    </motion.section >
   );
 }
 
