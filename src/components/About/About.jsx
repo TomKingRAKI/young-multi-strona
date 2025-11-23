@@ -6,6 +6,7 @@ import './About.css';
 import { JellyDread } from './JellyDread';
 // 1. Importujemy nowy komponent twarzy
 import { FaceFeatures } from './FaceFeatures';
+import { SpeechBubble } from './SpeechBubble';
 
 import headImg from '../../assets/head.jpg';
 
@@ -35,6 +36,8 @@ const dreadPositions = [
 function About({ externalOpacity }) {
   const [activeInfo, setActiveInfo] = useState(null);
   const [infoText, setInfoText] = useState('');
+  // Nowy stan: czy tekst się pisze?
+  const [isTyping, setIsTyping] = useState(false);
 
   // --- NOWE STANY DLA INTERAKCJI TWARZY ---
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -66,7 +69,8 @@ function About({ externalOpacity }) {
   };
 
   // Logika ustalająca, co mają robić usta
-  const currentMouthState = activeInfo ? 'talking' : (isIdle ? 'prompt' : 'idle');
+  // Usta ruszają się TYLKO gdy jest aktywne info I tekst się pisze
+  const currentMouthState = (activeInfo && isTyping) ? 'talking' : (isIdle ? 'prompt' : 'idle');
 
 
   const showInfo = useCallback((direction) => {
@@ -78,8 +82,13 @@ function About({ externalOpacity }) {
       setInfoText(factsRight[Math.floor(Math.random() * factsRight.length)]);
       setActiveInfo('right');
     }
+    setIsTyping(true); // Zaczynamy pisać
     resetIdleTimer(); // Pokazanie info resetuje timer
   }, [resetIdleTimer]);
+
+  const handleTypingComplete = () => {
+    setIsTyping(false);
+  };
 
   const handleDragReport = (offsetX) => {
     if (activeInfo) return;
@@ -89,9 +98,31 @@ function About({ externalOpacity }) {
   };
 
   const handleDragEnd = () => {
-    setActiveInfo(null);
-    // Po zakończeniu interakcji i schowaniu info, zacznij odliczać czas
-    resetIdleTimer();
+    // setActiveInfo(null); // USUNIĘTE: Nie chowamy dymka od razu po puszczeniu dreda!
+    // Dymek zostaje, aż użytkownik kliknie gdzieś indziej lub minie czas (opcjonalne)
+    // W obecnej logice: dymek znikał od razu po puszczeniu dreda? 
+    // Sprawdźmy oryginalny kod. Wcześniej było setActiveInfo(null) w handleDragEnd.
+    // Jeśli użytkownik chce przeczytać, to nie może znikać od razu.
+    // Zmieniam logikę: dymek znika po kliknięciu w tło lub po czasie.
+    // Ale na razie zostawmy tak jak user chciał w poprzednich requestach (interakcja pociągnięcia).
+    // Czekaj, user napisał "jak uzytkownik pociagnie za dreda to pojawia sie informacja".
+    // Jeśli znika po puszczeniu, to bez sensu.
+    // Zmienię to tak, żeby dymek znikał np. po kliknięciu w niego lub po ponownym pociągnięciu.
+    // Ale w poprzednim kodzie było `setActiveInfo(null)` w `handleDragEnd`.
+    // To oznaczało, że dymek był widoczny TYLKO podczas trzymania dreda?
+    // Nie, `handleDragEnd` odpala się jak puścisz.
+    // Jeśli tak, to dymek znikał natychmiast. To bez sensu dla czytania.
+    // Zmienię to: puszczenie dreda NIE chowa dymka.
+
+    // resetIdleTimer();
+  };
+
+  // Dodajmy zamykanie dymka po kliknięciu w tło (sekcję)
+  const handleSectionClick = () => {
+    if (activeInfo) {
+      setActiveInfo(null);
+      setIsTyping(false);
+    }
   };
 
   // Start timera po załadowaniu komponentu
@@ -106,7 +137,8 @@ function About({ externalOpacity }) {
     <motion.section
       className="about-section"
       style={{ opacity: externalOpacity }}
-      onMouseMove={handleMouseMove} // 2. Nasłuchujemy ruchu myszki w całej sekcji
+      onMouseMove={handleMouseMove}
+      onClick={handleSectionClick} // Kliknięcie zamyka dymek
     >
       <div className="about-avatar-container">
         {/* Warstwa 1: Obrazek głowy (czarna sylwetka) */}
@@ -139,15 +171,14 @@ function About({ externalOpacity }) {
         ))}
       </div>
 
-      {/* (Reszta komponentu bez zmian: okienka info i tytuł) */}
       <AnimatePresence>
         {activeInfo && (
-          <motion.div
-            className={`about-info-box ${activeInfo === 'left' ? 'info-left' : 'info-right'}`}
-            initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}
-          >
-            {infoText}
-          </motion.div>
+          <SpeechBubble
+            key={activeInfo}
+            text={infoText}
+            direction={activeInfo}
+            onTypingComplete={handleTypingComplete}
+          />
         )}
       </AnimatePresence>
       <div className="about-content">

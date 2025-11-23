@@ -18,9 +18,11 @@
 .about-avatar-container {
   /* To jest nasza "deska", na której wieszamy dredy */
   position: relative;
-  width: 1000px; /* Dopasuj do rozmiaru głowy */
+  width: 1000px;
+  /* Dopasuj do rozmiaru głowy */
   height: 960px;
-  grid-area: 1 / 1; /* Leży w komórce gridu */
+  grid-area: 1 / 1;
+  /* Leży w komórce gridu */
   z-index: 10;
   /*background-color: rgba(0, 255, 0, 0.1); /* Włącz, żeby zobaczyć obszar */
 }
@@ -31,21 +33,27 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 1000px; /* Dopasuj rozmiar głowy */
+  width: 1000px;
+  /* Dopasuj rozmiar głowy */
   height: auto;
-  pointer-events: none; /* Głowa nie jest klikalna */
-  z-index: 1; /* Pod dredami */
+  pointer-events: none;
+  /* Głowa nie jest klikalna */
+  z-index: 1;
+  /* Pod dredami */
 }
 
 /* (Style dla dredów są w JellyDread.css) */
 
 /* TYTUŁ "O MNIE" */
 .about-content {
-  grid-area: 1 / 1; /* Ta sama komórka co awatar */
+  grid-area: 1 / 1;
+  /* Ta sama komórka co awatar */
   padding: 2rem;
   text-align: center;
-  z-index: 5; /* Pod dredami (10), ale nad głową (1) */
-  pointer-events: none; /* Nieblokowalny */
+  z-index: 5;
+  /* Pod dredami (10), ale nad głową (1) */
+  pointer-events: none;
+  /* Nieblokowalny */
 }
 
 .about-title {
@@ -58,31 +66,6 @@
   transform: translateY(-300px);
 }
 
-/* OKIENKA Z CIEKAWOSTKAMI */
-.about-info-box {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 300px;
-  padding: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.95);
-  color: #000;
-  border-radius: 10px;
-  z-index: 100; /* Na samym wierzchu */
-  font-family: 'Antonio', sans-serif;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-.info-left {
-  left: 5%;
-}
-
-.info-right {
-  right: 5%;
-}
-
 .jelly-dread-wrapper {
   /* To jest "szpilka", którą wbijamy w deskę */
   position: absolute;
@@ -92,4 +75,84 @@
   height: 0;
   /* Z-index jest teraz tutaj */
   z-index: 10;
+}
+
+/* SPEECH BUBBLE */
+.about-speech-bubble {
+  position: absolute;
+  top: 40%;
+  /* Trochę wyżej niż środek */
+  transform: translateY(-50%);
+  width: 320px;
+  padding: 2rem;
+  background-color: #ffffff;
+  color: #000000;
+  border-radius: 20px;
+  z-index: 100;
+  font-family: 'Antonio', sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  border: 4px solid #000;
+  /* Komiksowy obrys */
+}
+
+/* Ogonki dymków */
+.about-speech-bubble::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.bubble-left {
+  left: 10%;
+}
+
+.bubble-left::after {
+  /* Ogonek po prawej stronie dymku, celujący w głowę */
+  top: 50%;
+  right: -20px;
+  margin-top: -15px;
+  border-width: 15px 0 15px 20px;
+  border-color: transparent transparent transparent #ffffff;
+  /* Obrys ogonka (trochę tricky w CSS, ale spróbujmy prosto) */
+  filter: drop-shadow(4px 0 0 #000);
+}
+
+.bubble-right {
+  right: 10%;
+}
+
+.bubble-right::after {
+  /* Ogonek po lewej stronie dymku */
+  top: 50%;
+  left: -20px;
+  margin-top: -15px;
+  border-width: 15px 20px 15px 0;
+  border-color: transparent #ffffff transparent transparent;
+  filter: drop-shadow(-4px 0 0 #000);
+}
+
+/* Kursor pisania */
+.cursor {
+  display: inline-block;
+  width: 2px;
+  background-color: #000;
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
