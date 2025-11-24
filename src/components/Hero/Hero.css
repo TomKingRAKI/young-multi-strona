@@ -112,6 +112,120 @@
   width: auto;
 }
 
+/* Plik: /src/components/Hero/Hero.css */
+
+@font-face {
+  font-family: 'Bernoru';
+  src: url('/fonts/bernoru-blackultraexpanded.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.hero-section {
+  height: 100vh;
+  width: 100%;
+  color: white;
+  overflow: hidden;
+  background-color: #111;
+  perspective: 1200px;
+  position: sticky;
+  top: 0;
+  z-index: 0;
+}
+
+.hero-content-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+/* GRID AREA DEFINITIONS */
+.hero-background-image,
+.text-young,
+.hero-person-container,
+.text-multi {
+  grid-area: 1 / 1;
+  margin: 0;
+}
+
+/* --- WARSTWA 0: TŁO --- */
+.hero-background-image {
+  z-index: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* --- WARSTWA 1: Napis "YOUNG" --- */
+.text-young {
+  z-index: 1;
+  font-family: 'Antonio', sans-serif;
+  font-weight: 700;
+  font-size: 24vw;
+  letter-spacing: 0.03em;
+  color: #000;
+  text-shadow:
+    4px 4px 0px #333333,
+    8px 8px 0px #666666,
+    12px 12px 0px #999999;
+  transform: translateY(-34%);
+  pointer-events: none;
+  /* Ważne, żeby nie blokowało myszki */
+}
+
+/* --- WARSTWA 2: KONTENER POSTACI --- */
+.hero-person-container {
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  /* Usuniięto style hover/trigger */
+}
+
+.hero-cutout-image {
+  grid-area: 1 / 1;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: drop-shadow(3px 3px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* --- WARSTWA 3: Napis "MULTI" --- */
+.text-multi {
+  z-index: 3;
+  color: #fff;
+  font-family: 'Bernoru', sans-serif;
+  text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.6);
+  font-size: 7vw;
+  transform: translateY(80%);
+  pointer-events: none;
+}
+
+/* --- NAWIGACJA --- */
+.hero-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.5rem 3rem;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.nav-logo {
+  height: 80px;
+  width: auto;
+}
+
 .nav-menu-icon {
   font-size: 2.5rem;
   cursor: pointer;
@@ -140,6 +254,8 @@
   .text-young {
     font-size: 22vw;
     transform: translateY(-30%);
+    z-index: 4;
+    -webkit-text-stroke: 1px white;
     text-shadow:
       2px 2px 0px #333333,
       4px 4px 0px #666666;
