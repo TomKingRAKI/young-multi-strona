@@ -348,19 +348,23 @@
 @media (max-width: 768px) {
   .gramophone-title-static {
     font-size: 3rem;
-    padding: 4rem 0;
+    padding: 10rem 0 4rem 1.5rem;
+    /* Padding z lewej */
+    text-align: left;
+    /* Wyrównanie do lewej */
     text-shadow:
       1px 1px 0 #444,
       2px 2px 0 #444,
       3px 3px 3px rgba(0, 0, 0, 0.3);
   }
 
-  .gram ophone-scroller .scroll-stack-inner {
+  .gramophone-scroller .scroll-stack-inner {
     padding: 40vh 3vw 30rem 3vw;
   }
 
   .scroll-stack-card.album-card {
-    padding: 1.2rem;
+    padding: 1rem;
+    /* Mniejszy padding */
     box-shadow:
       1px 1px 0px #bbb,
       2px 2px 0px #bbb,
@@ -395,6 +399,11 @@
       1px 1px 0 #888;
   }
 
+  .album-desc {
+    display: none;
+    /* Ukrywamy opis na mobile */
+  }
+
   .album-cover img {
     max-width: 250px;
     box-shadow:
@@ -409,7 +418,8 @@
   }
 
   .album-tracklist ul {
-    font-size: 1rem;
+    font-size: 0.9rem;
+    /* Mniejsza czcionka */
   }
 }
 
@@ -417,7 +427,8 @@
 @media (max-width: 480px) {
   .gramophone-title-static {
     font-size: 2.5rem;
-    padding: 3rem 0;
+    padding: 8rem 0 3rem 0;
+    /* Zwiększony padding z góry */
     text-shadow:
       1px 1px 0 #444,
       2px 2px 2px rgba(0, 0, 0, 0.3);

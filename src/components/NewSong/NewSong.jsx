@@ -69,12 +69,12 @@ const NewSong = forwardRef((props, ref) => {
   // X: 
   // Desktop: Wjeżdżają z prawej (50vw -> 15vw)
   // Mobile: Są wycentrowane (0vw -> 0vw)
-  const linksX = useTransform(contentProgress, [0.13, 0.18], isMobile ? ["10vw", "0vw"] : ["30vw", "30vw"]);
+  const linksX = useTransform(contentProgress, [0.13, 0.18], isMobile ? ["30vw", "30vw"] : ["50vw", "15vw"]);
 
   // Y:
   // Desktop: 15vh (obok wideo)
   // Mobile: 55vh (POD wideo)
-  const linksY = useTransform(contentProgress, [0.13, 0.18], isMobile ? ["55vh", "30vh"] : ["0vh", "0vh"]);
+  const linksY = useTransform(contentProgress, [0.13, 0.18], isMobile ? ["0vh", "0vh"] : ["15vh", "15vh"]);
 
   // 5. Pociąg odjeżdża
   const trackX = useTransform(contentProgress, [0.20, 0.24, 0.35, 1.0], ["0%", "0%", "-50%", "-50%"]);
