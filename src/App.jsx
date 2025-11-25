@@ -135,7 +135,7 @@ function App() {
       </AnimatePresence>
 
       <main>
-        <Hero scrollY={scrollY} />
+        <Hero scrollY={scrollY} startAnimation={!isLoading} />
         <NewSong isMenuOpen={isMenuOpen} />
         <Merch />
         <Contact />

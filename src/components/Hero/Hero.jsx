@@ -1,15 +1,23 @@
 // Plik: /src/components/Hero/Hero.jsx
 
 import React, { useState, useEffect } from 'react';
-import { motion, useTransform, useMotionValue } from 'framer-motion';
+import { motion, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import './Hero.css';
 
 // Zostawiamy tylko jeden, główny obrazek
 import cutoutPerson from '../../assets/cutout-person.png';
 
-function Hero({ scrollY }) {
+function Hero({ scrollY, startAnimation = false }) {
   // 1. Śledzenie pozycji myszki (X) dla napisów
   const mouseX = useMotionValue(0);
+
+  // Dodajemy sprężystość do ruchu myszki
+  const smoothMouseX = useSpring(mouseX, {
+    stiffness: 50,
+    damping: 20,
+    mass: 1
+  });
+
   const [windowWidth, setWindowWidth] = useState(1200);
 
   useEffect(() => {
@@ -21,8 +29,9 @@ function Hero({ scrollY }) {
 
   // 2. Obliczanie ruchu dla napisów (Lewo/Prawo)
   // YOUNG idzie przeciwnie do myszki (lub zgodnie, zależnie jak wolisz)
-  const xYoung = useTransform(mouseX, [0, windowWidth], [50, -50]);
-  const xMulti = useTransform(mouseX, [0, windowWidth], [-50, 50]);
+  // Używamy smoothMouseX zamiast surowego mouseX
+  const xYoung = useTransform(smoothMouseX, [0, windowWidth], [50, -50]);
+  const xMulti = useTransform(smoothMouseX, [0, windowWidth], [-50, 50]);
 
   // Paralaksa pionowa (od scrolla)
   const y = useTransform(scrollY, [0, 1000], [0, -150]);
@@ -45,7 +54,7 @@ function Hero({ scrollY }) {
           alt="Tło"
           className="hero-background-image"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          animate={startAnimation ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
         />
 
@@ -57,7 +66,7 @@ function Hero({ scrollY }) {
             className="hero-cutout-image"
             // Tylko wejście przy ładowaniu strony
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={startAnimation ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
           />
         </div>
@@ -67,7 +76,7 @@ function Hero({ scrollY }) {
           className="text-young"
           style={{ x: xYoung }} // Ruch myszką
           initial={{ y: "-44%", opacity: 0 }}
-          animate={{ y: "-34%", opacity: 1 }}
+          animate={startAnimation ? { y: "-34%", opacity: 1 } : { y: "-44%", opacity: 0 }}
           transition={{
             y: { duration: 0.8, delay: 1.0 },
             opacity: { duration: 0.8, delay: 1.0 }
@@ -80,7 +89,7 @@ function Hero({ scrollY }) {
           className="text-multi"
           style={{ x: xMulti }} // Ruch myszką
           initial={{ y: "70%", opacity: 0 }}
-          animate={{ y: "80%", opacity: 1 }}
+          animate={startAnimation ? { y: "80%", opacity: 1 } : { y: "70%", opacity: 0 }}
           transition={{
             y: { duration: 0.8, delay: 1.2 },
             opacity: { duration: 0.8, delay: 1.2 }
