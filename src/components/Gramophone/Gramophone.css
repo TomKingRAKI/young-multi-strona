@@ -19,30 +19,28 @@
 
 .gramophone-background-boxes {
   position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
+  /* Zwiększamy rozmiar kontenera tła, żeby przy skewie nie brakowało kratek */
+  width: 300%;
+  /* Było 200% */
+  height: 300%;
+  /* Było 200% */
+  /* Centrujemy ten wielki kontener */
+  top: -100%;
+  left: -100%;
   z-index: 1;
-  /* Usunęliśmy display: flex - Boxes wewnątrz mają własną strukturę */
-  padding: 1rem;
-  /* Transform jest teraz kontrolowany przez JavaScript (animacja 3D -> 2D) */
   transform-origin: center center;
   overflow: visible;
   pointer-events: none;
-  /* Upewniamy się, że Boxes są widoczne */
 }
 
 .gramophone-content-world {
   position: absolute;
-  width: 120%;
+  /* Zmieniamy szerokość na 100% i usuwamy left shift, żeby nie uciekało */
+  width: 100%;
   height: 100%;
   top: 0;
-  left: -10%;
-
+  left: 0;
   z-index: 3;
-  /* Wyżej niż About layer */
-  /* Transform jest teraz kontrolowany przez JavaScript (animacja 3D -> 2D) */
   transform-origin: center center;
   display: flex;
   flex-direction: column;
@@ -56,6 +54,7 @@
   padding: 7.5rem 0;
   flex-shrink: 0;
   color: #000000;
+  width: 100%;
   text-shadow:
     1px 1px 0 #444,
     2px 2px 0 #444,
@@ -346,12 +345,17 @@
 
 /* Mobile */
 @media (max-width: 768px) {
+
+  /* === NAPRAWA NAPISU DYSKOGRAFIA === */
   .gramophone-title-static {
-    font-size: 3rem;
-    padding: 10rem 0 4rem 1.5rem;
-    /* Padding z lewej */
+    /* Używamy VW, żeby napis ZAWSZE mieścił się w ekranie */
+    font-size: 13vw;
+    padding: 12vh 0 2rem 0;
     text-align: left;
-    /* Wyrównanie do lewej */
+    padding-left: 0;
+    /* Odsunięcie od krawędzi */
+    width: 100%;
+
     text-shadow:
       1px 1px 0 #444,
       2px 2px 0 #444,
@@ -359,67 +363,61 @@
   }
 
   .gramophone-scroller .scroll-stack-inner {
-    padding: 40vh 3vw 30rem 3vw;
+    padding: 30vh 5vw 30rem 5vw;
   }
 
+  /* Karty */
   .scroll-stack-card.album-card {
-    padding: 1rem;
-    /* Mniejszy padding */
-    box-shadow:
-      1px 1px 0px #bbb,
-      2px 2px 0px #bbb,
-      3px 3px 5px rgba(0, 0, 0, 0.2);
+    padding: 1.2rem;
+    min-height: auto;
+    /* Pozwalamy karcie być mniejszą */
+    /* Upewnij się, że karta nie wyjeżdża */
+    width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .album-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+    flex-direction: row;
+    /* Wracamy do rzędu, lepiej wygląda */
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
   }
 
   .album-header h2 {
-    font-size: 1.8rem;
-    text-shadow:
-      1px 1px 0 #555,
-      2px 2px 2px rgba(0, 0, 0, 0.1);
+    font-size: 1.5rem;
   }
 
   .album-header p {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
+  /* Układ wewnątrz karty */
   .album-content {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 1rem;
   }
 
-  .album-content h3 {
-    font-size: 1rem;
-    text-shadow:
-      1px 1px 0 #888;
-  }
-
-  .album-desc {
-    display: none;
-    /* Ukrywamy opis na mobile */
-  }
-
-  .album-cover img {
-    max-width: 250px;
-    box-shadow:
-      1px 1px 0px #bbb,
-      2px 2px 0px #bbb,
-      3px 3px 5px rgba(0, 0, 0, 0.2);
-  }
-
+  /* Okładka */
+  .album-cover img,
   .cover-placeholder {
-    max-width: 250px;
-    font-size: 4rem;
+    max-width: 180px;
+    /* Zmniejszamy okładkę, żeby karta była krótsza */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   }
 
   .album-tracklist ul {
-    font-size: 0.9rem;
-    /* Mniejsza czcionka */
+    font-size: 0.8rem;
+    text-align: center;
+    /* Ukrywamy nadmiarowe utwory jeśli trzeba, albo zmniejszamy marginesy */
+    margin-bottom: 0;
+  }
+
+  .album-tracklist li {
+    line-height: 1.4;
   }
 }
 

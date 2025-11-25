@@ -26,15 +26,6 @@
   /* border-r border-gray-200 */
   background-color: #ffffff;
   /* bg-white */
-  /* OPTYMALIZACJA: CSS hover zamiast framer-motion - znacznie wydajniejsze */
-  transition: background-color 1s ease-out;
-  will-change: background-color;
-}
-
-.boxes-col:hover {
-  background-color: #e5e5e5;
-  /* Tailwind 'gray-200' */
-  transition-duration: 0s;
 }
 
 .boxes-svg {

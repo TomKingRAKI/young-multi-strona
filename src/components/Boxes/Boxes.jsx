@@ -1,13 +1,12 @@
 "use client";
 import React from "react";
-// OPTYMALIZACJA: Usunęliśmy motion - używamy zwykłych div z CSS hover
 import "./Boxes.css";
 
 export const BoxesCore = ({
   className,
   ...rest
 }) => {
-  // --- RESPANSYWNOŚĆ (Mobile Check) ---
+  // --- RESPANSYWNOŚĆ ---
   const [isMobile, setIsMobile] = React.useState(false);
 
   React.useEffect(() => {
@@ -17,9 +16,12 @@ export const BoxesCore = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Mniej kratek na mobile dla lepszej wydajności i wyglądu
-  const rowsCount = isMobile ? 40 : 150;
-  const colsCount = isMobile ? 20 : 100;
+  // ZMIANA: Zwiększamy liczbę kratek, bo kontener jest teraz 300% szerokości
+  // Mimo że są rzadsze, musi ich być więcej na boki.
+
+  // Mobile: Większe kratki, ale musi ich być wystarczająco dużo
+  const rowsCount = isMobile ? 60 : 150;
+  const colsCount = isMobile ? 40 : 100;
 
   const rows = new Array(rowsCount).fill(1);
   const cols = new Array(colsCount).fill(1);

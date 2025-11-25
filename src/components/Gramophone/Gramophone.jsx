@@ -1,4 +1,4 @@
-// Plik: /src/components/Gramophone/Gramophone.jsx (NOWA WERSJA - ZOPTYMALIZOWANA)
+// Plik: /src/components/Gramophone/Gramophone.jsx
 
 import React, { useState, useEffect } from 'react';
 import { useTransform, motion } from 'framer-motion';
@@ -11,9 +11,6 @@ import tadCover from '../../assets/tadCover.jpg';
 import toxicCover from '../../assets/toxicCover.jpg';
 import { Boxes } from '../Boxes/Boxes';
 
-
-// === ZMIANA 2: Aktualizujemy dane ===
-// Dodałem 'styleId' do dynamicznych styli, okładki, opisy i tracklisty
 const albums = [
   {
     id: 1,
@@ -53,89 +50,53 @@ const albums = [
   },
 ];
 
-function Gramophone({ contentProgress, isMenuOpen, style }) { // ZMIANA: Przyjmujemy 'style' z propsów
+function Gramophone({ contentProgress, isMenuOpen, style }) {
 
-  // --- RESPANSYWNOŚĆ (Mobile Check) ---
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Sprawdzamy tylko po zamontowaniu komponentu (client-side)
     setIsMobile(window.innerWidth < 768);
-
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Animacja zmiany perspektywy z 3D na 2D po pokazaniu ostatniej karty (toxic)
-  // ScrollStack używa contentProgress w zakresie [0.65, 1.0]
-  // Karta TOXIC pojawia się jako ostatnia, więc animacja zaczyna się dopiero przy 0.95
-  // aby upewnić się, że karta jest już w pełni widoczn
-
   const perspectiveProgress = useTransform(
     contentProgress,
-    [0.59, 0.65], // Zaczyna się bardzo późno, gdy TOXIC jest już widoczny
+    [0.59, 0.65],
     [0, 1]
   );
 
-  // Wartości 3D (start)
-  const skewX3D = -25;
-  const skewY3D = 7;
+  // === POPRAWKA 3D DLA MOBILE ===
+  // Na desktopie: mocny skos (-25deg).
+  // Na mobile: delikatny skos (-10deg) lub prawie brak, żeby treść się mieściła.
+  const skewX3D = isMobile ? -10 : -25;
+  const skewY3D = isMobile ? 5 : 7;
   const scale3D = 0.85;
 
-  // Wartości 2D (koniec)
   const skewX2D = 0;
   const skewY2D = 0;
   const scale2D = 1;
 
-  // Interpolacja wartości - używamy useTransform zamiast state
-  const skewX = useTransform(
-    perspectiveProgress,
-    [0, 1],
-    [skewX3D, skewX2D]
-  );
-  const skewY = useTransform(
-    perspectiveProgress,
-    [0, 1],
-    [skewY3D, skewY2D]
-  );
-  const scale = useTransform(
-    perspectiveProgress,
-    [0, 1],
-    [scale3D, scale2D]
-  );
+  const skewX = useTransform(perspectiveProgress, [0, 1], [skewX3D, skewX2D]);
+  const skewY = useTransform(perspectiveProgress, [0, 1], [skewY3D, skewY2D]);
+  const scale = useTransform(perspectiveProgress, [0, 1], [scale3D, scale2D]);
 
-  // Animacja odwracania karty Toxic - zaczyna się po zakończeniu animacji perspektywy
-  // contentProgress w zakresie [0.95, 0.98] dla animacji flip
   const flipProgress = useTransform(
     contentProgress,
-    [0.61, 0.65], // Flip kończy się wcześniej, aby zostawić miejsce na zoom
+    [0.61, 0.65],
     [0, 1]
   );
 
-  // Rotacja Y dla efektu flip (0deg -> 180deg)
   const flipRotationY = useTransform(flipProgress, [0, 1], [0, 180]);
-
-  // Opacity dla frontu i tyłu karty
   const frontOpacity = useTransform(flipProgress, [0, 0.5, 1], [1, 1, 0]);
   const backOpacity = useTransform(flipProgress, [0, 0.5, 1], [0, 0, 1]);
-
-  // Animacja przybliżania - tylko do sterowania opacity
-  const zoomProgress = useTransform(
-    contentProgress,
-    [0.64, 0.8],
-    [0, 1]
-  );
-
-  // OPTYMALIZACJA: Używamy motion.div z bezpośrednimi motion values zamiast state + useMotionValueEvent
-  // To eliminuje re-rendery i działa bezpośrednio z motion values
 
   return (
     <motion.div
       className="Gramophone-section"
       style={style}
     >
-
       <motion.div
         className="gramophone-background-boxes"
         style={{
@@ -145,22 +106,20 @@ function Gramophone({ contentProgress, isMenuOpen, style }) { // ZMIANA: Przyjmu
           x: '0%',
           y: '0%',
           z: 0,
-
         }}
       >
         <Boxes />
       </motion.div>
+
       <motion.div
         className="gramophone-content-world"
         style={{
           skewX: skewX,
           skewY: skewY,
-          scale: scale, // ZMIANA: Już nie łączymy skali, główna skala jest na Gramophone-section
+          scale: scale,
           x: '0%',
-
         }}
       >
-
         <h1 className="gramophone-title-static">
           DYSKOGRAFIA
         </h1>
@@ -168,26 +127,24 @@ function Gramophone({ contentProgress, isMenuOpen, style }) { // ZMIANA: Przyjmu
         <ScrollStack
           className="gramophone-scroller"
           itemDistance={20}
-          itemStackDistance={isMobile ? 60 : 20} // Większy odstęp na mobile
+          // Na mobile karty muszą być bliżej siebie w pionie
+          itemStackDistance={isMobile ? 40 : 20}
           baseScale={0.9}
           stackPosition="0%"
-          scaleEndPosition={isMobile ? "15%" : "80%"} // Wcześniejszy start animacji na mobile
+          // Na mobile startujemy ciut niżej, żeby nie zasłaniać tytułu
+          scaleEndPosition={isMobile ? "20%" : "80%"}
           scrollProgress={contentProgress}
         >
-          {/* === ZMIANA 3: Nowa struktura wewnątrz karty === */}
           {albums.map((album) => (
             <ScrollStackItem
               key={album.id}
-              // Dodajemy dynamiczną klasę CSS dla stylów
               itemClassName={`album-card album-style-${album.styleId}`}
             >
-              {/* 1. Nagłówek (Tytuł + Data) */}
               <div className="album-header">
                 <h2>{album.title}</h2>
                 <p>{album.year}</p>
               </div>
 
-              {/* 2. Główna treść (3 kolumny) */}
               <div className="album-content">
                 <div className="album-desc">
                   <h3>Opis</h3>
@@ -196,40 +153,23 @@ function Gramophone({ contentProgress, isMenuOpen, style }) { // ZMIANA: Przyjmu
 
                 <div className="album-cover">
                   {album.id === 4 ? (
-                    // Specjalna animacja flip dla karty Toxic
                     <div className="album-cover-flip-container">
-                      {/* Front - okładka albumu */}
                       <motion.div
                         className="album-cover-flip-front"
-                        style={{
-                          rotateY: flipRotationY,
-                          opacity: frontOpacity,
-                        }}
+                        style={{ rotateY: flipRotationY, opacity: frontOpacity }}
                       >
-                        {album.cover ? (
-                          <img src={album.cover} alt={`Okładka ${album.title}`} />
-                        ) : (
-                          <div className="cover-placeholder">?</div>
-                        )}
+                        <img src={album.cover} alt={album.title} />
                       </motion.div>
-                      {/* Back - przezroczysty, aby pokazać sekcję About pod spodem */}
                       <motion.div
                         className="album-cover-flip-back"
                         style={{
                           rotateY: useTransform(flipRotationY, (ry) => ry - 180),
                           opacity: backOpacity,
                         }}
-                      >
-                        {/* Pusty div - sekcja About jest pod Gramophone, widoczna przez przezroczystość */}
-                      </motion.div>
+                      />
                     </div>
                   ) : (
-                    // Zwykłe okładki dla pozostałych albumów
-                    album.cover ? (
-                      <img src={album.cover} alt={`Okładka ${album.title}`} />
-                    ) : (
-                      <div className="cover-placeholder">?</div>
-                    )
+                    <img src={album.cover} alt={album.title} />
                   )}
                 </div>
 
@@ -242,11 +182,8 @@ function Gramophone({ contentProgress, isMenuOpen, style }) { // ZMIANA: Przyjmu
               </div>
             </ScrollStackItem>
           ))}
-
         </ScrollStack>
       </motion.div>
-
-      {/* Sekcja About pod Gramophone - widoczna przez przezroczysty odwrócony obrazek */}
     </motion.div>
   );
 }

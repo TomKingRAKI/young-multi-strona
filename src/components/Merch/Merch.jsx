@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import './Merch.css';
-import ScrollFloat from '../ScrollFloat/ScrollFloat'; // <--- IMPORTUJEMY NOWY NAPIS
+import ScrollFloat from '../ScrollFloat/ScrollFloat';
 
 // Importy zdjęć (pamiętaj o swoich ścieżkach!)
 import hoodieImg from '../../assets/hoodie1.png';
@@ -34,10 +34,19 @@ const products = [
 
 const Merch = () => {
   const targetRef = useRef(null);
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start start", "end end"]
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest >= 0.6) {
+      setIsAnimationComplete(true);
+    } else {
+      setIsAnimationComplete(false);
+    }
   });
 
   // --- ZWOLNIONE ANIMACJE (Większy zakres liczb = wolniejszy ruch) ---
@@ -87,7 +96,10 @@ const Merch = () => {
           </motion.p>
         </div>
 
-        <div className="products-grid">
+        <div
+          className="products-grid"
+          style={{ pointerEvents: isAnimationComplete ? 'auto' : 'none' }}
+        >
 
           {/* PRODUKT 1 */}
           <motion.div className="product-card" style={{ x: x1, rotate: r1, opacity: o1 }}>
