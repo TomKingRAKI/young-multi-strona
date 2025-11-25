@@ -33,6 +33,48 @@
   pointer-events: none;
 }
 
+.gramophone-css-grid {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  /* DEFINICJA SIATKI I KRZYŻYKÓW */
+  /* Używamy SVG zakodowanego w base64 (Data URI) jako tła - ultra wydajne */
+
+  background-image:
+    /* WARSTWA 1: Krzyżyki (SVG) */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='-6 -6 36 36' stroke-width='0.8' stroke='%23d4d4d4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 6v12m6-6H6'/%3E%3C/svg%3E"),
+    /* WARSTWA 2: Pionowe linie */
+    linear-gradient(to right, #e5e5e5 1px, transparent 1px),
+    /* WARSTWA 3: Poziome linie */
+    linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
+
+  /* ROZMIARY (ODPOWIEDNIK BOXES.CSS) */
+  /* Krzyżyki: pojawiają się co 2 kolumnę i co 2 rząd. 
+     Skoro kolumna=4rem, a rząd=2rem, to powtarzanie krzyżyka = 8rem 4rem */
+  background-size:
+    8rem 4rem,
+    /* Rozmiar powtarzania krzyżyków */
+    4rem 2rem,
+    /* Rozmiar kratki pionowej (szerokość 4rem) */
+    4rem 2rem;
+  /* Rozmiar kratki poziomej (wysokość 2rem) */
+
+  /* POZYCJA */
+  background-position:
+    0rem 0rem,
+    /* Przesunięcie krzyżyka, żeby celował w przecięcie linii (jak w oryginale top: -14px left: -22px) */
+    0 0,
+    0 0;
+
+  background-repeat: repeat;
+
+  /* Ważne: to zapewnia ostrość linii przy skalowaniu */
+  image-rendering: -webkit-optimize-contrast;
+}
+
 .gramophone-content-world {
   position: absolute;
   /* Zmieniamy szerokość na 100% i usuwamy left shift, żeby nie uciekało */
@@ -344,6 +386,31 @@
 }
 
 /* Mobile */
+@media (max-width: 768px) {
+  .gramophone-css-grid {
+    /* Na mobile w Boxes.css krzyżyki były ukryte (display: none), więc tu usuwamy warstwę SVG */
+    background-image:
+      linear-gradient(to right, #e5e5e5 0.5px, transparent 0.5px),
+      linear-gradient(to bottom, #e5e5e5 0.5px, transparent 0.5px);
+
+    /* Nowe wymiary z Boxes.css (Mobile: h=2.5rem, w=4rem) */
+    background-size:
+      4rem 2.5rem,
+      4rem 2.5rem;
+
+    background-position: 0 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .gramophone-css-grid {
+    /* Mobile Small: h=2rem, w=3rem */
+    background-size:
+      3rem 2rem,
+      3rem 2rem;
+  }
+}
+
 @media (max-width: 768px) {
 
   /* === NAPRAWA NAPISU DYSKOGRAFIA === */

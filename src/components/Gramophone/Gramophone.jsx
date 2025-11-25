@@ -9,7 +9,6 @@ import nowaFalaCover from '../../assets/NowafalaCover.jpg';
 import trapstarCover from '../../assets/trapstarCover.jpg';
 import tadCover from '../../assets/tadCover.jpg';
 import toxicCover from '../../assets/toxicCover.jpg';
-import { Boxes } from '../Boxes/Boxes';
 
 const albums = [
   {
@@ -108,7 +107,7 @@ function Gramophone({ contentProgress, isMenuOpen, style }) {
           z: 0,
         }}
       >
-        <Boxes />
+        <div className="gramophone-css-grid" />
       </motion.div>
 
       <motion.div
