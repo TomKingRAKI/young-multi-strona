@@ -1,7 +1,7 @@
 // Plik: /src/components/Gramophone/Gramophone.jsx (NOWA WERSJA - ZOPTYMALIZOWANA)
 
-import React from 'react';
-import { useTransform, motion, useMotionValue, useMotionValueEvent } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { useTransform, motion } from 'framer-motion';
 import './Gramophone.css';
 import ScrollStack, { ScrollStackItem } from '../ScrollStack/ScrollStack';
 
@@ -54,6 +54,18 @@ const albums = [
 ];
 
 function Gramophone({ contentProgress, isMenuOpen, style }) { // ZMIANA: Przyjmujemy 'style' z propsów
+
+  // --- RESPANSYWNOŚĆ (Mobile Check) ---
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Sprawdzamy tylko po zamontowaniu komponentu (client-side)
+    setIsMobile(window.innerWidth < 768);
+
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Animacja zmiany perspektywy z 3D na 2D po pokazaniu ostatniej karty (toxic)
   // ScrollStack używa contentProgress w zakresie [0.65, 1.0]
@@ -156,10 +168,10 @@ function Gramophone({ contentProgress, isMenuOpen, style }) { // ZMIANA: Przyjmu
         <ScrollStack
           className="gramophone-scroller"
           itemDistance={20}
-          itemStackDistance={20}
+          itemStackDistance={isMobile ? 60 : 20} // Większy odstęp na mobile
           baseScale={0.9}
           stackPosition="0%"
-          scaleEndPosition="80%"
+          scaleEndPosition={isMobile ? "15%" : "80%"} // Wcześniejszy start animacji na mobile
           scrollProgress={contentProgress}
         >
           {/* === ZMIANA 3: Nowa struktura wewnątrz karty === */}

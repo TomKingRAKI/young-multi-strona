@@ -56,13 +56,16 @@
 /* Mobile Small - Ukryj boxes lub zmniejsz je drastycznie dla wydajności */
 @media (max-width: 768px) {
   .boxes-row {
-    height: 1.5rem;
+    height: 2.5rem;
+    /* Większe komórki */
     border-left: 0.5px solid #e5e5e5;
   }
 
   .boxes-col {
-    height: 1.5rem;
-    width: 3rem;
+    height: 2.5rem;
+    /* Większe komórki */
+    width: 4rem;
+    /* Szersze komórki */
     border-top: 0.5px solid #e5e5e5;
     border-right: 0.5px solid #e5e5e5;
   }
@@ -74,11 +77,11 @@
 
 @media (max-width: 480px) {
   .boxes-row {
-    height: 1rem;
+    height: 2rem;
   }
 
   .boxes-col {
-    height: 1rem;
-    width: 2rem;
+    height: 2rem;
+    width: 3rem;
   }
 }

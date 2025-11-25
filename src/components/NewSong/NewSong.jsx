@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef, useState } from 'react';
+import React, { useRef, forwardRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import './NewSong.css';
 import Gramophone from '../Gramophone/Gramophone';
@@ -12,6 +12,15 @@ import SmokeTransition from '../SmokeTransition/SmokeTransition';
 const NewSong = forwardRef((props, ref) => {
   const scrollRef = useRef(null);
   const previousThemeRef = useRef(null);
+
+  // --- RESPANSYWNOŚĆ (Mobile Check) ---
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // --- ANIMACJE (Bez zmian logicznych, tylko dostosowanie) ---
   const { scrollYProgress: radiusProgress } = useScroll({
@@ -38,24 +47,34 @@ const NewSong = forwardRef((props, ref) => {
     }
   });
 
-  // --- SEKWENCJA RUCHU (ZOSTAWIAMY ORYGINALNĄ) ---
+  // --- SEKWENCJA RUCHU ---
   // 1. Tekst
-  const textY = useTransform(contentProgress, [0, 0.07], ["0vh", "-25vh"]);
+  // Na mobile tekst przesuwa się mniej drastycznie, żeby nie wjeżdżał na header
+  const textY = useTransform(contentProgress, [0, 0.07], ["0vh", isMobile ? "-18vh" : "-25vh"]);
 
   // 2. Wideo
-  // Startuje z dołu (100vh).
-  // Kończy na 15vh (zamiast 5vh) - dzięki temu będzie niżej, pod headerem.
-  const videoY = useTransform(contentProgress, [0, 0.07], ["100vh", "15vh"]);
+  // Desktop: Startuje z dołu (100vh) -> 15vh
+  // Mobile: Startuje z dołu (50vh) -> 10vh (żeby było bliżej tytułu)
+  const videoY = useTransform(contentProgress, [0, 0.07], ["100vh", isMobile ? "0vh" : "15vh"]);
 
   const videoScale = useTransform(contentProgress, [0.08, 0.12], [1, 0.9]);
-  const videoX = useTransform(contentProgress, [0.08, 0.12], ["0%", "-40%"]);
+
+  // Desktop: Wideo zjeżdża w lewo (-40%)
+  // Mobile: Wideo zostaje na środku (0%) - bo linki będą POD spodem
+  const videoX = useTransform(contentProgress, [0.08, 0.12], ["0%", isMobile ? "0%" : "-40%"]);
 
   // 3. Linki
   const linksOpacity = useTransform(contentProgress, [0.13, 0.18], [0, 1]);
-  // X: Wjeżdżają z prawej
-  const linksX = useTransform(contentProgress, [0.13, 0.18], ["50vw", "15vw"]);
-  // Y: Ustawiamy stałe 15vh (tak samo jak wideo), żeby były w jednej linii
-  const linksY = useTransform(contentProgress, [0.13, 0.18], ["15vh", "15vh"]);
+
+  // X: 
+  // Desktop: Wjeżdżają z prawej (50vw -> 15vw)
+  // Mobile: Są wycentrowane (0vw -> 0vw)
+  const linksX = useTransform(contentProgress, [0.13, 0.18], isMobile ? ["30vw", "30vw"] : ["50vw", "15vw"]);
+
+  // Y:
+  // Desktop: 15vh (obok wideo)
+  // Mobile: 55vh (POD wideo)
+  const linksY = useTransform(contentProgress, [0.13, 0.18], isMobile ? ["0vh", "0vh"] : ["15vh", "15vh"]);
 
   // 5. Pociąg odjeżdża
   const trackX = useTransform(contentProgress, [0.20, 0.24, 0.35, 1.0], ["0%", "0%", "-50%", "-50%"]);

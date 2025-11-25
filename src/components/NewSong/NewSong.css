@@ -360,201 +360,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  background: #000;
-  border: 1px solid #333;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-  cursor: pointer;
-  transition: border-color 0.3s;
-}
-
-.video-container:hover {
-  border-color: #fff;
-}
-
-.video-thumbnail-wrapper {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-
-.video-thumb-img,
-.video-preview-loop {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* TECH DETAILS (Narożniki i REC) */
-.tech-corner {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #fff;
-  z-index: 20;
-  pointer-events: none;
-  transition: all 0.3s;
-}
-
-.tl {
-  top: -1px;
-  left: -1px;
-  border-right: 0;
-  border-bottom: 0;
-}
-
-.br {
-  bottom: -1px;
-  right: -1px;
-  border-left: 0;
-  border-top: 0;
-}
-
-.video-container:hover .tl {
-  transform: translate(-5px, -5px);
-}
-
-.video-container:hover .br {
-  transform: translate(5px, 5px);
-}
-
-.rec-label {
-  position: absolute;
-  top: 20px;
-  left: 30px;
-  font-family: monospace;
-  color: #ff0000;
-  font-size: 1rem;
-  z-index: 20;
-  animation: blink 2s infinite;
-  pointer-events: none;
-}
-
-@keyframes blink {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0;
-  }
-}
-
-/* BUTTON PLAY */
-.play-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 8vw;
-  /* Skalowalne */
-  height: 8vw;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  transition: 0.3s;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(2px);
-}
-
-.play-icon {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 1.5vw 0 1.5vw 2.5vw;
-  border-color: transparent transparent transparent #fff;
-}
-
-.video-container:hover .play-button {
-  background: #fff;
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
-.video-container:hover .play-icon {
-  border-color: transparent transparent transparent #000;
-}
-
-/* --- LINKI (WIĘKSZE) --- */
-.links-container {
-  grid-area: stack;
-  z-index: 11;
-  width: 300px;
-  /* Troszkę szersze */
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.streaming-link {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 25px;
-
-  /* Tło: Półprzezroczysta czerń */
-  background: rgba(10, 10, 10, 0.8);
-
-  /* Ramka: Metaliczna szarość */
-  border: 1px solid #333;
-  border-left: 4px solid #555;
-  /* Akcent po lewej */
-
-  color: #ccc;
-  text-decoration: none;
-  font-family: 'Bernoru', sans-serif;
-  font-size: 1.6rem;
-  letter-spacing: 1px;
-
-  position: relative;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-
-  /* Subtelny cień */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-}
-
-.streaming-link:last-child {
-  border-bottom: 1px solid #333;
-}
-
-/* Hover Effect: Biały pasek wjeżdża */
-
-
-.streaming-link span {
-  position: relative;
-  z-index: 1;
-}
-
-.streaming-link:hover {
-  transform: translateX(10px);
-  border-color: #fff;
-  border-left-color: #ff0000;
-  /* Czerwony akcent */
-
-  /* Tło lekko jaśniejsze, ale PRZEZROCZYSTE, żeby widzieć tekst */
-  background: rgba(255, 255, 255, 0.1);
-
-  color: #fff;
-  /* Biały tekst */
-  box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
-}
-
-.link-arrow {
-  opacity: 0.3;
-  transition: 0.3s;
-}
-
-.streaming-link:hover .link-arrow {
-  opacity: 1;
-  color: #ff0000;
-}
-
-.newsong-about-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   z-index: 10;
@@ -596,16 +401,22 @@
 
 /* Mobile */
 @media (max-width: 768px) {
+  /* .newsong-section {
+    overflow-x: hidden; 
+  } */
+  /* REMOVED overflow-x: hidden to fix sticky behavior */
+
   .newsong-text-wrapper {
     margin-bottom: 20vh;
   }
 
   .newsong-title {
-    font-size: 15vw;
+    font-size: 12vw;
+    /* Reduced from 15vw */
   }
 
   .newsong-subtitle {
-    font-size: 2.5vw;
+    font-size: 3vw;
     padding: 0.4em 0.8em;
   }
 
@@ -649,12 +460,14 @@
 /* Mobile Small */
 @media (max-width: 480px) {
   .newsong-title {
-    font-size: 18vw;
+    font-size: 14vw;
+    /* Reduced from 18vw */
   }
 
   .newsong-subtitle {
-    font-size: 3vw;
-    letter-spacing: 0.3em;
+    font-size: 3.5vw;
+    /* Slightly larger for readability */
+    letter-spacing: 0.2em;
   }
 
   .video-container {
