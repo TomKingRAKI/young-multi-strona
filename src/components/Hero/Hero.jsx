@@ -4,14 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { motion, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import './Hero.css';
 
-// Zostawiamy tylko jeden, główny obrazek
 import cutoutPerson from '../../assets/cutout-person.png';
 
 function Hero({ scrollY, startAnimation = false }) {
-  // 1. Śledzenie pozycji myszki (X) dla napisów
   const mouseX = useMotionValue(0);
 
-  // Dodajemy sprężystość do ruchu myszki
   const smoothMouseX = useSpring(mouseX, {
     stiffness: 50,
     damping: 20,
@@ -21,30 +18,35 @@ function Hero({ scrollY, startAnimation = false }) {
   const [windowWidth, setWindowWidth] = useState(1200);
 
   useEffect(() => {
+    // Ustawiamy szerokość na start
     setWindowWidth(window.innerWidth);
-    const handleResize = () => setWindowWidth(window.innerWidth);
+
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // 2. Obliczanie ruchu dla napisów (Lewo/Prawo)
-  // YOUNG idzie przeciwnie do myszki (lub zgodnie, zależnie jak wolisz)
-  // Używamy smoothMouseX zamiast surowego mouseX
+  // Definiujemy, czy to mobile (poniżej 768px)
+  const isMobile = windowWidth <= 768;
+
+  // Ruch dla desktopu (działa tylko gdy przekażemy go do style)
   const xYoung = useTransform(smoothMouseX, [0, windowWidth], [50, -50]);
   const xMulti = useTransform(smoothMouseX, [0, windowWidth], [-50, 50]);
 
-  // Paralaksa pionowa (od scrolla)
   const y = useTransform(scrollY, [0, 1000], [0, -150]);
 
-  // Funkcja aktualizująca pozycję myszki
   const handleMouseMove = (e) => {
+    // Aktualizujemy pozycję myszki tylko na desktopie, 
+    // choć dla wydajności nie trzeba tego blokować, zablokujemy efekt w JSX
     mouseX.set(e.clientX);
   };
 
   return (
     <motion.section
       className="hero-section"
-      // Nasłuchujemy ruchu myszki na całej sekcji dla efektu tekstowego
       onMouseMove={handleMouseMove}
     >
       <motion.div className="hero-content-wrapper" style={{ y }}>
@@ -58,23 +60,22 @@ function Hero({ scrollY, startAnimation = false }) {
           transition={{ duration: 1, delay: 0.3 }}
         />
 
-        {/* KONTENER Z POSTACIĄ (Teraz tylko jeden statyczny obrazek) */}
         <div className="hero-person-container">
           <motion.img
             src={cutoutPerson}
             alt="Artysta"
             className="hero-cutout-image"
-            // Tylko wejście przy ładowaniu strony
             initial={{ opacity: 0 }}
             animate={startAnimation ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
           />
         </div>
 
-        {/* --- NAPISY REAGUJĄCE NA MYSZKĘ --- */}
+        {/* --- NAPISY --- */}
+        {/* Jeśli isMobile jest true, x ustawiamy na 0 (brak ruchu), w przeciwnym razie xYoung */}
         <motion.h1
           className="text-young"
-          style={{ x: xYoung }} // Ruch myszką
+          style={{ x: isMobile ? 0 : xYoung }}
           initial={{ y: "-44%", opacity: 0 }}
           animate={startAnimation ? { y: "-34%", opacity: 1 } : { y: "-44%", opacity: 0 }}
           transition={{
@@ -87,7 +88,7 @@ function Hero({ scrollY, startAnimation = false }) {
 
         <motion.h2
           className="text-multi"
-          style={{ x: xMulti }} // Ruch myszką
+          style={{ x: isMobile ? 0 : xMulti }}
           initial={{ y: "70%", opacity: 0 }}
           animate={startAnimation ? { y: "80%", opacity: 1 } : { y: "70%", opacity: 0 }}
           transition={{

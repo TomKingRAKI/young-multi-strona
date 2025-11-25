@@ -252,7 +252,7 @@
 /* Mobile */
 @media (max-width: 768px) {
   .text-young {
-    font-size: 22vw;
+    font-size: 25vw;
     transform: translateY(-30%);
     z-index: 4;
     -webkit-text-stroke: 1px white;
@@ -275,7 +275,7 @@
 /* Mobile Small */
 @media (max-width: 480px) {
   .text-young {
-    font-size: 25vw;
+    font-size: 35vw;
     transform: translateY(-28%);
     text-shadow:
       2px 2px 0px #333333,
