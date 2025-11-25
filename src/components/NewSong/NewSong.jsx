@@ -1,5 +1,5 @@
 import React, { useRef, forwardRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValueEvent, useMotionTemplate, useSpring, useMotionValue } from 'framer-motion';
 import './NewSong.css';
 import Gramophone from '../Gramophone/Gramophone';
 import About from '../About/About';
@@ -21,7 +21,42 @@ const NewSong = forwardRef((props, ref) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+  // === NOWE: LOGIKA LATARKI (SPOTLIGHT) ===
+  // 1. Tworzymy wartości Motion dla pozycji myszy (startujemy na środku: 50% 40%)
+  const mouseX = useMotionValue(50);
+  const mouseY = useMotionValue(40);
 
+  // 2. Dodajemy "sprężynę" (fizykę) do tych wartości.
+  // damping: im wyższy, tym mniej drga. stiffness: im wyższy, tym szybciej goni.
+  // Te ustawienia dają efekt ciężkiego, płynnego światła ("cinematic smooth").
+  const springConfig = { damping: 25, stiffness: 150, mass: 0.5 };
+
+  const smoothX = useSpring(mouseX, springConfig);
+  const smoothY = useSpring(mouseY, springConfig);
+
+  // 3. Tworzymy szablon gradientu, który aktualizuje się automatycznie bez przeładowania Reacta
+  // Używamy kolorów z Twojego CSS
+  const spotlightBackground = useMotionTemplate`radial-gradient(circle at ${smoothX}% ${smoothY}%, 
+    rgba(255, 255, 255, 0.03) 0%, 
+    rgba(0, 0, 0, 0.9) 40%, 
+    rgba(20, 0, 0, 0.4) 100%)`;
+
+  // 4. Nasłuchujemy ruchu myszy
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      // Obliczamy pozycję jako procent szerokości/wysokości ekranu
+      // Dzięki temu działa responsywnie
+      const xPct = (e.clientX / window.innerWidth) * 100;
+      const yPct = (e.clientY / window.innerHeight) * 100;
+
+      mouseX.set(xPct);
+      mouseY.set(yPct);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+  // === KONIEC LOGIKI LATARKI ===
   // --- ANIMACJE (Bez zmian logicznych, tylko dostosowanie) ---
   const { scrollYProgress: radiusProgress } = useScroll({
     target: scrollRef, offset: ["start end", "start start"]
@@ -111,7 +146,10 @@ const NewSong = forwardRef((props, ref) => {
             <div className="industrial-bg">
               <div className="noise-overlay"></div>
               <div className="grid-overlay"></div>
-              <div className="spotlight"></div>
+              <motion.div
+                className="spotlight"
+                style={{ background: spotlightBackground }}
+              />
             </div>
 
             {/* TYTUŁ */}
