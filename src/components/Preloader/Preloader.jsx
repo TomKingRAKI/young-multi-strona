@@ -1,11 +1,8 @@
-// Plik: /src/components/Preloader/Preloader.jsx
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Preloader.css';
 
-function Preloader() {
-  // --- LOGIKA POZOSTAJE BEZ ZMIAN (Skopiuj poprawioną wersję z poprzedniej odpowiedzi) ---
+function Preloader({ onComplete }) {
   const [loading, setLoading] = useState(true);
   const [hasHardwareAcceleration, setHasHardwareAcceleration] = useState(true);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
@@ -13,7 +10,7 @@ function Preloader() {
   const [showMobileWarning, setShowMobileWarning] = useState(false);
   const [canProceed, setCanProceed] = useState(false);
 
-  // 1. PANCERNE WYKRYWANIE AKCELERACJI
+  // 1. HARDWARE ACCELERATION CHECK
   useEffect(() => {
     const checkHardwareAcceleration = () => {
       const canvas = document.createElement('canvas');
@@ -31,7 +28,7 @@ function Preloader() {
     setHasHardwareAcceleration(checkHardwareAcceleration());
   }, []);
 
-  // 2. WYKRYWANIE MOBILE + RESIZE
+  // 2. MOBILE CHECK
   useEffect(() => {
     const checkMobileDevice = () => {
       const width = window.innerWidth;
@@ -44,20 +41,50 @@ function Preloader() {
     return () => window.removeEventListener('resize', checkMobileDevice);
   }, []);
 
-  // 3. TIMER
+  // 3. AUTO-SCROLL SEQUENCE
   useEffect(() => {
-    if (!loading) return;
-    const timer = setTimeout(() => {
+    const executeSequence = async () => {
+      // Initial wait
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Scroll to bottom
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+
+      // Wait for scroll down
+      await new Promise(resolve => setTimeout(resolve, 2500));
+
+      // Scroll to top
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+
+      // Wait for scroll up
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Finish loading state (triggers exit animation of inner content)
       setLoading(false);
+
+      // Check warnings
       if (!hasHardwareAcceleration) setShowHardwareWarning(true);
       else if (isMobileDevice) setShowMobileWarning(true);
       else setCanProceed(true);
-    }, 2500); // Zwiększyłem lekko czas do 2.5s, żeby nacieszyć oko nowym wyglądem
+    };
 
-    return () => clearTimeout(timer);
-  }, [loading, hasHardwareAcceleration, isMobileDevice]);
+    executeSequence();
+  }, [hasHardwareAcceleration, isMobileDevice]);
 
-  // Handlery...
+  // 4. COMPLETION HANDLER
+  useEffect(() => {
+    if (canProceed && onComplete) {
+      onComplete();
+    }
+  }, [canProceed, onComplete]);
+
+  // Handlers
   const handleHardwareWarningDismiss = () => {
     setShowHardwareWarning(false);
     isMobileDevice ? setShowMobileWarning(true) : setCanProceed(true);
@@ -72,15 +99,13 @@ function Preloader() {
 
   if (canProceed) return null;
 
-  // --- NOWA STRUKTURA JSX ---
   return (
     <motion.div
       className="preloader"
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.8, ease: "easeInOut" }} // Dłuższe, płynniejsze wyjście
+      transition={{ duration: 0.8, ease: "easeInOut" }}
     >
       <AnimatePresence mode="wait">
-        {/* FAZA 1: Ładowanie (Nowy, bogatszy wygląd) */}
         {loading && (
           <motion.div
             key="loading-content"
@@ -90,13 +115,8 @@ function Preloader() {
             exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
             transition={{ duration: 0.8 }}
           >
-            {/* Poświata */}
             <div className="logo-glow" />
-
-            {/* Logo YFL */}
             <div className="shimmer-logo" />
-
-            {/* Tekst pod logo */}
             <motion.p
               className="loading-text"
               initial={{ opacity: 0, y: 20 }}
@@ -108,7 +128,6 @@ function Preloader() {
           </motion.div>
         )}
 
-        {/* FAZA 2 & 3: Ostrzeżenia (Bez zmian w strukturze, tylko styly z CSS) */}
         {showHardwareWarning && (
           <motion.div
             key="hardware-warning"
@@ -168,14 +187,13 @@ function Preloader() {
         )}
       </AnimatePresence>
 
-      {/* Pasek postępu na samym dole (poza AnimatePresence, znika razem z całym preloaderem) */}
       {loading && (
         <div className="bottom-progress-bar">
           <motion.div
             className="progress-bar-fill"
             initial={{ width: "0%" }}
             animate={{ width: "100%" }}
-            transition={{ duration: 2.5, ease: "easeInOut" }} // Czas zgodny z timerem
+            transition={{ duration: 5.5, ease: "easeInOut" }}
           />
         </div>
       )}

@@ -68,11 +68,6 @@ function App() {
     }
   });
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000);
-    return () => clearTimeout(timer);
-  }, []);
-
   const openMenu = () => setIsMenuOpen(true);
   const closeMenu = () => setIsMenuOpen(false);
   const currentTheme = isMenuOpen ? 'dark' : headerTheme;
@@ -118,10 +113,14 @@ function App() {
     }, 300);
   };
 
+  const handlePreloaderComplete = () => {
+    setIsLoading(false);
+  };
+
   return (
     <>
       <AnimatePresence>
-        {isLoading && <Preloader />}
+        {isLoading && <Preloader onComplete={handlePreloaderComplete} />}
       </AnimatePresence>
 
       <Header
@@ -135,14 +134,12 @@ function App() {
         {isMenuOpen && <MenuOverlay onSectionClick={handleSectionClick} />}
       </AnimatePresence>
 
-      {!isLoading && (
-        <main>
-          <Hero scrollY={scrollY} />
-          <NewSong isMenuOpen={isMenuOpen} />
-          <Merch />
-          <Contact />
-        </main>
-      )}
+      <main>
+        <Hero scrollY={scrollY} />
+        <NewSong isMenuOpen={isMenuOpen} />
+        <Merch />
+        <Contact />
+      </main>
     </>
   );
 }
