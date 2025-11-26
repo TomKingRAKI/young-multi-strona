@@ -1,5 +1,3 @@
-// Plik: /src/components/About/About.jsx (WERSJA FINALNA)
-
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './About.css';
@@ -34,6 +32,30 @@ const dreadPositions = [
 ];
 
 function About({ externalOpacity }) {
+  // --- DETEKCJA MOBILE ---
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // --- LOGIKA MOBILE (Carousel) ---
+  const [mobileFactIndex, setMobileFactIndex] = useState(0);
+  // Łączymy fakty w jedną tablicę
+  const mobileFacts = [...factsLeft, ...factsRight];
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const interval = setInterval(() => {
+      setMobileFactIndex((prev) => (prev + 1) % mobileFacts.length);
+    }, 4000); // Zmiana co 4 sekundy
+    return () => clearInterval(interval);
+  }, [isMobile, mobileFacts.length]);
+
+
+  // --- LOGIKA DESKTOP (Zachowana) ---
   const [activeInfo, setActiveInfo] = useState(null);
   const [infoText, setInfoText] = useState('');
   // Nowy stan: czy tekst się pisze?
@@ -59,6 +81,7 @@ function About({ externalOpacity }) {
 
   // Handler ruchu myszki w obrębie sekcji
   const handleMouseMove = (e) => {
+    if (isMobile) return; // Nie obsługujemy na mobile
     setMousePos({ x: e.clientX, y: e.clientY });
     resetIdleTimer(); // Ruch myszką resetuje timer
   };
@@ -98,27 +121,12 @@ function About({ externalOpacity }) {
   };
 
   const handleDragEnd = () => {
-    // setActiveInfo(null); // USUNIĘTE: Nie chowamy dymka od razu po puszczeniu dreda!
-    // Dymek zostaje, aż użytkownik kliknie gdzieś indziej lub minie czas (opcjonalne)
-    // W obecnej logice: dymek znikał od razu po puszczeniu dreda? 
-    // Sprawdźmy oryginalny kod. Wcześniej było setActiveInfo(null) w handleDragEnd.
-    // Jeśli użytkownik chce przeczytać, to nie może znikać od razu.
-    // Zmieniam logikę: dymek znika po kliknięciu w tło lub po czasie.
-    // Ale na razie zostawmy tak jak user chciał w poprzednich requestach (interakcja pociągnięcia).
-    // Czekaj, user napisał "jak uzytkownik pociagnie za dreda to pojawia sie informacja".
-    // Jeśli znika po puszczeniu, to bez sensu.
-    // Zmienię to tak, żeby dymek znikał np. po kliknięciu w niego lub po ponownym pociągnięciu.
-    // Ale w poprzednim kodzie było `setActiveInfo(null)` w `handleDragEnd`.
-    // To oznaczało, że dymek był widoczny TYLKO podczas trzymania dreda?
-    // Nie, `handleDragEnd` odpala się jak puścisz.
-    // Jeśli tak, to dymek znikał natychmiast. To bez sensu dla czytania.
-    // Zmienię to: puszczenie dreda NIE chowa dymka.
-
     // resetIdleTimer();
   };
 
   // Dodajmy zamykanie dymka po kliknięciu w tło (sekcję)
   const handleSectionClick = () => {
+    if (isMobile) return;
     if (activeInfo) {
       setActiveInfo(null);
       setIsTyping(false);
@@ -127,12 +135,51 @@ function About({ externalOpacity }) {
 
   // Start timera po załadowaniu komponentu
   useEffect(() => {
+    if (isMobile) return;
     resetIdleTimer();
     // Sprzątanie timera przy odmontowaniu
     return () => { if (idleTimerRef.current) clearTimeout(idleTimerRef.current); };
-  }, [resetIdleTimer]);
+  }, [resetIdleTimer, isMobile]);
 
 
+  // --- RENDEROWANIE ---
+
+  // 1. WIDOK MOBILNY
+  if (isMobile) {
+    return (
+      <section className="about-section mobile-view" style={{ opacity: externalOpacity }}>
+        {/* Góra: Tytuł */}
+        <div className="mobile-title-container">
+          <h1 className="about-title mobile">O MNIE</h1>
+        </div>
+
+        {/* Środek: Carousel z faktami */}
+        <div className="mobile-carousel-container">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={mobileFactIndex}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.5 }}
+              className="mobile-fact-text"
+            >
+              {mobileFacts[mobileFactIndex]}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Dół: Statyczna głowa */}
+        <img
+          src={headImg}
+          alt="Young Multi"
+          className="about-head mobile-head"
+        />
+      </section>
+    );
+  }
+
+  // 2. WIDOK DESKTOP (Oryginalny)
   return (
     <motion.section
       className="about-section"
