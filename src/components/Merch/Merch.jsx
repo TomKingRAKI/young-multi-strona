@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import './Merch.css';
 import ScrollFloat from '../ScrollFloat/ScrollFloat';
 
-// Importy zdjęć (pamiętaj o swoich ścieżkach!)
+// Importy zdjęć
 import hoodieImg from '../../assets/hoodie1.png';
 import hoodie1Img from '../../assets/hoodie2.png';
 import teeImg from '../../assets/tshirt.png';
@@ -35,6 +35,16 @@ const products = [
 const Merch = () => {
   const targetRef = useRef(null);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: targetRef,
@@ -42,59 +52,75 @@ const Merch = () => {
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest >= 0.6) {
-      setIsAnimationComplete(true);
-    } else {
-      setIsAnimationComplete(false);
-    }
+    // ZMIANA: Kończymy logikę przy 0.8, żeby dać czas dla sekcji Contact
+    const threshold = isMobile ? 0.8 : 0.6;
+    setIsAnimationComplete(latest >= threshold);
   });
 
-  // --- ZWOLNIONE ANIMACJE (Większy zakres liczb = wolniejszy ruch) ---
+  // --- DESKTOP (BEZ ZMIAN) ---
+  const desktopX1 = useTransform(scrollYProgress, [0, 0.5], ["-100vw", "0vw"]);
+  const desktopR1 = useTransform(scrollYProgress, [0, 0.5], [-45, 0]);
+  const desktopO1 = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
-  // A. Produkt 1 (Lewy):
-  // Wcześniej: [0, 0.25] -> Szybko
-  // Teraz: [0, 0.5] -> Dwa razy wolniej
-  const x1 = useTransform(scrollYProgress, [0, 0.5], ["-100vw", "0vw"]);
-  const r1 = useTransform(scrollYProgress, [0, 0.5], [-45, 0]);
-  const o1 = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+  const desktopY2 = useTransform(scrollYProgress, [0.1, 0.6], ["100vh", "0vh"]);
+  const desktopS2 = useTransform(scrollYProgress, [0.1, 0.6], [0.5, 1]);
+  const desktopO2 = useTransform(scrollYProgress, [0.1, 0.4], [0, 1]);
 
-  // B. Produkt 2 (Środkowy):
-  const y2 = useTransform(scrollYProgress, [0.1, 0.6], ["100vh", "0vh"]); // Startuje ciut później, kończy później
-  const s2 = useTransform(scrollYProgress, [0.1, 0.6], [0.5, 1]);
-  const o2 = useTransform(scrollYProgress, [0.1, 0.4], [0, 1]);
+  const desktopX3 = useTransform(scrollYProgress, [0, 0.5], ["100vw", "0vw"]);
+  const desktopR3 = useTransform(scrollYProgress, [0, 0.5], [45, 0]);
+  const desktopO3 = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
-  // C. Produkt 3 (Prawy):
-  const x3 = useTransform(scrollYProgress, [0, 0.5], ["100vw", "0vw"]);
-  const r3 = useTransform(scrollYProgress, [0, 0.5], [45, 0]);
-  const o3 = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+  // --- MOBILE (PRZYSPIESZONE TEMPO) ---
 
+  // Header: Szybki wjazd na górę (0 -> 0.1)
+  const mobileHeaderY = useTransform(scrollYProgress, [0, 0.1], ["15vh", "8vh"]);
+  const mobileHeaderScale = useTransform(scrollYProgress, [0, 0.1], [1, 0.85]);
+
+  // Produkt 1: Szybki wyjazd (0.1 -> 0.3)
+  const mobileX1 = useTransform(scrollYProgress, [0.1, 0.3], ["0vw", "-120vw"]);
+  const mobileOpacity1 = useTransform(scrollYProgress, [0.25, 0.3], [1, 0]);
+
+  // Produkt 2: Wjazd, Pauza, Wyjazd (0.3 -> 0.65)
+  // Wcześniej kończył się przy 0.8, teraz przy 0.65
+  const mobileX2 = useTransform(scrollYProgress, [0.3, 0.45, 0.5, 0.65], ["120vw", "0vw", "0vw", "-120vw"]);
+  const mobileOpacity2 = useTransform(scrollYProgress, [0.3, 0.35, 0.6, 0.65], [0, 1, 1, 0]);
+
+  // Produkt 3: Finałowy wjazd (0.65 -> 0.8)
+  // Wcześniej kończył się przy 0.95, teraz przy 0.80.
+  // Dzięki temu od 0.80 do 1.0 nic się nie rusza, a "Ink Spill" może spokojnie wjechać.
+  const mobileX3 = useTransform(scrollYProgress, [0.65, 0.8], ["120vw", "0vw"]);
 
   return (
     <section ref={targetRef} className="merch-scroll-container">
 
       <div className="merch-sticky-wrapper">
 
-        {/* --- TUTAJ WSTAWIAMY NOWY ANIMOWANY NAPIS --- */}
-        <div style={{ marginBottom: '40px', textAlign: 'center' }}>
-          <ScrollFloat
-            animationDuration={1}
-            ease='back.inOut(2)'
-            scrollStart='center bottom+=50%'
-            scrollEnd='bottom bottom-=40%'
-            stagger={0.05} // Im wyższa liczba, tym większe opóźnienie między literkami
-          >
-            SELECTED GOODS
-          </ScrollFloat>
+        <motion.div
+          key={isMobile ? "mobile-header" : "desktop-header"}
+          className="merch-header-wrapper"
+          style={isMobile ? { y: mobileHeaderY, scale: mobileHeaderScale } : {}}
+        >
+          <div className="merch-header-inner">
+            <ScrollFloat
+              animationDuration={1}
+              ease='back.inOut(2)'
+              scrollStart='top bottom'
+              scrollEnd='bottom center'
+              stagger={0.05}
+            >
+              SELECTED GOODS
+            </ScrollFloat>
 
-          <motion.p
-            className="merch-subtitle"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            YOUNG FAMILY LABEL • SEASON 2025
-          </motion.p>
-        </div>
+            <motion.p
+              className="merch-subtitle"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              YOUNG FAMILY LABEL • SEASON 2025
+            </motion.p>
+          </div>
+        </motion.div>
 
         <div
           className="products-grid"
@@ -102,17 +128,41 @@ const Merch = () => {
         >
 
           {/* PRODUKT 1 */}
-          <motion.div className="product-card" style={{ x: x1, rotate: r1, opacity: o1 }}>
+          <motion.div
+            className="product-card"
+            style={{
+              x: isMobile ? mobileX1 : desktopX1,
+              rotate: isMobile ? 0 : desktopR1,
+              opacity: isMobile ? mobileOpacity1 : desktopO1,
+              scale: 1,
+              y: 0
+            }}
+          >
             <ProductContent product={products[0]} />
           </motion.div>
 
           {/* PRODUKT 2 */}
-          <motion.div className="product-card" style={{ y: y2, scale: s2, opacity: o2 }}>
+          <motion.div
+            className="product-card"
+            style={{
+              x: isMobile ? mobileX2 : 0,
+              y: isMobile ? 0 : desktopY2,
+              scale: isMobile ? 1 : desktopS2,
+              opacity: isMobile ? mobileOpacity2 : desktopO2
+            }}
+          >
             <ProductContent product={products[1]} />
           </motion.div>
 
           {/* PRODUKT 3 */}
-          <motion.div className="product-card" style={{ x: x3, rotate: r3, opacity: o3 }}>
+          <motion.div
+            className="product-card"
+            style={{
+              x: isMobile ? mobileX3 : desktopX3,
+              rotate: isMobile ? 0 : desktopR3,
+              opacity: isMobile ? 1 : desktopO3
+            }}
+          >
             <ProductContent product={products[2]} />
           </motion.div>
 
