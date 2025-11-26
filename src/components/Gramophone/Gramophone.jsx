@@ -49,7 +49,7 @@ const albums = [
   },
 ];
 
-function Gramophone({ contentProgress, isMenuOpen, style }) {
+function Gramophone({ contentProgress, isMenuOpen, style, zoomTargetRef }) {
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -69,9 +69,9 @@ function Gramophone({ contentProgress, isMenuOpen, style }) {
   // === POPRAWKA 3D DLA MOBILE ===
   // Na desktopie: mocny skos (-25deg).
   // Na mobile: delikatny skos (-10deg) lub prawie brak, żeby treść się mieściła.
-  const skewX3D = isMobile ? -10 : -25;
-  const skewY3D = isMobile ? 5 : 7;
-  const scale3D = 0.85;
+  const skewX3D = isMobile ? 0 : -25;
+  const skewY3D = isMobile ? 0 : 7;
+  const scale3D = isMobile ? 1 : 0.85;
 
   const skewX2D = 0;
   const skewY2D = 0;
@@ -129,9 +129,9 @@ function Gramophone({ contentProgress, isMenuOpen, style }) {
           // Na mobile karty muszą być bliżej siebie w pionie
           itemStackDistance={isMobile ? 40 : 20}
           baseScale={0.9}
-          stackPosition="0%"
+          stackPosition={isMobile ? "0%" : "0%"}
           // Na mobile startujemy ciut niżej, żeby nie zasłaniać tytułu
-          scaleEndPosition={isMobile ? "20%" : "80%"}
+          scaleEndPosition={isMobile ? "80%" : "80%"}
           scrollProgress={contentProgress}
         >
           {albums.map((album) => (
@@ -164,8 +164,18 @@ function Gramophone({ contentProgress, isMenuOpen, style }) {
                         style={{
                           rotateY: useTransform(flipRotationY, (ry) => ry - 180),
                           opacity: backOpacity,
+                          // Ważne: Flexbox żeby wycentrować celownik
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
                         }}
-                      />
+                      >
+                        {/* === TU JEST NASZ NIEWIDZIALNY CELOWNIK === */}
+                        <div
+                          ref={zoomTargetRef}
+                          style={{ width: '10px', height: '10px', background: 'transparent' }}
+                        />
+                      </motion.div>
                     </div>
                   ) : (
                     <img src={album.cover} alt={album.title} />

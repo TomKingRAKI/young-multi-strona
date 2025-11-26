@@ -386,112 +386,146 @@
 }
 
 /* Mobile */
+/* --- RESPONSIVE DESIGN (MOBILE) --- */
+
 @media (max-width: 768px) {
+
+  /* 1. NAPRAWA TŁA (GRID) */
   .gramophone-css-grid {
-    /* Na mobile w Boxes.css krzyżyki były ukryte (display: none), więc tu usuwamy warstwę SVG */
+    /* Uproszczony grid na mobile - same linie, bez krzyżyków */
     background-image:
-      linear-gradient(to right, #e5e5e5 0.5px, transparent 0.5px),
-      linear-gradient(to bottom, #e5e5e5 0.5px, transparent 0.5px);
+      linear-gradient(to right, #e5e5e5 1px, transparent 1px),
+      linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
 
-    /* Nowe wymiary z Boxes.css (Mobile: h=2.5rem, w=4rem) */
-    background-size:
-      4rem 2.5rem,
-      4rem 2.5rem;
-
-    background-position: 0 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .gramophone-css-grid {
-    /* Mobile Small: h=2rem, w=3rem */
-    background-size:
-      3rem 2rem,
-      3rem 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-
-  /* === NAPRAWA NAPISU DYSKOGRAFIA === */
-  .gramophone-title-static {
-    /* Używamy VW, żeby napis ZAWSZE mieścił się w ekranie */
-    font-size: 13vw;
-    padding: 12vh 0 2rem 0;
-    text-align: left;
-    padding-left: 0;
-    /* Odsunięcie od krawędzi */
-    width: 100%;
-
-    text-shadow:
-      1px 1px 0 #444,
-      2px 2px 0 #444,
-      3px 3px 3px rgba(0, 0, 0, 0.3);
+    /* Wyraźniejszy rozmiar kratki */
+    background-size: 40px 40px;
+    background-position: center top;
+    opacity: 1;
+    /* Pewność, że widać */
   }
 
-  .gramophone-scroller .scroll-stack-inner {
-    padding: 30vh 5vw 30rem 5vw;
+  /* 2. UKRYWAMY OPIS (MIEJSCE) */
+  .album-desc {
+    display: none;
   }
 
-  /* Karty */
+  /* 3. FORMATOWANIE KARTY */
   .scroll-stack-card.album-card {
-    padding: 1.2rem;
-    min-height: auto;
-    /* Pozwalamy karcie być mniejszą */
-    /* Upewnij się, że karta nie wyjeżdża */
     width: 90vw;
     margin-left: auto;
     margin-right: auto;
+    padding: 1.5rem;
+
+    /* Ważne: Flex column, żeby elementy były jeden pod drugim */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
+  .album-content {
+    display: contents;
+    /* Resetuje grid z desktopu */
+  }
+
+  /* 4. NAGŁÓWEK KARTY */
   .album-header {
-    flex-direction: row;
-    /* Wracamy do rzędu, lepiej wygląda */
+    width: 100%;
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 0.5rem;
   }
 
   .album-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
 
   .album-header p {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 
-  /* Układ wewnątrz karty */
-  .album-content {
+  /* 5. NAPRAWA ZNIKAJĄCEJ OKŁADKI TOXIC */
+  /* Kontener musi mieć sztywną wysokość, bo dzieci są absolute */
+  .album-cover {
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+    justify-content: center;
+    order: 1;
+    /* Okładka zaraz po nagłówku */
+    margin: 1rem 0;
   }
 
-  /* Okładka */
-  .album-cover img,
-  .cover-placeholder {
-    max-width: 180px;
-    /* Zmniejszamy okładkę, żeby karta była krótsza */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  .album-cover-flip-container {
+    width: 250px;
+    max-width: 70vw;
+
+    /* KLUCZOWA ZMIANA: */
+    height: auto;
+    /* Usuwamy sztywne 250px */
+    aspect-ratio: 1 / 1;
+    /* Wymuszamy kwadrat na kontenerze 3D */
+
+    position: relative;
+    /* Reszta bez zmian */
+  }
+
+  .album-cover img {
+    width: 250px;
+    /* Baza */
+    max-width: 70vw;
+    /* Ograniczenie szerokości */
+
+    /* KLUCZOWA ZMIANA: */
+    height: auto;
+    /* Wysokość elastyczna */
+    aspect-ratio: 1 / 1;
+    /* Zawsze kwadrat */
+    object-fit: cover;
+    /* Wypełnienie */
+
+    border-radius: 10px;
+    /* Dla pewności */
+  }
+
+  /* 6. TRACKLISTA POD SPODEM */
+  .album-tracklist {
+    order: 2;
+    width: 100%;
+    text-align: center;
   }
 
   .album-tracklist ul {
-    font-size: 0.8rem;
-    text-align: center;
-    /* Ukrywamy nadmiarowe utwory jeśli trzeba, albo zmniejszamy marginesy */
-    margin-bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
   }
 
   .album-tracklist li {
-    line-height: 1.4;
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  /* Naprawa tytułu sekcji */
+  .gramophone-title-static {
+    font-size: 8.5vw;
+    padding: 15vh 0 2rem 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Poprawka paddingu scrolla */
+  .gramophone-scroller .scroll-stack-inner {
+    padding: 15vh 5vw 40rem 5vw;
   }
 }
 
 /* Mobile Small */
 @media (max-width: 480px) {
   .gramophone-title-static {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     padding: 8rem 0 3rem 0;
     /* Zwiększony padding z góry */
     text-shadow:

@@ -1,73 +1,78 @@
 import React, { useRef, forwardRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent, useMotionTemplate, useSpring, useMotionValue } from 'framer-motion';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValueEvent,
+  useMotionTemplate,
+  useSpring,
+  useMotionValue
+} from 'framer-motion';
 import './NewSong.css';
 import Gramophone from '../Gramophone/Gramophone';
 import About from '../About/About';
 import SmokeTransition from '../SmokeTransition/SmokeTransition';
 
-// Importy placeholderów (podmień na swoje pliki!)
+// Importy placeholderów (jeśli używasz)
 // import previewVideo from '../../assets/preview-loop.mp4'; 
-// import thumbImg from '../../assets/thumb.jpg'; 
 
 const NewSong = forwardRef((props, ref) => {
   const scrollRef = useRef(null);
   const previousThemeRef = useRef(null);
 
-  // --- RESPANSYWNOŚĆ (Mobile Check) ---
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  // === 1. PRZYGOTOWANIE DO CELOWANIA (SNAJPER) ===
+  // Tworzymy Ref, który przekażemy do Gramophone, żeby namierzyć ten mały div
+  const zoomTargetRef = useRef(null);
 
+  // Domyślne wartości (startujemy od Twojego starego ustawienia jako fallback)
+  // 50% szerokości (0.5) i 78% wysokości (0.78)
+  const originX = useMotionValue(0.5);
+  const originY = useMotionValue(0.78);
+
+  // Dynamiczny szablon CSS, który łączy X i Y w jeden string np. "50.5% 78.2%"
+  const calculatedOrigin = useMotionTemplate`${useTransform(originX, x => x * 100)}% ${useTransform(originY, y => y * 100)}%`;
+
+
+  // --- RESPANSYWNOŚĆ (Mobile Check) ---
+  const [isMobile, setIsMobile] = useState(false); // Domyślnie false, useEffect ustawi
   useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  // === NOWE: LOGIKA LATARKI (SPOTLIGHT) ===
-  // 1. Tworzymy wartości Motion dla pozycji myszy (startujemy na środku: 50% 40%)
+
+
+  // === LOGIKA LATARKI (SPOTLIGHT) ===
   const mouseX = useMotionValue(50);
   const mouseY = useMotionValue(40);
-
-  // 2. Dodajemy "sprężynę" (fizykę) do tych wartości.
-  // damping: im wyższy, tym mniej drga. stiffness: im wyższy, tym szybciej goni.
-  // Te ustawienia dają efekt ciężkiego, płynnego światła ("cinematic smooth").
   const springConfig = { damping: 25, stiffness: 150, mass: 0.5 };
-
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
-  // 3. Tworzymy szablon gradientu, który aktualizuje się automatycznie bez przeładowania Reacta
-  // Używamy kolorów z Twojego CSS
   const spotlightBackground = useMotionTemplate`radial-gradient(circle at ${smoothX}% ${smoothY}%, 
     rgba(255, 255, 255, 0.03) 0%, 
     rgba(0, 0, 0, 0.9) 40%, 
     rgba(20, 0, 0, 0.4) 100%)`;
 
-  // 4. Nasłuchujemy ruchu myszy
   useEffect(() => {
     const handleMouseMove = (e) => {
-      // Obliczamy pozycję jako procent szerokości/wysokości ekranu
-      // Dzięki temu działa responsywnie
       const xPct = (e.clientX / window.innerWidth) * 100;
       const yPct = (e.clientY / window.innerHeight) * 100;
-
       mouseX.set(xPct);
       mouseY.set(yPct);
     };
-
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
-  // === KONIEC LOGIKI LATARKI ===
-  // --- ANIMACJE (Bez zmian logicznych, tylko dostosowanie) ---
-  const { scrollYProgress: radiusProgress } = useScroll({
-    target: scrollRef, offset: ["start end", "start start"]
-  });
-  const radius = useTransform(radiusProgress, [0, 1], ["20px", "0px"]); // Ostre rogi pasują bardziej do industrialu!
 
+
+  // --- GŁÓWNE ANIMACJE SCROLLA ---
   const { scrollYProgress: contentProgress } = useScroll({
     target: scrollRef, offset: ["start start", "end end"]
   });
 
-  // Logika zmiany motywu (header)
+  // Logika zmiany motywu (Header)
   useMotionValueEvent(contentProgress, "change", (latest) => {
     if (typeof props.setHeaderTheme === 'function') {
       if (latest < 0.05) {
@@ -80,44 +85,58 @@ const NewSong = forwardRef((props, ref) => {
         props.setHeaderTheme(newTheme);
       }
     }
+
+    // === 2. LOGIKA CELOWANIA (NAMIERZANIE) ===
+    // Namierzamy cel, ZANIM zacznie się zoom (zoom startuje ok 0.65).
+    // Dzięki temu kamera ustawia się na wprost celu i wjazd jest prosty (------), a nie ukośny (\).
+    if (latest > 0.55 && latest < 0.64 && zoomTargetRef.current) {
+      const rect = zoomTargetRef.current.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      // Obliczamy środek w pikselach
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      // === TU REGULUJESZ CELOWNIK ===
+
+      const OFFSET_X = 0.01; // <--- ZWIĘKSZ, żeby przesunąć W PRAWO (np. 0.03, 0.05)
+      const OFFSET_Y = 0.1; // <--- To Twoje ustawienie W DÓŁ
+
+      // Dodajemy offsety do wyniku
+      const newX = (centerX / windowWidth) + OFFSET_X;
+      const newY = (centerY / windowHeight) + OFFSET_Y;
+
+      originX.set(newX);
+      originY.set(newY);
+    }
   });
+
 
   // --- SEKWENCJA RUCHU ---
   // 1. Tekst
-  // Na mobile tekst przesuwa się mniej drastycznie, żeby nie wjeżdżał na header
   const textY = useTransform(contentProgress, [0, 0.07], ["0vh", isMobile ? "-18vh" : "-25vh"]);
 
   // 2. Wideo
-  // Desktop: Startuje z dołu (100vh) -> 15vh
-  // Mobile: Startuje z dołu (50vh) -> 10vh (żeby było bliżej tytułu)
   const videoY = useTransform(contentProgress, [0, 0.07], ["100vh", isMobile ? "0vh" : "15vh"]);
-
   const videoScale = useTransform(contentProgress, [0.08, 0.12], [1, 0.9]);
-
-  // Desktop: Wideo zjeżdża w lewo (-40%)
-  // Mobile: Wideo zostaje na środku (0%) - bo linki będą POD spodem
   const videoX = useTransform(contentProgress, [0.08, 0.12], ["0%", isMobile ? "0%" : "-40%"]);
 
   // 3. Linki
   const linksOpacity = useTransform(contentProgress, [0.13, 0.18], [0, 1]);
-
-  // X: 
-  // Desktop: Wjeżdżają z prawej (50vw -> 15vw)
-  // Mobile: Są wycentrowane (0vw -> 0vw)
   const linksX = useTransform(contentProgress, [0.13, 0.18], isMobile ? ["0%", "0%"] : ["50vw", "15vw"]);
-
-  // Y:
-  // Desktop: 15vh (obok wideo)
-  // Mobile: 55vh (POD wideo)
   const linksY = useTransform(contentProgress, [0.13, 0.18], isMobile ? ["80vh", "30vh"] : ["15vh", "15vh"]);
 
-  // 5. Pociąg odjeżdża
+  // 4. Pociąg odjeżdża
   const trackX = useTransform(contentProgress, [0.20, 0.24, 0.35, 1.0], ["0%", "0%", "-50%", "-50%"]);
 
-  // --- RESZTA (Gramophone, About, Smoke) - BEZ ZMIAN ---
+  // --- GRAMOPHONE & ABOUT & SMOKE ---
   const gramophoneZoomProgress = useTransform(contentProgress, [0.65, 0.85], [0, 1]);
   const gramophoneScale = useTransform(gramophoneZoomProgress, [0, 1], [1, 15]);
-  const gramophoneTransformOrigin = useTransform(gramophoneZoomProgress, [0, 1], ["50% 78%", "50% 78%"]);
+
+  // UWAGA: Tutaj usunąłem stare `gramophoneTransformOrigin`, bo teraz używamy `calculatedOrigin`
+  // wyliczanego na żywo w sekcji "Logika Celowania".
+
   const aboutClipPath = useTransform(gramophoneZoomProgress, [0.05, 1], ["circle(0% at 50% 62%)", "circle(150% at 50% 0%)"]);
   const aboutOpacity = useTransform(gramophoneZoomProgress, [0, 0.001], [0, 1]);
   const aboutPointerEvents = useTransform(gramophoneZoomProgress, (v) => (v > 0.1 ? 'auto' : 'none'));
@@ -142,7 +161,7 @@ const NewSong = forwardRef((props, ref) => {
           {/* PANEL 1: NEW SONG */}
           <div className="newsong-panel">
 
-            {/* --- NOWE TŁO (Industrial) --- */}
+            {/* TŁO INDUSTRIAL */}
             <div className="industrial-bg">
               <div className="noise-overlay"></div>
               <div className="grid-overlay"></div>
@@ -167,7 +186,6 @@ const NewSong = forwardRef((props, ref) => {
               style={{ y: videoY, x: videoX, scale: videoScale }}
               onClick={() => window.open('https://www.youtube.com/watch?v=A0I1MrojmJE&list=RDA0I1MrojmJE&start_radio=1', '_blank')}
             >
-              {/* Ozdobniki techniczne */}
               <div className="tech-corner tl"></div>
               <div className="tech-corner br"></div>
               <div className="rec-label">● REC</div>
@@ -203,12 +221,15 @@ const NewSong = forwardRef((props, ref) => {
           </div>
 
           {/* PANEL 2: GRAMOPHONE */}
+          {/* Tu przekazujemy ref i obliczony origin */}
           <Gramophone
             contentProgress={contentProgress}
             isMenuOpen={props.isMenuOpen}
-            zoomScale={gramophoneScale}
-            zoomOrigin={gramophoneTransformOrigin}
-            style={{ scale: gramophoneScale, transformOrigin: gramophoneTransformOrigin }}
+            zoomTargetRef={zoomTargetRef} // <--- PRZEKAZUJEMY SNAJPERA
+            style={{
+              scale: gramophoneScale,
+              transformOrigin: calculatedOrigin // <--- TUTAJ WPADA OBLICZONA POZYCJA (np. 50.5% 78.2%)
+            }}
           />
         </motion.div>
 
