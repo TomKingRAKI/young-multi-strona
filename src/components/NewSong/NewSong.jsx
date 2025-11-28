@@ -212,10 +212,23 @@ const NewSong = forwardRef((props, ref) => {
               className="links-container"
               style={{ opacity: linksOpacity, x: linksX, y: linksY }}
             >
-              <PlatformLink name="SPOTIFY" />
-              <PlatformLink name="APPLE MUSIC" />
-              <PlatformLink name="YOUTUBE MUSIC" />
-              <PlatformLink name="TIDAL" />
+              {/* Tu wklej swoje prawdziwe linki w cudzysłowiu */}
+              <PlatformLink
+                name="SPOTIFY"
+                url="https://open.spotify.com/album/3ex3T8zjsgKoSP9ajrXv2l"
+              />
+              <PlatformLink
+                name="APPLE MUSIC"
+                url="https://music.apple.com/us/album/gdzie-m%C3%B3j-dom-single/1845163826"
+              />
+              <PlatformLink
+                name="YOUTUBE MUSIC"
+                url="https://music.youtube.com/playlist?list=OLAK5uy_mvis9FVMPeX96gbKtOFgWsjlooaX5ty_M"
+              />
+              <PlatformLink
+                name="TIDAL"
+                url="http://www.tidal.com/album/463841952"
+              />
             </motion.div>
 
           </div>
@@ -255,8 +268,8 @@ const NewSong = forwardRef((props, ref) => {
   );
 });
 
-const PlatformLink = ({ name }) => (
-  <a href="#" className="streaming-link" target="_blank">
+const PlatformLink = ({ name, url }) => (
+  <a href={url} className="streaming-link" target="_blank" rel="noopener noreferrer">
     <span>{name}</span>
     <span className="link-arrow">↗</span>
   </a>
