@@ -15,6 +15,7 @@ const products = [
     price: "499,00 ZŁ",
     status: "WYPRZEDANE",
     image: hoodieImg,
+    link: "https://sklep.yfl.pl/products/yfl-limited-hoodie"
   },
   {
     id: 2,
@@ -22,6 +23,7 @@ const products = [
     price: "459,00 ZŁ",
     status: "WYPRZEDANE",
     image: hoodie1Img,
+    link: "https://sklep.yfl.pl/products/yfl-hoodie"
   },
   {
     id: 3,
@@ -29,6 +31,7 @@ const products = [
     price: "179,00 ZŁ",
     status: "WYPRZEDANE",
     image: teeImg,
+    link: "https://sklep.yfl.pl/products/yfl-basic-tshirt-1"
   }
 ];
 
@@ -175,13 +178,35 @@ const Merch = () => {
 const ProductContent = ({ product }) => (
   <>
     <div className="product-image-wrapper">
-      <img src={product.image} alt={product.name} className="product-img" />
-      <button className="shop-btn">ZOBACZ DROP</button>
+      {/* 1. Link owijający zdjęcie - kliknięcie w zdjęcie przenosi do sklepu */}
+      <a
+        href={product.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="img-link"
+      >
+        <img src={product.image} alt={product.name} className="product-img" />
+      </a>
+
+      {/* 2. Link jako przycisk - zmieniliśmy <button> na <a>, ale klasa została ta sama */}
+      <a
+        href={product.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="shop-btn"
+      >
+        ZOBACZ DROP
+      </a>
+
       {product.status === "WYPRZEDANE" && <div className="status-badge">SOLD OUT</div>}
     </div>
+
     <div className="product-info">
       <div className="info-left">
-        <h3 className="product-name">{product.name}</h3>
+        {/* Opcjonalnie: Nazwa produktu też może być linkiem */}
+        <a href={product.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <h3 className="product-name">{product.name}</h3>
+        </a>
         <span className="product-status">{product.status}</span>
       </div>
       <div className="info-right">

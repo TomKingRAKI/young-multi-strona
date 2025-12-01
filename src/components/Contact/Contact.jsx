@@ -91,9 +91,20 @@ const Contact = () => {
                 </motion.div>
 
                 <div className="socials-row">
-                  <SocialButton name="IG" />
-                  <SocialButton name="YT" />
-                  <SocialButton name="SP" />
+                  <SocialButton
+                    name="IG"
+                    link="https://www.instagram.com/youngmulti/"
+                  />
+
+                  <SocialButton
+                    name="YT"
+                    link="https://www.youtube.com/channel/UCiP6-9NHJ36BCxUWL-gNKYg"
+                  />
+
+                  <SocialButton
+                    name="SP"
+                    link="https://open.spotify.com/artist/5CkZIA3WpaEFxp0wSjMzRI"
+                  />
                 </div>
               </div>
 
@@ -131,9 +142,12 @@ const ChangingNumbers = () => (
   </div>
 );
 
-const SocialButton = ({ name }) => (
+// Na samym dole pliku Contact.jsx
+const SocialButton = ({ name, link }) => (
   <motion.a
-    href="#"
+    href={link}                  // Tu wstawiamy link przekazany z góry
+    target="_blank"              // Otwórz w nowej karcie
+    rel="noopener noreferrer"    // Zabezpieczenie
     className="social-btn"
     whileHover={{ scale: 1.2, backgroundColor: "#fff", color: "#000" }}
     whileTap={{ scale: 0.9 }}
