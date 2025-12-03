@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
+import { FaInstagram, FaYoutube, FaSpotify } from 'react-icons/fa';
 import './Contact.css';
 
 // Pamiętaj o swoim zdjęciu!
@@ -57,8 +58,8 @@ const Contact = () => {
             <div className="marquee-container">
               <motion.div
                 className="marquee-text"
-                animate={{ x: [0, -1000] }}
-                transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+                animate={{ x: "-50%" }}
+                transition={{ repeat: Infinity, duration: 60, ease: "linear" }}
               >
                 YOUNG FAMILY LABEL — WORLDWIDE — 2025 — MULTI —
                 YOUNG FAMILY LABEL — WORLDWIDE — 2025 — MULTI —
@@ -75,14 +76,8 @@ const Contact = () => {
                 >
                   <h2 className="section-label">CONTACT / BOOKING</h2>
 
-                  <a href="mailto:biznes@yfl.pl" className="contact-link">
-                    <span className="link-text">BIZNES@YFL.PL</span>
-                    <span className="link-arrow">↗</span>
-                  </a>
-                  <a href="mailto:booking@yfl.pl" className="contact-link">
-                    <span className="link-text">BOOKING@YFL.PL</span>
-                    <span className="link-arrow">↗</span>
-                  </a>
+                  <CopyLink email="BIZNES@YFL.PL" />
+                  <CopyLink email="BOOKING@YFL.PL" />
 
                   <div className="coordinates-box">
                     <p>YFL HQ COORDINATES:</p>
@@ -92,17 +87,17 @@ const Contact = () => {
 
                 <div className="socials-row">
                   <SocialButton
-                    name="IG"
+                    icon={<FaInstagram />}
                     link="https://www.instagram.com/youngmulti/"
                   />
 
                   <SocialButton
-                    name="YT"
+                    icon={<FaYoutube />}
                     link="https://www.youtube.com/channel/UCiP6-9NHJ36BCxUWL-gNKYg"
                   />
 
                   <SocialButton
-                    name="SP"
+                    icon={<FaSpotify />}
                     link="https://open.spotify.com/artist/5CkZIA3WpaEFxp0wSjMzRI"
                   />
                 </div>
@@ -117,7 +112,7 @@ const Contact = () => {
                 <motion.img
                   src={multiImg}
                   alt="Young Multi"
-                  className="multi-blend"  // <--- ZMIANA Z 'multi-img' NA 'multi-blend' !!!
+                  className="multi-blend"
                   style={{ x: xMove, y: yMove }}
                 />
               </div>
@@ -125,7 +120,9 @@ const Contact = () => {
 
             <footer className="main-footer">
               <span>© 2025 YFL. ALL RIGHTS RESERVED.</span>
-              <span>DESIGNED BY AI & YOU.</span>
+              <a href="https://www.youtube.com/@itompoland" target="_blank" rel="noopener noreferrer" className="creator-link">
+                STRONĘ WYKONAŁ ITOM ↗
+              </a>
             </footer>
 
           </section>
@@ -142,17 +139,42 @@ const ChangingNumbers = () => (
   </div>
 );
 
-// Na samym dole pliku Contact.jsx
-const SocialButton = ({ name, link }) => (
+const CopyLink = ({ email }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(email.toLowerCase());
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
+
+  return (
+    <div className="contact-link" onClick={handleCopy} style={{ cursor: 'pointer' }}>
+      {copied ? (
+        <span className="link-text" style={{ color: '#ff0000' }}>SKOPIOWANO!</span>
+      ) : (
+        <>
+          <span className="link-text">{email}</span>
+          <span className="link-arrow">↗</span>
+        </>
+      )}
+    </div>
+  );
+};
+
+const SocialButton = ({ icon, link }) => (
   <motion.a
-    href={link}                  // Tu wstawiamy link przekazany z góry
-    target="_blank"              // Otwórz w nowej karcie
-    rel="noopener noreferrer"    // Zabezpieczenie
+    href={link}
+    target="_blank"
+    rel="noopener noreferrer"
     className="social-btn"
     whileHover={{ scale: 1.2, backgroundColor: "#fff", color: "#000" }}
     whileTap={{ scale: 0.9 }}
   >
-    {name}
+    {icon}
   </motion.a>
 );
 
