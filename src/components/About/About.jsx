@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import './About.css';
 import { JellyDread } from './JellyDread';
+import { SpectralGuide } from './SpectralGuide';
 // 1. Importujemy nowy komponent twarzy
 import { FaceFeatures } from './FaceFeatures';
 import { SpeechBubble } from './SpeechBubble';
@@ -65,6 +66,14 @@ function About({ externalOpacity }) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isIdle, setIsIdle] = useState(false); // Czy użytkownik jest nieaktywny?
   const idleTimerRef = useRef(null); // Referencja do timera
+
+  // MotionValue dla duszka (steruje offsetem wybranego dreda)
+  const ghostDreadOffsetX = useMotionValue(0);
+  const ghostDreadOffsetY = useMotionValue(0);
+  // Obiekt, który przekażemy do JellyDread i SpectralGuide
+  // Używamy useMemo lub po prostu tworzymy obiekt, ale JellyDread oczekuje {x, y}
+  // Ważne: JellyDread używa .get() i .onChange() na x i y, więc to muszą być MotionValues.
+  const ghostDreadOffset = { x: ghostDreadOffsetX, y: ghostDreadOffsetY };
 
   // Funkcja resetująca timer bezczynności. Wywoływana przy każdej akcji.
   const resetIdleTimer = useCallback(() => {
@@ -222,6 +231,7 @@ function About({ externalOpacity }) {
               onDragStart={handleDragStart}
               onDragReport={handleDragReport}
               onDragEnd={handleDragEnd}
+              ghostOffset={i === 3 ? ghostDreadOffset : null} // Tylko dred nr 3 ma ducha
             >
               {/* Definicja gradientu przekazywana jako children (dla kompatybilności z Twoim plikiem) */}
               <linearGradient
@@ -239,6 +249,19 @@ function About({ externalOpacity }) {
             </JellyDread>
           </motion.div>
         ))}
+
+        {/* D. Spectral Guide (Duszek) */}
+        <AnimatePresence>
+          {!activeInfo && isIdle && !isMobile && (
+            <SpectralGuide
+              startPos={{
+                x: dreadPositions[3].x - 20,
+                y: dreadPositions[3].y + 120 // +140 to offset do końcówki (initialTipY)
+              }}
+              ghostOffset={ghostDreadOffset}
+            />
+          )}
+        </AnimatePresence>
       </div>
 
       {/* 3. WARSTWA WIERZCHNIA: DYMEK */}

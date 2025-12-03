@@ -19,6 +19,7 @@ export function JellyDread({
   onDragReport,
   onDragStart,
   onDragEnd,
+  ghostOffset,
   children
 }) {
   const isDraggingRef = useRef(false);
@@ -32,6 +33,13 @@ export function JellyDread({
   const tipX = useMotionValue(anchorX);
   const tipY = useMotionValue(anchorY + initialTipY);
 
+  // Transformacje dla uchwytu - pozycjonujemy go względem końcówki dreda
+  // SVG jest offsetowane o -500px, więc pozycja (500, 500) w SVG = (0, 0) w kontenerze
+  // Używamy useMotionValue dla pozycji uchwytu, żeby móc ją kontrolować
+  // Pozycja startowa: końcówka dreda jest na (500, 640), więc uchwyt na (0, 140)
+  const handleX = useMotionValue(0);
+  const handleY = useMotionValue(initialTipY);
+
   // === OSTATECZNA LOGIKA DLA ŚRODKA (C) ===
 
   // 1. Definiujemy "idealny środek" (tak jak ostatnio)
@@ -40,7 +48,7 @@ export function JellyDread({
 
   // 2. RĘCZNIE obliczamy wartości startowe dla sprężyn
   //    (500 + 500) / 2 = 500
-  const initialMidX = (anchorX + tipX.get()) / 2; 
+  const initialMidX = (anchorX + tipX.get()) / 2;
   //    (500 + 600) / 2 = 550
   const initialMidY = (anchorY + tipY.get()) / 2;
 
@@ -61,8 +69,37 @@ export function JellyDread({
     // Zależnościami są teraz 'idealMidX' i 'idealMidY'
   }, [idealMidX, idealMidY, midX, midY]);
 
+  // === GHOST OFFSET LOGIC ===
+  useEffect(() => {
+    if (!ghostOffset) return;
+
+    // Funkcja aktualizująca pozycję na podstawie ghostOffset
+    const updateFromGhost = () => {
+      if (!isDraggingRef.current) {
+        const currentGhostX = ghostOffset.x.get();
+        const currentGhostY = ghostOffset.y.get();
+
+        // Ustawiamy tipX/Y jako anchor + offset
+        tipX.set(anchorX + currentGhostX);
+        tipY.set(anchorY + initialTipY + currentGhostY);
+
+        // Uchwyt też musi podążać za duchem, żeby wizualnie było spójnie
+        handleX.set(currentGhostX);
+        handleY.set(initialTipY + currentGhostY);
+      }
+    };
+
+    const unsubX = ghostOffset.x.onChange(updateFromGhost);
+    const unsubY = ghostOffset.y.onChange(updateFromGhost);
+
+    return () => {
+      unsubX();
+      unsubY();
+    };
+  }, [ghostOffset, anchorX, anchorY, initialTipY, tipX, tipY, handleX, handleY]);
+
   // 5. Usuń mylące, stare komentarze, które tam zostały
-  
+
   // === KONIEC ZMIAN ===
 
   // Ścieżka SVG (bez zmian, teraz dostanie 500, 550 na starcie)
@@ -74,23 +111,16 @@ export function JellyDread({
     }
   );
 
-  // Transformacje dla uchwytu - pozycjonujemy go względem końcówki dreda
-  // SVG jest offsetowane o -500px, więc pozycja (500, 500) w SVG = (0, 0) w kontenerze
-  // Używamy useMotionValue dla pozycji uchwytu, żeby móc ją kontrolować
-  // Pozycja startowa: końcówka dreda jest na (500, 640), więc uchwyt na (0, 140)
-  const handleX = useMotionValue(0);
-  const handleY = useMotionValue(initialTipY);
-
   // Handlery - aktualizujemy zarówno końcówkę dreda jak i pozycję uchwytu
   const handleDrag = (event, info) => {
     // Aktualizujemy końcówkę dreda używając offset (względem początku drag)
     tipX.set(anchorX + info.offset.x);
     tipY.set(anchorY + initialTipY + info.offset.y);
-    
+
     // Aktualizujemy pozycję uchwytu - użyjemy offset, bo to jest względne przesunięcie
     handleX.set(info.offset.x);
     handleY.set(initialTipY + info.offset.y);
-    
+
     if (onDragReport) onDragReport(info.offset.x);
   };
 
@@ -118,17 +148,13 @@ export function JellyDread({
   // Gdy końcówka wraca na miejsce, uchwyt też powinien wrócić
   useEffect(() => {
     const unsubX = tipX.onChange((v) => {
-      // Aktualizujemy pozycję uchwytu tylko gdy nie przeciągamy
-      if (!isDraggingRef.current) {
-        // Końcówka jest na pozycji v, więc uchwyt powinien być na (v - CANVAS_CENTER)
-        // Ale ponieważ używamy offset podczas drag, resetujemy do 0
+      // Aktualizujemy pozycję uchwytu tylko gdy nie przeciągamy ORAZ nie ma aktywnego ducha
+      if (!isDraggingRef.current && (!ghostOffset || (ghostOffset.x.get() === 0 && ghostOffset.y.get() === 0))) {
         handleX.set(v - CANVAS_CENTER);
       }
     });
     const unsubY = tipY.onChange((v) => {
-      // Aktualizujemy pozycję uchwytu tylko gdy nie przeciągamy
-      if (!isDraggingRef.current) {
-        // Końcówka jest na pozycji v, więc uchwyt powinien być na (v - CANVAS_CENTER)
+      if (!isDraggingRef.current && (!ghostOffset || (ghostOffset.x.get() === 0 && ghostOffset.y.get() === 0))) {
         handleY.set(v - CANVAS_CENTER);
       }
     });
@@ -137,7 +163,7 @@ export function JellyDread({
       unsubX();
       unsubY();
     };
-  }, [tipX, tipY, handleX, handleY]);
+  }, [tipX, tipY, handleX, handleY, ghostOffset]);
 
   return (
     <div className="jelly-dread-container">
@@ -152,7 +178,7 @@ export function JellyDread({
         onDrag={handleDrag}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd} // onDragEnd teraz otrzymuje `info`
-        style={{ 
+        style={{
           x: handleX,
           y: handleY
         }}
@@ -175,9 +201,9 @@ export function JellyDread({
           fill="none"
         />
         <motion.path
-          d={svgPath} 
+          d={svgPath}
           stroke={`url(#${dreadId})`}
-          strokeWidth="18" 
+          strokeWidth="18"
           strokeLinecap="round"
           fill="none"
         />
