@@ -6,7 +6,8 @@ import {
   useMotionValueEvent,
   useMotionTemplate,
   useSpring,
-  useMotionValue
+  useMotionValue,
+  animate
 } from 'framer-motion';
 import './NewSong.css';
 import Gramophone from '../Gramophone/Gramophone';
@@ -43,17 +44,30 @@ const NewSong = forwardRef((props, ref) => {
   }, []);
 
 
-  // === LOGIKA LATARKI (SPOTLIGHT) ===
+  // === LOGIKA LATARKI (CHAMELEON SPOTLIGHT) ===
   const mouseX = useMotionValue(50);
   const mouseY = useMotionValue(40);
+  const spotlightColor = useMotionValue('rgba(255, 255, 255, 0.05)');
+  const spotlightSize = useSpring(40, { damping: 20, stiffness: 100 });
+
   const springConfig = { damping: 25, stiffness: 150, mass: 0.5 };
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
   const spotlightBackground = useMotionTemplate`radial-gradient(circle at ${smoothX}% ${smoothY}%, 
-    rgba(255, 255, 255, 0.03) 0%, 
-    rgba(0, 0, 0, 0.9) 40%, 
+    ${spotlightColor} 0%, 
+    rgba(0, 0, 0, 0.9) ${spotlightSize}%, 
     rgba(20, 0, 0, 0.4) 100%)`;
+
+  const handleSpotlightHover = (color) => {
+    spotlightColor.set(color);
+    spotlightSize.set(25); // Kurczy się dla skupienia uwagi
+  };
+
+  const handleSpotlightLeave = () => {
+    spotlightColor.set('rgba(255, 255, 255, 0.05)');
+    spotlightSize.set(40); // Powrót do normalnego rozmiaru
+  };
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -212,22 +226,33 @@ const NewSong = forwardRef((props, ref) => {
               className="links-container"
               style={{ opacity: linksOpacity, x: linksX, y: linksY }}
             >
-              {/* Tu wklej swoje prawdziwe linki w cudzysłowiu */}
-              <PlatformLink
+              <InteractiveLink
                 name="SPOTIFY"
                 url="https://open.spotify.com/album/3ex3T8zjsgKoSP9ajrXv2l"
+                baseColor="#1DB954"
+                onHoverStart={() => handleSpotlightHover('rgba(29, 185, 84, 0.3)')}
+                onHoverEnd={handleSpotlightLeave}
               />
-              <PlatformLink
+              <InteractiveLink
                 name="APPLE MUSIC"
                 url="https://music.apple.com/us/album/gdzie-m%C3%B3j-dom-single/1845163826"
+                baseColor="#FC3C44"
+                onHoverStart={() => handleSpotlightHover('rgba(252, 60, 68, 0.3)')}
+                onHoverEnd={handleSpotlightLeave}
               />
-              <PlatformLink
+              <InteractiveLink
                 name="YOUTUBE MUSIC"
                 url="https://music.youtube.com/playlist?list=OLAK5uy_mvis9FVMPeX96gbKtOFgWsjlooaX5ty_M"
+                baseColor="#FF0000"
+                onHoverStart={() => handleSpotlightHover('rgba(255, 0, 0, 0.3)')}
+                onHoverEnd={handleSpotlightLeave}
               />
-              <PlatformLink
+              <InteractiveLink
                 name="TIDAL"
                 url="http://www.tidal.com/album/463841952"
+                baseColor="#00FFFF"
+                onHoverStart={() => handleSpotlightHover('rgba(0, 255, 255, 0.3)')}
+                onHoverEnd={handleSpotlightLeave}
               />
             </motion.div>
 
@@ -268,11 +293,102 @@ const NewSong = forwardRef((props, ref) => {
   );
 });
 
-const PlatformLink = ({ name, url }) => (
-  <a href={url} className="streaming-link" target="_blank" rel="noopener noreferrer">
-    <span>{name}</span>
-    <span className="link-arrow">↗</span>
-  </a>
-);
+// === INTERACTIVE LINK COMPONENT ===
+const InteractiveLink = ({ name, url, baseColor, onHoverStart, onHoverEnd }) => {
+  const [displayName, setDisplayName] = useState(name);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const linkRef = useRef(null);
+  const magneticX = useMotionValue(0);
+  const magneticY = useMotionValue(0);
+  const springX = useSpring(magneticX, { damping: 15, stiffness: 150 });
+  const springY = useSpring(magneticY, { damping: 15, stiffness: 150 });
+
+  // Matrix/Cipher Effect
+  const scrambleText = async () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+
+    const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    const originalName = name;
+    const iterations = 15;
+
+    for (let i = 0; i < iterations; i++) {
+      await new Promise(resolve => setTimeout(resolve, 30));
+
+      if (i < iterations - 5) {
+        // Losowe znaki
+        setDisplayName(
+          originalName.split('').map(() =>
+            chars[Math.floor(Math.random() * chars.length)]
+          ).join('')
+        );
+      } else {
+        // Stopniowo odkrywaj prawdziwy tekst
+        const revealIndex = Math.floor((i - (iterations - 5)) / 5 * originalName.length);
+        setDisplayName(
+          originalName.split('').map((char, idx) =>
+            idx <= revealIndex ? char : chars[Math.floor(Math.random() * chars.length)]
+          ).join('')
+        );
+      }
+    }
+
+    setDisplayName(originalName);
+    setIsAnimating(false);
+  };
+
+  // Magnetic Effect
+  const handleMouseMove = (e) => {
+    if (!linkRef.current) return;
+
+    const rect = linkRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const deltaX = (e.clientX - centerX) * 0.2; // Siła magnetyzmu
+    const deltaY = (e.clientY - centerY) * 0.2;
+
+    magneticX.set(deltaX);
+    magneticY.set(deltaY);
+  };
+
+  const handleMouseLeave = () => {
+    magneticX.set(0);
+    magneticY.set(0);
+    setDisplayName(name);
+    setIsAnimating(false);
+    onHoverEnd?.();
+  };
+
+  return (
+    <motion.a
+      ref={linkRef}
+      href={url}
+      className="streaming-link"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ x: springX, y: springY }}
+      onMouseEnter={() => {
+        scrambleText();
+        onHoverStart?.();
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <motion.div
+        className="btn-glow"
+        style={{
+          backgroundColor: baseColor,
+          opacity: 0
+        }}
+        whileHover={{ opacity: 0.15 }}
+        transition={{ duration: 0.3 }}
+      />
+      <span>{displayName}</span>
+      <span className="link-arrow">↗</span>
+    </motion.a>
+  );
+};
 
 export default NewSong;

@@ -1,4 +1,4 @@
-/* Plik: /src/components/NewSong/NewSong.css */
+﻿/* Plik: /src/components/NewSong/NewSong.css */
 
 .newsong-section {
   height: 1500vh;
@@ -30,14 +30,14 @@
   flex-shrink: 0;
   position: relative;
   overflow: hidden;
-  /* Grid centruje wszystkie warstwy (tło, tekst, video) na środku */
+  /* Grid centruje wszystkie warstwy (tĹ‚o, tekst, video) na Ĺ›rodku */
   display: grid;
   place-items: center;
   grid-template-areas: "stack";
 
 }
 
-/* --- NOWE TŁO: INDUSTRIAL --- */
+/* --- NOWE TĹO: INDUSTRIAL --- */
 .industrial-bg {
   grid-area: stack;
   position: absolute;
@@ -47,7 +47,7 @@
   overflow: hidden;
 }
 
-/* Szum (Noise) - daje teksturę betonu/filmu */
+/* Szum (Noise) - daje teksturÄ™ betonu/filmu */
 .noise-overlay {
   position: absolute;
   inset: 0;
@@ -68,11 +68,11 @@
   pointer-events: none;
 }
 
-/* Reflektor na środku (Spotlight) */
+/* Reflektor na Ĺ›rodku (Spotlight) */
 .spotlight {
   position: absolute;
   inset: 0;
-  /* ZMIANA: Zmniejszamy jasność środka (z 0.08 na 0.02 lub wcale) */
+  /* ZMIANA: Zmniejszamy jasnoĹ›Ä‡ Ĺ›rodka (z 0.08 na 0.02 lub wcale) */
   /*
   background: radial-gradient(circle at 50% 40%,
       rgba(255, 255, 255, 0.02) 0%,
@@ -87,7 +87,7 @@
 .newsong-text-wrapper {
   grid-area: stack;
   z-index: 2;
-  /* Nad tłem, ale pod wideo jeśli najedzie */
+  /* Nad tĹ‚em, ale pod wideo jeĹ›li najedzie */
   text-align: center;
   mix-blend-mode: normal;
   /* Tekst fajnie przenika */
@@ -101,42 +101,42 @@
   margin: 0;
 
   /* --- KLUCZ DO METALU (HARD CHROME) --- */
-  /* 180deg = z góry na dół */
+  /* 180deg = z gĂłry na dĂłĹ‚ */
   background-image: linear-gradient(180deg,
 
-      /* GÓRA (NIEBO) */
+      /* GĂ“RA (NIEBO) */
       #ffffff 0%,
-      /* Start: Biały błysk */
+      /* Start: BiaĹ‚y bĹ‚ysk */
       #a0a0a0 45%,
       /* Koniec nieba: Szare srebro */
 
-      /* HORYZONT (OSTRE CIĘCIE) */
+      /* HORYZONT (OSTRE CIÄCIE) */
       #000000 50%,
-      /* Czerń - to daje efekt "odbicia ziemi" */
+      /* CzerĹ„ - to daje efekt "odbicia ziemi" */
       #444444 50.1%,
-      /* Lekko jaśniej zaraz pod kreską */
+      /* Lekko jaĹ›niej zaraz pod kreskÄ… */
 
-      /* DÓŁ (ZIEMIA) */
+      /* DĂ“Ĺ (ZIEMIA) */
       #cccccc 100%
       /* Koniec: Jasne srebro */
     );
 
-  /* Wycinamy gradient w kształt liter */
+  /* Wycinamy gradient w ksztaĹ‚t liter */
   -webkit-background-clip: text;
   background-clip: text;
 
-  /* Ważne: Kolor tekstu musi być przezroczysty, żeby tło było widać */
+  /* WaĹĽne: Kolor tekstu musi byÄ‡ przezroczysty, ĹĽeby tĹ‚o byĹ‚o widaÄ‡ */
   -webkit-text-fill-color: transparent;
   color: transparent;
 
   /* --- EFEKTY 3D --- */
-  /* Cienki biały obrys (dodaje ostrości) */
+  /* Cienki biaĹ‚y obrys (dodaje ostroĹ›ci) */
   -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
 
-  /* Cień pod spodem (odrywa napis od tła) */
+  /* CieĹ„ pod spodem (odrywa napis od tĹ‚a) */
   filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.8));
 
-  /* Upewniamy się, że warstwy się nie gryzą */
+  /* Upewniamy siÄ™, ĹĽe warstwy siÄ™ nie gryzÄ… */
   position: relative;
   z-index: 10;
 }
@@ -153,7 +153,7 @@
   padding: 0.5em 1em;
 }
 
-/* --- WIDEO (TERAZ DUŻE) --- */
+/* --- WIDEO (TERAZ DUĹ»E) --- */
 .video-container {
   grid-area: stack;
   z-index: 10;
@@ -161,7 +161,7 @@
   /* ZMIANA: Zamiast 55vw dajemy max-width */
   width: 120%;
   max-width: 700px;
-  /* Rozsądny rozmiar laptopowy */
+  /* RozsÄ…dny rozmiar laptopowy */
   aspect-ratio: 16/9;
 
   position: relative;
@@ -190,7 +190,7 @@
   object-fit: cover;
 }
 
-/* TECH DETAILS (Narożniki i REC) */
+/* TECH DETAILS (NaroĹĽniki i REC) */
 .tech-corner {
   position: absolute;
   width: 20px;
@@ -282,12 +282,12 @@
   border-color: transparent transparent transparent #000;
 }
 
-/* --- LINKI (WIĘKSZE) --- */
+/* --- LINKI (WIÄKSZE) --- */
 .links-container {
   grid-area: stack;
   z-index: 11;
   width: 300px;
-  /* Troszkę szersze */
+  /* TroszkÄ™ szersze */
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -299,10 +299,10 @@
   align-items: center;
   padding: 15px 25px;
 
-  /* Tło: Ciemniejsza półprzezroczystość */
+  /* TĹ‚o: Ciemniejsza pĂłĹ‚przezroczystoĹ›Ä‡ */
   background: rgba(5, 5, 5, 0.6);
 
-  /* Ramka: Metaliczna szarość */
+  /* Ramka: Metaliczna szaroĹ›Ä‡ */
   border: 1px solid #333;
   border-left: 4px solid #555;
   /* Akcent po lewej */
@@ -321,7 +321,7 @@
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 
-  /* Subtelny cień */
+  /* Subtelny cieĹ„ */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
@@ -374,11 +374,11 @@
   border-left-color: #ff0000;
   /* Czerwony akcent */
 
-  /* Tło lekko jaśniejsze, ale PRZEZROCZYSTE, żeby widzieć tekst */
+  /* TĹ‚o lekko jaĹ›niejsze, ale PRZEZROCZYSTE, ĹĽeby widzieÄ‡ tekst */
   background: rgba(255, 255, 255, 0.1);
 
   color: #fff;
-  /* Biały tekst */
+  /* BiaĹ‚y tekst */
   box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
 }
 
@@ -472,7 +472,7 @@
 
   .tech-corner {
     display: none;
-    /* Ukrywamy narożniki na mobile dla prostszego UI */
+    /* Ukrywamy naroĹĽniki na mobile dla prostszego UI */
   }
 
   .rec-label {
