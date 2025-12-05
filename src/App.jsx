@@ -6,6 +6,7 @@ import { AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 // Importy komponentów
 import Hero from './components/Hero/Hero';
 import Preloader from './components/Preloader/Preloader';
+import SystemCheck from './components/SystemCheck/SystemCheck';
 import NewSong from './components/NewSong/NewSong';
 import Header from './components/Header/Header';
 import MenuOverlay from './components/MenuOverlay/MenuOverlay';
@@ -13,6 +14,8 @@ import Merch from './components/Merch/Merch';
 import Contact from './components/Contact/Contact';
 
 function App() {
+  // Nowy stan: czy system check zakończony
+  const [systemReady, setSystemReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [headerTheme, setHeaderTheme] = useState('light');
@@ -113,33 +116,49 @@ function App() {
     }, 300);
   };
 
+  // Handler dla SystemCheck
+  const handleSystemCheckComplete = () => {
+    setSystemReady(true);
+  };
+
   const handlePreloaderComplete = () => {
     setIsLoading(false);
   };
 
   return (
     <>
+      {/* KROK 1: System Check - pokazuje się PRZED preloaderem jeśli są problemy */}
       <AnimatePresence>
-        {isLoading && <Preloader onComplete={handlePreloaderComplete} />}
+        {!systemReady && <SystemCheck onComplete={handleSystemCheckComplete} />}
       </AnimatePresence>
 
-      <Header
-        theme={currentTheme}
-        onMenuClick={openMenu}
-        onCloseClick={closeMenu}
-        isMenuOpen={isMenuOpen}
-      />
-
-      <AnimatePresence mode='wait'>
-        {isMenuOpen && <MenuOverlay onSectionClick={handleSectionClick} />}
+      {/* KROK 2: Preloader - pokazuje się dopiero po przejściu System Check */}
+      <AnimatePresence>
+        {systemReady && isLoading && <Preloader onComplete={handlePreloaderComplete} />}
       </AnimatePresence>
 
-      <main>
-        <Hero scrollY={scrollY} startAnimation={!isLoading} />
-        <NewSong isMenuOpen={isMenuOpen} />
-        <Merch />
-        <Contact />
-      </main>
+      {/* KROK 3: Główna zawartość - dopiero po załadowaniu */}
+      {systemReady && (
+        <>
+          <Header
+            theme={currentTheme}
+            onMenuClick={openMenu}
+            onCloseClick={closeMenu}
+            isMenuOpen={isMenuOpen}
+          />
+
+          <AnimatePresence mode='wait'>
+            {isMenuOpen && <MenuOverlay onSectionClick={handleSectionClick} />}
+          </AnimatePresence>
+
+          <main>
+            <Hero scrollY={scrollY} startAnimation={!isLoading} />
+            <NewSong isMenuOpen={isMenuOpen} />
+            <Merch />
+            <Contact />
+          </main>
+        </>
+      )}
     </>
   );
 }

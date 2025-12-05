@@ -34,7 +34,6 @@ const ScrollFloat = ({
         const scroller = scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window;
         const charElements = el.querySelectorAll('.char');
 
-        // Czyścimy poprzednie animacje (ważne w React!)
         const ctx = gsap.context(() => {
             gsap.fromTo(
                 charElements,
@@ -59,13 +58,13 @@ const ScrollFloat = ({
                         scroller,
                         start: scrollStart,
                         end: scrollEnd,
-                        scrub: true // To sprawia, że animacja jest podpięta pod scrolla
+                        scrub: true 
                     }
                 }
             );
         }, el);
 
-        return () => ctx.revert(); // Sprzątanie po odmontowaniu
+        return () => ctx.revert();
     }, [scrollContainerRef, animationDuration, ease, scrollStart, scrollEnd, stagger]);
 
     return (
