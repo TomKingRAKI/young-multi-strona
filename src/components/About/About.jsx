@@ -11,18 +11,19 @@ import headImg from '../../assets/head1.png';
 
 // (Twoje tablice factsLeft i factsRight pozostają bez zmian...)
 const factsLeft = [
-  "Pamiętasz Multigameplayguy? Tak, to byłem ja. Zaczynałem od gierek w 2010...",
-  "Muzyka to jedno, ale YFL to co innego. Zbudowałem własną wytwórnię...",
-  "Mówili, że 'Trapstar' to będzie klapa. Skończyło się na podwójnej platynie...",
-  "W 2018 zrobiliśmy z Bedoesem 'Nowy Karnawał'...",
-  "Mało kto wie, ale zanim 'Nowa Fala' pozamiatała, wydałem mixtape 'Więcej dymu'...",
+  "Nazywam się Michał Rychlik, ale wszyscy znają mnie jako Young Multi — zaczynałem jako YouTuber i gamer.",
+  "W 2017 wypuściłem mój pierwszy album 'Nowa Fala' i wskoczył od razu na szczyt OLiS.",
+  "Zanim zacząłem rapować, byłem jednym z większych gamingowych twórców na polskim YouTube.",
+  "Urodziłem się w Głubczycach, w małej miejscowości, z której ruszyłem w stronę muzyki.",
+  "To ja założyłem Young Family Label — miejsce, w którym działa też kilku młodych artystów.",
 ];
+
 const factsRight = [
-  "Jak nie jestem w biurze, to znajdziesz mnie na Twitchu. Zwykle na #1 miejscu...",
-  "Nagrywałem z Ninja'ą, największą gwiazdą Fortnite na świecie...",
-  "Wszyscy pytają: 'raper czy streamer?'. A ja pytam: 'czemu nie oba?'...",
-  "Wychowałem się na CS-ie. Zanim były miliony na koncie...",
-  "YFL to nie tylko ciuchy i muzyka. To też esport...",
+  "Moja zmiana z YouTubera na rapera wywołała dużo hejtu, ale i tak zrobiłem swoje.",
+  "Styl, który robiłem, był mocno inspirowany trapem z USA — i to ludzi najbardziej podzieliło.",
+  "Zaczynałem muzykę totalnie sam — zero kontaktów w branży, tylko ja, mikrofon i internet.",
+  "Mój przydomek 'Multi' to skrót od dawnej nazwy kanału — MultiGameplayGuy.",
+  "Wielu raperów mnie krytykowało, ale finalnie to ja otworzyłem drzwi dla nowych twórców z YouTube.",
 ];
 
 // (Twoje pozycje dredów...)

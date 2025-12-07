@@ -249,7 +249,27 @@
 }
 
 .album-style-trapstar .album-content h3 {
-  opacity: 0.6;
+  color: #ffffff;
+  opacity: 0.85;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.album-style-trapstar .album-header h2 {
+  color: #ffffff;
+  text-shadow: 1px 1px 0 #333, 2px 2px 0 #333, 3px 3px 2px rgba(0, 0, 0, 0.3);
+}
+
+.album-style-trapstar .album-header p {
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+.album-style-trapstar .album-tracklist ul {
+  color: #ffffff;
+}
+
+.album-style-trapstar .album-desc {
+  color: #ffffff;
 }
 
 .album-style-tad {
