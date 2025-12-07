@@ -1,22 +1,22 @@
 /* Plik: /src/components/Preloader/Preloader.css */
 
-/* --- GŁÓWNY KONTENER --- */
+/* ============================================
+   GŁÓWNY KONTENER
+   ============================================ */
 .preloader {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  /* Ciemniejsze, bardziej eleganckie tło */
   background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
   display: grid;
   place-items: center;
   z-index: 9999;
   overflow: hidden;
-  /* Ważne dla efektów tła */
 }
 
-/* Dodanie tekstury "ziarna" (noise) dla efektu premium */
+/* Noise texture background */
 .preloader::before {
   content: "";
   position: absolute;
@@ -76,7 +76,9 @@
   }
 }
 
-/* Kontener centrujący logo i tekst */
+/* ============================================
+   LOADER CONTENT (Logo + Text)
+   ============================================ */
 .loader-content-wrapper {
   display: flex;
   flex-direction: column;
@@ -86,9 +88,7 @@
   z-index: 2;
 }
 
-/* --- LOGO I EFEKTY --- */
-
-/* Poświata pod logo */
+/* Logo glow effect */
 .logo-glow {
   position: absolute;
   top: 50%;
@@ -96,7 +96,6 @@
   transform: translate(-50%, -50%);
   width: 250px;
   height: 250px;
-  /* Subtelne białe światło */
   background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0) 60%);
   filter: blur(30px);
   animation: pulseGlow 4s ease-in-out infinite alternate;
@@ -115,41 +114,29 @@
   }
 }
 
-/* Twoje oryginalne logo z gradientem shimmer */
+/* Shimmer logo */
 .shimmer-logo {
   width: 200px;
   height: 160px;
   position: relative;
-  /* Dodane */
-
-  background: linear-gradient(-45deg,
-      #222,
-      #fff,
-      #555,
-      #222);
+  background: linear-gradient(-45deg, #222, #fff, #555, #222);
   background-size: 400% 400%;
-
   mask-image: url('../../assets/logoyflbiale.png');
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
-
   -webkit-mask-image: url('../../assets/logoyflbiale.png');
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
-
   animation: gradient-flow 3s ease-in-out infinite;
 }
 
-/* --- NOWE ELEMENTY --- */
-
-/* Tekst pod logo */
+/* Loading text */
 .loading-text {
   margin-top: 25px;
   color: rgba(255, 255, 255, 0.5);
   font-family: monospace;
-  /* Lub inny pasujący font */
   font-size: 12px;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -166,7 +153,9 @@
   }
 }
 
-/* Cieniutki pasek postępu na dole */
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
 .bottom-progress-bar {
   position: absolute;
   bottom: 0;
@@ -179,8 +168,6 @@
 .progress-bar-fill {
   height: 100%;
   width: 0%;
-  /* Będzie animowane w JSX */
-  /* Ten sam gradient co w logo */
   background: linear-gradient(90deg, #222, #fff, #555, #222);
   background-size: 200% 100%;
   animation: gradient-flow 2s linear infinite;
@@ -200,133 +187,358 @@
   }
 }
 
-
-/* --- WARNING MODAL (Lekki lifting) --- */
-.warning-modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 500px;
-  width: 90%;
-  z-index: 1005;
+/* ============================================
+   EXPLOSION EFFECT
+   ============================================ */
+.explosion-container {
+  position: relative;
+  width: 200px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
 }
 
-.warning-content {
-  /* Bardziej 'szklany' efekt */
-  background: rgba(10, 10, 10, 0.85);
-  backdrop-filter: blur(30px) saturate(0);
-  /* saturate(0) robi czarno-białe tło za szkłem */
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  padding: 40px 30px;
+.logo-particle {
+  position: absolute;
+  background: linear-gradient(135deg, #fff 0%, #888 50%, #fff 100%);
+  border-radius: 2px;
   box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.8),
-    0 0 100px rgba(255, 255, 255, 0.03) inset;
+    0 0 10px rgba(255, 255, 255, 0.5),
+    0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   WARNING MODAL (from SystemCheck)
+   ============================================ */
+.system-warning-modal {
+  position: relative;
+  max-width: 550px;
+  width: 90%;
+  z-index: 2;
+}
+
+.system-warning-content {
+  background: rgba(10, 10, 10, 0.9);
+  backdrop-filter: blur(40px) saturate(0);
+  -webkit-backdrop-filter: blur(40px) saturate(0);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 50px 40px;
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.9),
+    0 0 120px rgba(255, 255, 255, 0.02) inset;
   text-align: center;
 }
 
-.warning-icon {
-  font-size: 64px;
-  margin-bottom: 20px;
-  /* Ikona też czarno-biała */
+/* Tech corner decorations */
+.system-warning-content::before,
+.system-warning-content::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.system-warning-content::before {
+  top: 15px;
+  left: 15px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.system-warning-content::after {
+  bottom: 15px;
+  right: 15px;
+  border-left: none;
+  border-top: none;
+}
+
+.system-warning-content:hover::before {
+  transform: translate(-5px, -5px);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.system-warning-content:hover::after {
+  transform: translate(5px, 5px);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Warning icon */
+.warning-icon-large {
+  font-size: 72px;
+  margin-bottom: 25px;
   filter: grayscale(1) brightness(1.5);
-  animation: pulse 2s ease-in-out infinite;
+  animation: iconPulse 2.5s ease-in-out infinite;
 }
 
-/* Reszta stylów warning pozostaje podobna, tylko kolory bardziej stonowane */
-.warning-content h2 {
-  color: #ffffff;
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  letter-spacing: 1px;
-}
-
-.warning-content p {
-  color: #aaaaaa;
-  font-size: 15px;
-  line-height: 1.6;
-  margin-bottom: 15px;
-}
-
-.warning-suggestion {
-  color: #dddddd;
-  font-weight: 500;
-  font-style: italic;
-  margin-top: 20px;
-  margin-bottom: 30px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 20px;
-}
-
-/* Przyciski bardziej monochromatyczne */
-.btn-primary {
-  /* Czarno-biały gradient */
-  background: linear-gradient(135deg, #333 0%, #777 100%);
-  color: #ffffff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(135deg, #444 0%, #888 100%);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-}
-
-/* Reszta btn-secondary i media queries bez zmian z poprzedniego pliku */
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-.btn-secondary:active {
-  transform: translateY(0);
-}
-
-@keyframes pulse {
+@keyframes iconPulse {
 
   0%,
   100% {
     transform: scale(1);
+    filter: grayscale(1) brightness(1.5);
   }
 
   50% {
     transform: scale(1.1);
+    filter: grayscale(0.8) brightness(1.8);
   }
 }
 
+/* Title */
+.system-warning-content h2 {
+  color: #ffffff;
+  font-family: "Antonio", sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #fff 0%, #999 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Description text */
+.system-warning-content p {
+  color: #999;
+  font-family: "Anton", sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  margin: 0 0 15px 0;
+  font-weight: 300;
+}
+
+/* Warning list */
+.warning-list {
+  list-style: none;
+  padding: 0;
+  margin: 25px 0;
+  text-align: left;
+}
+
+.warning-list li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid #ff4444;
+  border-radius: 8px;
+  font-family: "Antonio", sans-serif;
+  color: #ccc;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.warning-list li .issue-icon {
+  font-size: 24px;
+  filter: grayscale(1);
+}
+
+.warning-list li .issue-text {
+  flex: 1;
+}
+
+.warning-list li .issue-text strong {
+  display: block;
+  color: #fff;
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+.warning-list li .issue-text span {
+  color: #888;
+  font-size: 13px;
+}
+
+/* Suggestion box */
+.system-suggestion {
+  color: #ddd;
+  font-family: "Antonio", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+  margin: 30px 0;
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
+/* Buttons container */
+.system-warning-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+/* Primary button */
+.system-btn-primary {
+  background: linear-gradient(135deg, #333 0%, #666 50%, #333 100%);
+  background-size: 200% 200%;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 16px 35px;
+  font-family: "Antonio", sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.system-btn-primary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.system-btn-primary:hover {
+  transform: translateY(-3px);
+  background-position: 100% 0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.system-btn-primary:hover::before {
+  left: 100%;
+}
+
+/* Secondary button */
+.system-btn-secondary {
+  background: transparent;
+  color: #888;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 16px 35px;
+  font-family: "Antonio", sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.system-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   SYSTEM INFO BOX
+   ============================================ */
+.system-info-box {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row.gpu-info {
+  flex-wrap: wrap;
+}
+
+.info-label {
+  color: #666;
+  min-width: 100px;
+  font-weight: bold;
+}
+
+.info-value {
+  color: #fff;
+  flex: 1;
+}
+
+.info-value.error {
+  color: #ff6666;
+}
+
+.info-value.ok {
+  color: #66ff66;
+}
+
+.info-required {
+  color: #555;
+  font-size: 11px;
+}
+
+.gpu-info .info-value {
+  word-break: break-all;
+  font-size: 11px;
+  color: #888;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media (max-width: 600px) {
-  .warning-content {
-    padding: 30px 20px;
+  .system-warning-content {
+    padding: 35px 25px;
   }
 
-  .warning-icon {
-    font-size: 48px;
+  .warning-icon-large {
+    font-size: 56px;
   }
 
-  .warning-content h2 {
-    font-size: 20px;
+  .system-warning-content h2 {
+    font-size: 22px;
   }
 
-  .warning-content p {
+  .system-warning-content p {
     font-size: 14px;
   }
 
-  .warning-buttons {
+  .warning-list li {
+    padding: 12px 15px;
+    font-size: 13px;
+  }
+
+  .system-warning-buttons {
     flex-direction: column;
   }
 
-  .warning-buttons button {
+  .system-btn-primary,
+  .system-btn-secondary {
     width: 100%;
+    padding: 14px 25px;
   }
 }

@@ -16,8 +16,8 @@
 
   background-color: transparent;
 
-  /* Płynna zmiana kolorów, gdy przejeżdżasz między sekcjami */
-  transition: color 0.3s ease-out;
+  /* EXCLUSION blend mode - podobne do difference ale łagodniejsze */
+  mix-blend-mode: exclusion;
 }
 
 /* --- LOGO --- */
@@ -25,30 +25,12 @@
   height: 80px;
   width: auto;
   cursor: pointer;
-  transition: filter 0.3s ease-out;
-}
-
-/* --- STYL DLA JASNEGO MOTYWU (Czarne ikony na jasnym tle) --- */
-.header-light .header-logo {
-  filter: none;
-  /* Logo jest oryginalnie czarne, więc nic nie robimy */
-}
-
-.header-light .hamburger-wrapper {
-  /* Hamburger sam obsłuży kolor, tutaj tylko dla porządku */
-}
-
-/* --- STYL DLA CIEMNEGO MOTYWU (Białe ikony na ciemnym/czerwonym tle) --- */
-.header-dark .header-logo {
   filter: invert(1);
-  /* Odwracamy czarne logo na białe */
+  /* Białe logo */
 }
-
-/* Tu nie musimy nic więcej pisać, React przekaże kolor do hamburgera */
 
 /* --- RESPONSIVE DESIGN --- */
 
-/* Tablet */
 @media (max-width: 1024px) {
   .header-container {
     padding: 2rem 2rem;
@@ -59,7 +41,6 @@
   }
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .header-container {
     padding: 1.5rem 1.5rem;
@@ -70,7 +51,6 @@
   }
 }
 
-/* Mobile Small */
 @media (max-width: 480px) {
   .header-container {
     padding: 1rem 1rem;

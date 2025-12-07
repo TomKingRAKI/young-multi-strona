@@ -4,38 +4,32 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import './HamburgerMenuIcon.css';
 
-// Przyjmujemy 'isOpen' (czy menu jest otwarte) i 'onClick' (funkcję do kliknięcia)
-function HamburgerMenuIcon({ isOpen, onClick, theme }) {
+// Nie potrzebujemy prop 'theme' - mix-blend-mode załatwia wszystko!
+function HamburgerMenuIcon({ isOpen, onClick }) {
 
-  // Warianty animacji dla każdego paska
   const topBarVariants = {
-    closed: { rotate: 0, y: 0 }, // W stanie zamkniętym: bez obrotu, na swojej pozycji
-    open: { rotate: 45, y: 7 }    // W stanie otwartym: obróć o 45 stopni, przesuń w dół
+    closed: { rotate: 0, y: 0 },
+    open: { rotate: 45, y: 7 }
   };
 
   const bottomBarVariants = {
-    closed: { rotate: 0, y: 0 },  // W stanie zamkniętym: bez obrotu, na swojej pozycji
-    open: { rotate: -45, y: -7 }  // W stanie otwartym: obróć o -45 stopni, przesuń w górę
+    closed: { rotate: 0, y: 0 },
+    open: { rotate: -45, y: -7 }
   };
 
   return (
-    <div 
-      className={`hamburger-menu-icon ${theme === 'light' ? 'theme-light' : 'theme-dark'}`} 
-      onClick={onClick}
-    >
-      {/* Górny pasek */}
-      <motion.div 
+    <div className="hamburger-menu-icon" onClick={onClick}>
+      <motion.div
         className="hamburger-bar top-bar"
         variants={topBarVariants}
-        animate={isOpen ? "open" : "closed"} // Animuj w zależności od 'isOpen'
+        animate={isOpen ? "open" : "closed"}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       />
-      
-      {/* Dolny pasek */}
-      <motion.div 
+
+      <motion.div
         className="hamburger-bar bottom-bar"
         variants={bottomBarVariants}
-        animate={isOpen ? "open" : "closed"} // Animuj w zależności od 'isOpen'
+        animate={isOpen ? "open" : "closed"}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       />
     </div>

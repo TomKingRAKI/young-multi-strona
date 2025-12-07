@@ -3,24 +3,18 @@ import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTe
 import { FaInstagram, FaYoutube, FaSpotify } from 'react-icons/fa';
 import './Contact.css';
 
-// Pamiętaj o swoim zdjęciu!
 import multiImg from '../../assets/multi-dark.png';
 
 const Contact = () => {
   const containerRef = useRef(null);
 
-  // Śledzimy scroll wewnątrz wysokiego kontenera (300vh)
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end end"]
   });
 
-  // --- 1. PRZEJŚCIE (INK SPILL) ---
-  // POPRAWKA: Zmieniliśmy zakres z [0, 0.3] na [0, 0.75]
-  // Dzięki temu koło powiększa się DUŻO WOLNIEJ podczas scrollowania.
   const clipPathSize = useTransform(scrollYProgress, [0, 0.75], ["0%", "150%"]);
 
-  // --- 2. PARALAKSA DLA MULTIEGO ---
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -37,22 +31,17 @@ const Contact = () => {
   const xTitle = useSpring(useTransform(mouseX, [-0.5, 0.5], ["5%", "-5%"]), springConfig);
 
   return (
-    // Kontener scrolla (długi)
-    <div ref={containerRef} className="contact-wrapper">
+    <div ref={containerRef} className="contact-wrapper" data-header-theme="dark">
 
-      {/* Sticky View - To sprawia, że zawartość stoi w miejscu podczas animacji */}
       <div className="contact-sticky-view" onMouseMove={handleMouseMove}>
 
-        {/* --- WARSTWA PRZEJŚCIA (Zalewa ekran czernią) --- */}
         <motion.div
           className="ink-transition-layer"
           style={{
-            // Maska koła
             clipPath: useMotionTemplate`circle(${clipPathSize} at 50% 100%)`
           }}
         >
 
-          {/* --- ZAWARTOŚĆ (WIDOCZNA DOPIERO W CZERNI) --- */}
           <section className="contact-section">
 
             <div className="marquee-container">
@@ -67,7 +56,6 @@ const Contact = () => {
             </div>
 
             <div className="contact-grid">
-              {/* LEWA STRONA */}
               <div className="contact-info">
                 <motion.div
                   initial={{ opacity: 0, x: -50 }}
@@ -103,7 +91,6 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* PRAWA STRONA */}
               <div className="multi-visual-container">
                 <motion.h1 className="giant-bg-text" style={{ x: xTitle }}>
                   CEO

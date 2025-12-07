@@ -6,13 +6,10 @@ import './Header.css';
 import logoYFL from '../../assets/logoyflczarne.png';
 import HamburgerMenuIcon from '../HamburgerMenuIcon/HamburgerMenuIcon';
 
-// Dodajemy prop 'theme' ('light' lub 'dark')
-function Header({ onMenuClick, isMenuOpen, onCloseClick, theme = 'light' }) {
-
+function Header({ onMenuClick, isMenuOpen, onCloseClick }) {
   return (
     <motion.nav
-      // Dodajemy klasę dynamicznie: header-light lub header-dark
-      className={`header-container header-${theme}`}
+      className="header-container"
       initial={{ y: -60, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, delay: 0.8 }}
@@ -20,11 +17,6 @@ function Header({ onMenuClick, isMenuOpen, onCloseClick, theme = 'light' }) {
       <img src={logoYFL} alt="YFL Logo" className="header-logo" />
 
       <div className="header-menu-icon-wrapper">
-        {/* Używamy naszego nowego hamburgera */}
-        {/* Ważne: musimy zaktualizować Hamburger.css, żeby używał currentColor, 
-            albo możemy zrobić to prymitywnie CSS-em w headerze, 
-            ALE najprościej przekazać klasę do wrappera powyżej (co zrobiliśmy w CSS) */}
-
         <HamburgerMenuIcon
           isOpen={isMenuOpen}
           onClick={isMenuOpen ? onCloseClick : onMenuClick}

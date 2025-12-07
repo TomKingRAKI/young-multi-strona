@@ -14,28 +14,18 @@ import Gramophone from '../Gramophone/Gramophone';
 import About from '../About/About';
 import SmokeTransition from '../SmokeTransition/SmokeTransition';
 
-// Importy placeholderów (jeśli używasz)
-// import previewVideo from '../../assets/preview-loop.mp4'; 
-
 const NewSong = forwardRef((props, ref) => {
   const scrollRef = useRef(null);
   const previousThemeRef = useRef(null);
 
-  // === 1. PRZYGOTOWANIE DO CELOWANIA (SNAJPER) ===
-  // Tworzymy Ref, który przekażemy do Gramophone, żeby namierzyć ten mały div
+  // === SNAJPER ===
   const zoomTargetRef = useRef(null);
-
-  // Domyślne wartości (startujemy od Twojego starego ustawienia jako fallback)
-  // 50% szerokości (0.5) i 78% wysokości (0.78)
   const originX = useMotionValue(0.5);
   const originY = useMotionValue(0.78);
-
-  // Dynamiczny szablon CSS, który łączy X i Y w jeden string np. "50.5% 78.2%"
   const calculatedOrigin = useMotionTemplate`${useTransform(originX, x => x * 100)}% ${useTransform(originY, y => y * 100)}%`;
 
-
-  // --- RESPANSYWNOŚĆ (Mobile Check) ---
-  const [isMobile, setIsMobile] = useState(false); // Domyślnie false, useEffect ustawi
+  // --- RESPANSYWNOŚĆ ---
+  const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     setIsMobile(window.innerWidth < 768);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -43,8 +33,7 @@ const NewSong = forwardRef((props, ref) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-
-  // === LOGIKA LATARKI (CHAMELEON SPOTLIGHT) ===
+  // === LOGIKA LATARKI ===
   const mouseX = useMotionValue(50);
   const mouseY = useMotionValue(40);
   const spotlightColor = useMotionValue('rgba(255, 255, 255, 0.05)');
@@ -61,12 +50,12 @@ const NewSong = forwardRef((props, ref) => {
 
   const handleSpotlightHover = (color) => {
     spotlightColor.set(color);
-    spotlightSize.set(25); // Kurczy się dla skupienia uwagi
+    spotlightSize.set(25);
   };
 
   const handleSpotlightLeave = () => {
     spotlightColor.set('rgba(255, 255, 255, 0.05)');
-    spotlightSize.set(40); // Powrót do normalnego rozmiaru
+    spotlightSize.set(40);
   };
 
   useEffect(() => {
@@ -80,13 +69,12 @@ const NewSong = forwardRef((props, ref) => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
 
-
   // --- GŁÓWNE ANIMACJE SCROLLA ---
   const { scrollYProgress: contentProgress } = useScroll({
     target: scrollRef, offset: ["start start", "end end"]
   });
 
-  // Logika zmiany motywu (Header)
+  // Logika zmiany motywu (stara - zachowana dla kompatybilności)
   useMotionValueEvent(contentProgress, "change", (latest) => {
     if (typeof props.setHeaderTheme === 'function') {
       if (latest < 0.05) {
@@ -100,57 +88,35 @@ const NewSong = forwardRef((props, ref) => {
       }
     }
 
-    // === 2. LOGIKA CELOWANIA (NAMIERZANIE) ===
-    // Namierzamy cel, ZANIM zacznie się zoom (zoom startuje ok 0.65).
-    // Dzięki temu kamera ustawia się na wprost celu i wjazd jest prosty (------), a nie ukośny (\).
+    // Logika celowania
     if (latest > 0.55 && latest < 0.64 && zoomTargetRef.current) {
       const rect = zoomTargetRef.current.getBoundingClientRect();
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
-
-      // Obliczamy środek w pikselach
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-
-      // === TU REGULUJESZ CELOWNIK ===
-
-      const OFFSET_X = 0.01; // <--- ZWIĘKSZ, żeby przesunąć W PRAWO (np. 0.03, 0.05)
-      const OFFSET_Y = 0.1; // <--- To Twoje ustawienie W DÓŁ
-
-      // Dodajemy offsety do wyniku
+      const OFFSET_X = 0.01;
+      const OFFSET_Y = 0.1;
       const newX = (centerX / windowWidth) + OFFSET_X;
       const newY = (centerY / windowHeight) + OFFSET_Y;
-
       originX.set(newX);
       originY.set(newY);
     }
   });
 
-
   // --- SEKWENCJA RUCHU ---
-  // 1. Tekst
   const textY = useTransform(contentProgress, [0, 0.07], ["0vh", isMobile ? "-18vh" : "-25vh"]);
-
-  // 2. Wideo
   const videoY = useTransform(contentProgress, [0, 0.07], ["100vh", isMobile ? "0vh" : "15vh"]);
   const videoScale = useTransform(contentProgress, [0.08, 0.12], [1, 0.9]);
   const videoX = useTransform(contentProgress, [0.08, 0.12], ["0%", isMobile ? "0%" : "-40%"]);
-
-  // 3. Linki
   const linksOpacity = useTransform(contentProgress, [0.13, 0.18], [0, 1]);
   const linksX = useTransform(contentProgress, [0.13, 0.18], isMobile ? ["0%", "0%"] : ["50vw", "15vw"]);
   const linksY = useTransform(contentProgress, [0.13, 0.18], isMobile ? ["80vh", "30vh"] : ["15vh", "15vh"]);
-
-  // 4. Pociąg odjeżdża
   const trackX = useTransform(contentProgress, [0.20, 0.24, 0.35, 1.0], ["0%", "0%", "-50%", "-50%"]);
 
   // --- GRAMOPHONE & ABOUT & SMOKE ---
   const gramophoneZoomProgress = useTransform(contentProgress, [0.65, 0.85], [0, 1]);
   const gramophoneScale = useTransform(gramophoneZoomProgress, [0, 1], [1, 15]);
-
-  // UWAGA: Tutaj usunąłem stare `gramophoneTransformOrigin`, bo teraz używamy `calculatedOrigin`
-  // wyliczanego na żywo w sekcji "Logika Celowania".
-
   const aboutClipPath = useTransform(gramophoneZoomProgress, [0.05, 1], ["circle(0% at 50% 62%)", "circle(150% at 50% 0%)"]);
   const aboutOpacity = useTransform(gramophoneZoomProgress, [0, 0.001], [0, 1]);
   const aboutPointerEvents = useTransform(gramophoneZoomProgress, (v) => (v > 0.1 ? 'auto' : 'none'));
@@ -167,6 +133,7 @@ const NewSong = forwardRef((props, ref) => {
         else if (ref) ref.current = node;
       }}
       className="newsong-section"
+      data-header-theme="dark"
     >
       <div className="newsong-sticky-viewport">
 
@@ -259,14 +226,13 @@ const NewSong = forwardRef((props, ref) => {
           </div>
 
           {/* PANEL 2: GRAMOPHONE */}
-          {/* Tu przekazujemy ref i obliczony origin */}
           <Gramophone
             contentProgress={contentProgress}
             isMenuOpen={props.isMenuOpen}
-            zoomTargetRef={zoomTargetRef} // <--- PRZEKAZUJEMY SNAJPERA
+            zoomTargetRef={zoomTargetRef}
             style={{
               scale: gramophoneScale,
-              transformOrigin: calculatedOrigin // <--- TUTAJ WPADA OBLICZONA POZYCJA (np. 50.5% 78.2%)
+              transformOrigin: calculatedOrigin
             }}
           />
         </motion.div>
@@ -304,7 +270,6 @@ const InteractiveLink = ({ name, url, baseColor, onHoverStart, onHoverEnd }) => 
   const springX = useSpring(magneticX, { damping: 15, stiffness: 150 });
   const springY = useSpring(magneticY, { damping: 15, stiffness: 150 });
 
-  // Matrix/Cipher Effect
   const scrambleText = async () => {
     if (isAnimating) return;
     setIsAnimating(true);
@@ -317,14 +282,12 @@ const InteractiveLink = ({ name, url, baseColor, onHoverStart, onHoverEnd }) => 
       await new Promise(resolve => setTimeout(resolve, 30));
 
       if (i < iterations - 5) {
-        // Losowe znaki
         setDisplayName(
           originalName.split('').map(() =>
             chars[Math.floor(Math.random() * chars.length)]
           ).join('')
         );
       } else {
-        // Stopniowo odkrywaj prawdziwy tekst
         const revealIndex = Math.floor((i - (iterations - 5)) / 5 * originalName.length);
         setDisplayName(
           originalName.split('').map((char, idx) =>
@@ -338,7 +301,6 @@ const InteractiveLink = ({ name, url, baseColor, onHoverStart, onHoverEnd }) => 
     setIsAnimating(false);
   };
 
-  // Magnetic Effect
   const handleMouseMove = (e) => {
     if (!linkRef.current) return;
 
@@ -346,7 +308,7 @@ const InteractiveLink = ({ name, url, baseColor, onHoverStart, onHoverEnd }) => 
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
-    const deltaX = (e.clientX - centerX) * 0.2; // Siła magnetyzmu
+    const deltaX = (e.clientX - centerX) * 0.2;
     const deltaY = (e.clientY - centerY) * 0.2;
 
     magneticX.set(deltaX);

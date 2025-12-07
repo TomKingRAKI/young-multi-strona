@@ -18,7 +18,6 @@ function Hero({ scrollY, startAnimation = false }) {
   const [windowWidth, setWindowWidth] = useState(1200);
 
   useEffect(() => {
-    // Ustawiamy szerokość na start
     setWindowWidth(window.innerWidth);
 
     const handleResize = () => {
@@ -29,24 +28,21 @@ function Hero({ scrollY, startAnimation = false }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Definiujemy, czy to mobile (poniżej 768px)
   const isMobile = windowWidth <= 768;
 
-  // Ruch dla desktopu (działa tylko gdy przekażemy go do style)
   const xYoung = useTransform(smoothMouseX, [0, windowWidth], [50, -50]);
   const xMulti = useTransform(smoothMouseX, [0, windowWidth], [-50, 50]);
 
   const y = useTransform(scrollY, [0, 1000], [0, -150]);
 
   const handleMouseMove = (e) => {
-    // Aktualizujemy pozycję myszki tylko na desktopie, 
-    // choć dla wydajności nie trzeba tego blokować, zablokujemy efekt w JSX
     mouseX.set(e.clientX);
   };
 
   return (
     <motion.section
       className="hero-section"
+      data-header-theme="light"
       onMouseMove={handleMouseMove}
     >
       <motion.div className="hero-content-wrapper" style={{ y }}>
@@ -71,8 +67,6 @@ function Hero({ scrollY, startAnimation = false }) {
           />
         </div>
 
-        {/* --- NAPISY --- */}
-        {/* Jeśli isMobile jest true, x ustawiamy na 0 (brak ruchu), w przeciwnym razie xYoung */}
         <motion.h1
           className="text-young"
           style={{ x: isMobile ? 0 : xYoung }}
@@ -100,7 +94,7 @@ function Hero({ scrollY, startAnimation = false }) {
         </motion.h2>
 
       </motion.div>
-    </motion.section >
+    </motion.section>
   );
 }
 

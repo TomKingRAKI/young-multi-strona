@@ -55,12 +55,11 @@ const Merch = () => {
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    // ZMIANA: Kończymy logikę przy 0.8, żeby dać czas dla sekcji Contact
     const threshold = isMobile ? 0.8 : 0.6;
     setIsAnimationComplete(latest >= threshold);
   });
 
-  // --- DESKTOP (BEZ ZMIAN) ---
+  // --- DESKTOP ---
   const desktopX1 = useTransform(scrollYProgress, [0, 0.5], ["-100vw", "0vw"]);
   const desktopR1 = useTransform(scrollYProgress, [0, 0.5], [-45, 0]);
   const desktopO1 = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
@@ -73,28 +72,20 @@ const Merch = () => {
   const desktopR3 = useTransform(scrollYProgress, [0, 0.5], [45, 0]);
   const desktopO3 = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
-  // --- MOBILE (PRZYSPIESZONE TEMPO) ---
-
-  // Header: Szybki wjazd na górę (0 -> 0.1)
+  // --- MOBILE ---
   const mobileHeaderY = useTransform(scrollYProgress, [0, 0.1], ["15vh", "8vh"]);
   const mobileHeaderScale = useTransform(scrollYProgress, [0, 0.1], [1, 0.85]);
 
-  // Produkt 1: Szybki wyjazd (0.1 -> 0.3)
   const mobileX1 = useTransform(scrollYProgress, [0.1, 0.3], ["0vw", "-120vw"]);
   const mobileOpacity1 = useTransform(scrollYProgress, [0.25, 0.3], [1, 0]);
 
-  // Produkt 2: Wjazd, Pauza, Wyjazd (0.3 -> 0.65)
-  // Wcześniej kończył się przy 0.8, teraz przy 0.65
   const mobileX2 = useTransform(scrollYProgress, [0.3, 0.45, 0.5, 0.65], ["120vw", "0vw", "0vw", "-120vw"]);
   const mobileOpacity2 = useTransform(scrollYProgress, [0.3, 0.35, 0.6, 0.65], [0, 1, 1, 0]);
 
-  // Produkt 3: Finałowy wjazd (0.65 -> 0.8)
-  // Wcześniej kończył się przy 0.95, teraz przy 0.80.
-  // Dzięki temu od 0.80 do 1.0 nic się nie rusza, a "Ink Spill" może spokojnie wjechać.
   const mobileX3 = useTransform(scrollYProgress, [0.65, 0.8], ["120vw", "0vw"]);
 
   return (
-    <section ref={targetRef} className="merch-scroll-container">
+    <section ref={targetRef} className="merch-scroll-container" data-header-theme="light">
 
       <div className="merch-sticky-wrapper">
 
@@ -178,7 +169,6 @@ const Merch = () => {
 const ProductContent = ({ product }) => (
   <>
     <div className="product-image-wrapper">
-      {/* 1. Link owijający zdjęcie - kliknięcie w zdjęcie przenosi do sklepu */}
       <a
         href={product.link}
         target="_blank"
@@ -188,7 +178,6 @@ const ProductContent = ({ product }) => (
         <img src={product.image} alt={product.name} className="product-img" />
       </a>
 
-      {/* 2. Link jako przycisk - zmieniliśmy <button> na <a>, ale klasa została ta sama */}
       <a
         href={product.link}
         target="_blank"
@@ -203,7 +192,6 @@ const ProductContent = ({ product }) => (
 
     <div className="product-info">
       <div className="info-left">
-        {/* Opcjonalnie: Nazwa produktu też może być linkiem */}
         <a href={product.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
           <h3 className="product-name">{product.name}</h3>
         </a>

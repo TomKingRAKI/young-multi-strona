@@ -1,7 +1,6 @@
 /* Plik: /src/components/HamburgerMenuIcon/HamburgerMenuIcon.css */
 
 .hamburger-menu-icon {
-  /* Obszar klikalny - duży i wygodny */
   width: 60px;
   height: 80px;
 
@@ -10,41 +9,22 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  /* Odstęp między paskami */
 
   cursor: pointer;
   z-index: 1001;
-  /* Usuwamy background-color i transition na filtrach, bo nie potrzebne */
 }
 
 .hamburger-bar {
   width: 40px;
   height: 3px;
   border-radius: 2px;
-
-  /* ZMIEŃ TO: Zamiast #ffffff dajemy currentColor */
-  /* Dzięki temu jak Header będzie miał klasę .header-dark (biały tekst), paski będą białe.
-     Jak .header-light (czarny tekst), paski będą czarne. */
-  background-color: currentColor !important;
-
+  /* Białe paski dla exclusion blend */
+  background-color: #ffffff;
   transform-origin: center;
 }
 
-.header-light .hamburger-menu-icon {
-  color: #000000;
-  /* Czarne paski */
-}
-
-.header-dark .hamburger-menu-icon {
-  color: #ffffff;
-  /* Białe paski */
-}
-
-/* USUNĘLIŚMY sekcje .theme-dark i .theme-light - są zbędne! */
-
 /* --- RESPONSIVE DESIGN --- */
 
-/* Mobile */
 @media (max-width: 768px) {
   .hamburger-menu-icon {
     width: 50px;
@@ -58,7 +38,6 @@
   }
 }
 
-/* Mobile Small */
 @media (max-width: 480px) {
   .hamburger-menu-icon {
     width: 45px;
