@@ -6,13 +6,13 @@ import './Header.css';
 import logoYFL from '../../assets/logoyflczarne.png';
 import HamburgerMenuIcon from '../HamburgerMenuIcon/HamburgerMenuIcon';
 
-function Header({ onMenuClick, isMenuOpen, onCloseClick }) {
+function Header({ onMenuClick, isMenuOpen, onCloseClick, startAnimation = false }) {
   return (
     <motion.nav
       className="header-container"
       initial={{ y: -60, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, delay: 0.8 }}
+      animate={startAnimation ? { y: 0, opacity: 1 } : { y: -60, opacity: 0 }}
+      transition={{ duration: 0.8, delay: 1.0 }}
     >
       <img src={logoYFL} alt="YFL Logo" className="header-logo" />
 

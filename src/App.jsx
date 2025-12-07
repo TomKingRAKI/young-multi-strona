@@ -75,6 +75,7 @@ function App() {
           onMenuClick={openMenu}
           onCloseClick={closeMenu}
           isMenuOpen={isMenuOpen}
+          startAnimation={!isLoading}
         />
 
         <AnimatePresence mode='wait'>
