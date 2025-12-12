@@ -1,7 +1,7 @@
 /* Plik: /src/components/Gramophone/Gramophone.css (WERSJA Z POPRAWKĄ HOVERA) */
 :root {
-  --gramophone-3d-transform:
-    translate(0%, 0%) skewX(-25deg) skewY(7deg) scale(0.85) translateZ(0);
+  --gramophone-3d-transform: translate(0%, 0%) skewX(-25deg) skewY(7deg)
+    scale(0.85) translateZ(0);
 }
 
 .Gramophone-section {
@@ -9,7 +9,7 @@
   height: 100vh;
   flex-shrink: 0;
   color: #111;
-  font-family: 'Bernoru', sans-serif;
+  font-family: "Bernoru", sans-serif;
   overflow: hidden;
   position: relative;
   background-color: #ffffff;
@@ -44,29 +44,23 @@
   /* Używamy SVG zakodowanego w base64 (Data URI) jako tła - ultra wydajne */
 
   background-image:
-    /* WARSTWA 1: Krzyżyki (SVG) */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='-6 -6 36 36' stroke-width='0.8' stroke='%23d4d4d4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 6v12m6-6H6'/%3E%3C/svg%3E"),
+    /* WARSTWA 1: Krzyżyki (SVG) */ url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='-6 -6 36 36' stroke-width='0.8' stroke='%23d4d4d4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 6v12m6-6H6'/%3E%3C/svg%3E"),
     /* WARSTWA 2: Pionowe linie */
-    linear-gradient(to right, #e5e5e5 1px, transparent 1px),
+      linear-gradient(to right, #e5e5e5 1px, transparent 1px),
     /* WARSTWA 3: Poziome linie */
-    linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
+      linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
 
   /* ROZMIARY (ODPOWIEDNIK BOXES.CSS) */
   /* Krzyżyki: pojawiają się co 2 kolumnę i co 2 rząd. 
      Skoro kolumna=4rem, a rząd=2rem, to powtarzanie krzyżyka = 8rem 4rem */
-  background-size:
-    8rem 4rem,
-    /* Rozmiar powtarzania krzyżyków */
-    4rem 2rem,
-    /* Rozmiar kratki pionowej (szerokość 4rem) */
-    4rem 2rem;
+  background-size: 8rem 4rem, /* Rozmiar powtarzania krzyżyków */ 4rem 2rem,
+    /* Rozmiar kratki pionowej (szerokość 4rem) */ 4rem 2rem;
   /* Rozmiar kratki poziomej (wysokość 2rem) */
 
   /* POZYCJA */
-  background-position:
-    0rem 0rem,
+  background-position: 0rem 0rem,
     /* Przesunięcie krzyżyka, żeby celował w przecięcie linii (jak w oryginale top: -14px left: -22px) */
-    0 0,
+      0 0,
     0 0;
 
   background-repeat: repeat;
@@ -97,14 +91,8 @@
   flex-shrink: 0;
   color: #000000;
   width: 100%;
-  text-shadow:
-    1px 1px 0 #444,
-    2px 2px 0 #444,
-    3px 3px 0 #444,
-    4px 4px 0 #444,
-    5px 5px 0 #444,
-    6px 6px 0 #444,
-    7px 7px 5px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 0 #444, 2px 2px 0 #444, 3px 3px 0 #444, 4px 4px 0 #444,
+    5px 5px 0 #444, 6px 6px 0 #444, 7px 7px 5px rgba(0, 0, 0, 0.3);
   pointer-events: none;
 }
 
@@ -124,7 +112,7 @@
 }
 
 .scroll-stack-card.album-card {
-  font-family: 'Antonio', sans-serif;
+  font-family: "Antonio", sans-serif;
   max-width: 900px;
   margin: 0 auto 20px auto;
   height: auto;
@@ -135,14 +123,10 @@
   color: #111;
   display: block;
 
-  box-shadow:
-    1px 1px 0px #bbb,
-    2px 2px 0px #bbb,
-    3px 3px 0px #bbb,
-    4px 4px 0px #bbb,
-    5px 5px 0px #bbb,
-    /* Ostatni cień jest miękki i rzucany na "podłogę" */
-    6px 6px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 0px #bbb, 2px 2px 0px #bbb, 3px 3px 0px #bbb,
+    4px 4px 0px #bbb, 5px 5px 0px #bbb,
+    /* Ostatni cień jest miękki i rzucany na "podłogę" */ 6px 6px 10px
+      rgba(0, 0, 0, 0.2);
 }
 
 /* ... (reszta stylów kart bez zmian) ... */
@@ -153,24 +137,29 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding-bottom: 1rem;
   margin-bottom: 1.5rem;
-  font-family: 'Bernoru', sans-serif;
+  font-family: "Bernoru", sans-serif;
 }
 
 .album-header h2 {
   margin: 0;
   font-size: 2.5rem;
   color: #111;
-  text-shadow:
-    1px 1px 0 #555,
-    2px 2px 0 #555,
-    3px 3px 2px rgba(0, 0, 0, 0.1);
+  /* Biały outline + ciemny cień = czytelność na każdym tle */
+  text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.8),
+    1px -1px 0 rgba(255, 255, 255, 0.8), -1px 1px 0 rgba(255, 255, 255, 0.8),
+    1px 1px 0 rgba(255, 255, 255, 0.8), 2px 2px 0 #555, 3px 3px 0 #555,
+    4px 4px 3px rgba(0, 0, 0, 0.2);
 }
 
 .album-header p {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 300;
-  opacity: 0.8;
+  opacity: 0.9;
+  color: #111;
+  /* Biały glow dla czytelności na ciemnych tłach */
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.9),
+    0 0 15px rgba(255, 255, 255, 0.5);
 }
 
 .album-content {
@@ -181,17 +170,24 @@
 }
 
 .album-content h3 {
-  font-family: 'Bernoru', sans-serif;
+  font-family: "Bernoru", sans-serif;
   margin: 0 0 0.5rem 0;
   font-size: 1.2rem;
   letter-spacing: 1px;
   text-transform: uppercase;
-  opacity: 0.7;
-  color: #333;
-  /* Lekko ciemniejszy dla lepszego kontrastu cienia */
-  text-shadow:
-    1px 1px 0 #888,
-    2px 2px 1px rgba(0, 0, 0, 0.1);
+  opacity: 0.9;
+  color: #222;
+  /* Biały outline dla czytelności na ciemnych tłach */
+  text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.6),
+    1px -1px 0 rgba(255, 255, 255, 0.6), -1px 1px 0 rgba(255, 255, 255, 0.6),
+    1px 1px 0 rgba(255, 255, 255, 0.6), 2px 2px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Opis albumu - czytelny na każdym tle */
+.album-desc p {
+  color: #111;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.9),
+    0 0 15px rgba(255, 255, 255, 0.5);
 }
 
 .album-cover {
@@ -203,10 +199,7 @@
   width: 100%;
   max-width: 300px;
   border-radius: 10px;
-  box-shadow:
-    1px 1px 0px #bbb,
-    2px 2px 0px #bbb,
-    3px 3px 0px #bbb,
+  box-shadow: 1px 1px 0px #bbb, 2px 2px 0px #bbb, 3px 3px 0px #bbb,
     4px 4px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -228,6 +221,10 @@
   list-style: none;
   font-size: 1.1rem;
   line-height: 1.6;
+  color: #111;
+  /* Biały glow dla czytelności */
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.9),
+    0 0 15px rgba(255, 255, 255, 0.5);
 }
 
 .album-style-nowa-fala {
@@ -241,35 +238,11 @@
 
 .album-style-trapstar {
   background: linear-gradient(135deg, #1b2a3a 0%, #3a5c7c 60%, #c87c54 100%);
-  color: #ffffff;
+  /* Kolory dziedziczone z bazowych styli - biały outline sprawia że tekst jest czytelny */
 }
 
 .album-style-trapstar .album-header {
   border-bottom-color: rgba(255, 255, 255, 0.2);
-}
-
-.album-style-trapstar .album-content h3 {
-  color: #ffffff;
-  opacity: 0.85;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-}
-
-.album-style-trapstar .album-header h2 {
-  color: #ffffff;
-  text-shadow: 1px 1px 0 #333, 2px 2px 0 #333, 3px 3px 2px rgba(0, 0, 0, 0.3);
-}
-
-.album-style-trapstar .album-header p {
-  color: #ffffff;
-  opacity: 0.9;
-}
-
-.album-style-trapstar .album-tracklist ul {
-  color: #ffffff;
-}
-
-.album-style-trapstar .album-desc {
-  color: #ffffff;
 }
 
 .album-style-tad {
@@ -339,10 +312,7 @@
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
-  box-shadow:
-    1px 1px 0px #bbb,
-    2px 2px 0px #bbb,
-    3px 3px 0px #bbb,
+  box-shadow: 1px 1px 0px #bbb, 2px 2px 0px #bbb, 3px 3px 0px #bbb,
     4px 4px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -380,10 +350,7 @@
   .gramophone-title-static {
     font-size: 4.5rem;
     padding: 5rem 0;
-    text-shadow:
-      1px 1px 0 #444,
-      2px 2px 0 #444,
-      3px 3px 0 #444,
+    text-shadow: 1px 1px 0 #444, 2px 2px 0 #444, 3px 3px 0 #444,
       4px 4px 5px rgba(0, 0, 0, 0.3);
   }
 
@@ -409,12 +376,10 @@
 /* --- RESPONSIVE DESIGN (MOBILE) --- */
 
 @media (max-width: 768px) {
-
   /* 1. NAPRAWA TŁA (GRID) */
   .gramophone-css-grid {
     /* Uproszczony grid na mobile - same linie, bez krzyżyków */
-    background-image:
-      linear-gradient(to right, #e5e5e5 1px, transparent 1px),
+    background-image: linear-gradient(to right, #e5e5e5 1px, transparent 1px),
       linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
 
     /* Wyraźniejszy rozmiar kratki */
@@ -548,9 +513,7 @@
     font-size: 1.8rem;
     padding: 8rem 0 3rem 0;
     /* Zwiększony padding z góry */
-    text-shadow:
-      1px 1px 0 #444,
-      2px 2px 2px rgba(0, 0, 0, 0.3);
+    text-shadow: 1px 1px 0 #444, 2px 2px 2px rgba(0, 0, 0, 0.3);
   }
 
   .gramophone-scroller .scroll-stack-inner {

@@ -1,36 +1,57 @@
-import React, { useRef, useEffect } from 'react';
-import { useMotionValueEvent } from 'framer-motion';
+import React, { useRef, useEffect, useState } from 'react';
+import { motion, useMotionValueEvent, useTransform } from 'framer-motion';
 import './SmokeTransition.css';
 
 const SmokeTransition = ({ progress }) => {
     const videoRef = useRef(null);
+    const [isMobile, setIsMobile] = useState(false);
 
-    // To jest serce mechanizmu - nasłuchujemy zmian scrolla
+    // Detekcja mobile
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    // Animacja kurtyny na mobile - przesuwa się od lewej do prawej
+    const curtainX = useTransform(progress, [0, 1], ['-100%', '0%']);
+
+    // Desktop: scroll-driven video
     useMotionValueEvent(progress, "change", (latestValue) => {
+        if (isMobile) return; // Na mobile nie używamy video
+
         const video = videoRef.current;
-
-        // Sprawdzamy czy wideo jest załadowane i ma duration
         if (video && video.duration) {
-            // latestValue to liczba od 0 do 1.
-            // Mnożymy przez długość filmu, żeby uzyskać konkretną sekundę.
             const targetTime = latestValue * video.duration;
-
-            // Ustawiamy czas filmu
             if (Number.isFinite(targetTime)) {
                 video.currentTime = targetTime;
             }
         }
     });
 
+    // MOBILE: Sliding curtain effect
+    if (isMobile) {
+        return (
+            <div className="smoke-transition-container">
+                <motion.div 
+                    className="mobile-curtain"
+                    style={{ x: curtainX }}
+                />
+            </div>
+        );
+    }
+
+    // DESKTOP: Scroll-driven video
     return (
         <div className="smoke-transition-container">
             <video
                 ref={videoRef}
                 className="smoke-video"
-                src="/smoke-transition.mp4" // Ścieżka do pliku w folderze public
+                src="/smoke-transition.mp4"
                 muted
                 playsInline
-                preload="auto" // Ważne: ładujemy film od razu, żeby nie zacinał
+                preload="auto"
             />
         </div>
     );
