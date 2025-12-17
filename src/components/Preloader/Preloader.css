@@ -214,7 +214,9 @@
    ============================================ */
 .system-warning-modal {
   position: relative;
-  max-width: 550px;
+  /* Fluid dimensions based on 1920px */
+  max-width: 28.64vw;
+  /* 550px */
   width: 90%;
   z-index: 2;
 }
@@ -224,8 +226,10 @@
   backdrop-filter: blur(40px) saturate(0);
   -webkit-backdrop-filter: blur(40px) saturate(0);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 50px 40px;
+  border-radius: 1.04vw;
+  /* 20px */
+  padding: 2.6vw 2.08vw;
+  /* 50px 40px */
   box-shadow:
     0 40px 100px rgba(0, 0, 0, 0.9),
     0 0 120px rgba(255, 255, 255, 0.02) inset;
@@ -269,8 +273,10 @@
 
 /* Warning icon */
 .warning-icon-large {
-  font-size: 72px;
-  margin-bottom: 25px;
+  font-size: 3.75vw;
+  /* 72px */
+  margin-bottom: 1.3vw;
+  /* 25px */
   filter: grayscale(1) brightness(1.5);
   animation: iconPulse 2.5s ease-in-out infinite;
 }
@@ -293,10 +299,13 @@
 .system-warning-content h2 {
   color: #ffffff;
   font-family: "Antonio", sans-serif;
-  font-size: 28px;
+  font-size: 1.45vw;
+  /* 28px */
   font-weight: 700;
-  margin: 0 0 20px 0;
-  letter-spacing: 2px;
+  margin: 0 0 1.04vw 0;
+  /* 20px */
+  letter-spacing: 0.1vw;
+  /* 2px */
   text-transform: uppercase;
   background: linear-gradient(180deg, #fff 0%, #999 100%);
   -webkit-background-clip: text;
@@ -308,9 +317,11 @@
 .system-warning-content p {
   color: #999;
   font-family: "Anton", sans-serif;
-  font-size: 16px;
+  font-size: 0.83vw;
+  /* 16px */
   line-height: 1.7;
-  margin: 0 0 15px 0;
+  margin: 0 0 0.78vw 0;
+  /* 15px */
   font-weight: 300;
 }
 
@@ -331,10 +342,12 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-left: 3px solid #ff4444;
-  border-radius: 8px;
+  border-radius: 0.41vw;
+  /* 8px */
   font-family: "Antonio", sans-serif;
   color: #ccc;
-  font-size: 14px;
+  font-size: 0.73vw;
+  /* 14px */
   letter-spacing: 0.5px;
 }
 
@@ -388,12 +401,15 @@
   background-size: 200% 200%;
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 16px 35px;
+  padding: 0.83vw 1.82vw;
+  /* 16px 35px */
   font-family: "Antonio", sans-serif;
-  font-size: 14px;
+  font-size: 0.73vw;
+  /* 14px */
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 0.1vw;
+  /* 2px */
   cursor: pointer;
   border-radius: 8px;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -429,12 +445,15 @@
   background: transparent;
   color: #888;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 16px 35px;
+  padding: 0.83vw 1.82vw;
+  /* 16px 35px */
   font-family: "Antonio", sans-serif;
-  font-size: 14px;
+  font-size: 0.73vw;
+  /* 14px */
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 0.1vw;
+  /* 2px */
   cursor: pointer;
   border-radius: 8px;
   transition: all 0.3s ease;

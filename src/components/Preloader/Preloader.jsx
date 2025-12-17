@@ -18,7 +18,6 @@ function Preloader({ onComplete }) {
   // === STATES ===
   const [phase, setPhase] = useState('loading'); // 'loading' | 'exploding' | 'warning' | 'done'
   const [issues, setIssues] = useState([]);
-  const [screenInfo, setScreenInfo] = useState({ width: 0, height: 0 });
   const [performanceInfo, setPerformanceInfo] = useState({ fps: 0, gpuName: '' });
   const [particles] = useState(generateParticles);
   const fpsRef = useRef({ frames: [], startTime: 0 });
@@ -61,14 +60,6 @@ function Preloader({ onComplete }) {
     return isMobileUA || (isSmallScreen && isTouchDevice);
   };
 
-  const checkResolution = (isMobile) => {
-    const width = window.screen.width;
-    const height = window.screen.height;
-    setScreenInfo({ width, height });
-    if (isMobile) return true;
-    return width >= 1920 && height >= 1080;
-  };
-
   // === FPS MEASUREMENT DURING SCROLL ===
   const measureFPS = () => {
     const now = performance.now();
@@ -92,10 +83,8 @@ function Preloader({ onComplete }) {
     const runSequence = async () => {
       const detectedIssues = [];
 
-      // 1. Run GPU and resolution checks immediately
+      // 1. Run GPU check immediately
       const gpuCheck = checkHardwareAcceleration();
-      const isMobile = checkIsMobile();
-      const hasResolution = checkResolution(isMobile);
 
       if (!gpuCheck.hasGPU) {
         detectedIssues.push({
@@ -103,15 +92,6 @@ function Preloader({ onComplete }) {
           icon: '🎮',
           title: 'Akceleracja Sprzętowa Wyłączona',
           description: 'Przeglądarka renderuje grafikę programowo (CPU)'
-        });
-      }
-
-      if (!hasResolution) {
-        detectedIssues.push({
-          type: 'resolution',
-          icon: '🖥️',
-          title: 'Niestandardowa Rozdzielczość',
-          description: `Wykryto ${window.screen.width}×${window.screen.height}px`
         });
       }
 
@@ -291,13 +271,6 @@ function Preloader({ onComplete }) {
               </ul>
 
               <div className="system-info-box">
-                {issues.some(i => i.type === 'resolution') && (
-                  <div className="info-row">
-                    <span className="info-label">Rozdzielczość:</span>
-                    <span className="info-value error">{screenInfo.width} × {screenInfo.height}px</span>
-                    <span className="info-required">(wymagane: 1920×1080)</span>
-                  </div>
-                )}
                 {performanceInfo.fps > 0 && (
                   <div className="info-row">
                     <span className="info-label">Wydajność:</span>
@@ -321,9 +294,6 @@ function Preloader({ onComplete }) {
                 )}
                 {issues.some(i => i.type === 'performance') && (
                   <>Twój komputer może mieć problemy z płynnym wyświetlaniem animacji. </>
-                )}
-                {issues.some(i => i.type === 'resolution') && (
-                  <>Strona może wyglądać inaczej na Twojej rozdzielczości. </>
                 )}
                 <br />
                 <strong>Niektóre elementy mogą lagować lub się rozjeżdżać.</strong>
