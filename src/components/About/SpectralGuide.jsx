@@ -71,15 +71,13 @@ export function SpectralGuide({ startPos, ghostOffset }) {
             // 3. Pull (Ghost moves, Dread follows)
             // We need to animate ghostOffset.x alongside controls
             // We can use a helper promise for the dread animation
-            const pullDist = -80;
+            // 3. Pull (Visual Ghost moves fluidly)
+            const ghostPull = controls.start({ x: "-4.16vw", transition: { duration: 1.0, ease: "easeInOut" } });
 
-            const ghostPull = controls.start({ x: pullDist, transition: { duration: 1.0, ease: "easeInOut" } });
-
-            // Animate the MotionValue directly using the animate helper (we will import it)
-            // Note: We need to import { animate } from 'framer-motion'
-            // This is a side-effect animation on the MotionValue
+            // Dread Physics (Virtual units: 1000px space)
+            // Musimy pociągnąć dreda o -80 jednostek w jego wewnętrznym układzie
             const dreadPull = import('framer-motion').then(({ animate }) => {
-                return animate(ghostOffset.x, pullDist, { duration: 1.0, ease: "easeInOut" });
+                return animate(ghostOffset.x, -80, { duration: 1.0, ease: "easeInOut" });
             });
 
             await Promise.all([ghostPull, dreadPull]);

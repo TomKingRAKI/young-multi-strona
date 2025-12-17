@@ -27,10 +27,13 @@ const factsRight = [
 ];
 
 // (Twoje pozycje dredów...)
+// Konwersja na % (zakładając wirtualny kontener 1000x1000 dla łatwości,
+// ale w CSS będziemy skalować 'about-avatar-container' zachowując ratio).
+// x / 1000 * 100 -> %
 const dreadPositions = [
-  { x: 355, y: 400 }, { x: 395, y: 380 }, { x: 445, y: 360 },
-  { x: 485, y: 360 }, { x: 525, y: 360 }, { x: 575, y: 380 },
-  { x: 615, y: 400 },
+  { x: 35.5, y: 41.6 }, { x: 39.5, y: 39.5 }, { x: 44.5, y: 37.5 },
+  { x: 48.5, y: 37.5 }, { x: 52.5, y: 37.5 }, { x: 57.5, y: 39.5 },
+  { x: 61.5, y: 41.6 },
 ];
 
 function About({ externalOpacity }) {
@@ -225,7 +228,7 @@ function About({ externalOpacity }) {
           <motion.div
             key={i}
             className="jelly-dread-wrapper"
-            style={{ x: pos.x, y: pos.y, zIndex: 10 }}
+            style={{ left: `${pos.x}%`, top: `${pos.y}%`, zIndex: 10 }}
           >
             <JellyDread
               dreadId={`dread-gradient-${i}`}
@@ -256,8 +259,11 @@ function About({ externalOpacity }) {
           {!activeInfo && isIdle && !isMobile && (
             <SpectralGuide
               startPos={{
-                x: dreadPositions[3].x - 20,
-                y: dreadPositions[3].y + 120 // +140 to offset do końcówki (initialTipY)
+                // Przeliczone na %: 
+                // x: 48.5 (anchor) - 2% (offset w lewo) = 46.5%
+                // y: 37.5 (anchor) + 14.6% (tip offset 140px/960px) = 52.1%
+                x: '46%',
+                y: '50%'
               }}
               ghostOffset={ghostDreadOffset}
             />

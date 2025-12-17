@@ -31,9 +31,11 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: 40px;
+  margin-bottom: 2.083vw;
+  /* 40px */
   z-index: 10;
-  min-height: 120px;
+  min-height: 6.25vw;
+  /* 120px */
 }
 
 .merch-header-inner {
@@ -42,21 +44,35 @@
 
 .merch-subtitle {
   font-family: 'Antonio', sans-serif;
-  font-size: 1rem;
-  letter-spacing: 6px;
+  font-size: 0.833vw;
+  /* 16px */
+  letter-spacing: 0.3125vw;
+  /* 6px */
   color: #888;
-  margin-top: 0.5rem;
+  margin-top: 0.416vw;
+  /* 8px */
   text-transform: uppercase;
   font-weight: 700;
+}
+
+/* New class for ScrollFloat title */
+.merch-title-text {
+  font-size: 5vw !important;
+  /* 96px at 1920px */
+  line-height: 1;
+  letter-spacing: -0.1vw;
+  /* -2px approx */
 }
 
 /* 4. GRID PRODUKTÓW */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  gap: 1.5625vw;
+  /* 30px */
   width: 100%;
-  max-width: 1400px;
+  max-width: 72.916vw;
+  /* 1400px */
   align-items: center;
   position: relative;
   z-index: 5;
@@ -166,27 +182,35 @@
 .status-badge {
   position: absolute;
   top: 0;
-  right: 10px;
+  right: 0.52vw;
+  /* 10px */
   background-color: #000;
   color: #fff;
-  padding: 4px 8px;
+  padding: 0.208vw 0.416vw;
+  /* 4px 8px */
   font-family: 'Antonio', sans-serif;
   font-weight: bold;
-  font-size: 0.7rem;
-  letter-spacing: 1px;
+  font-size: 0.583vw;
+  /* ~11.2px (0.7rem) */
+  letter-spacing: 0.052vw;
+  /* 1px */
 }
 
 .shop-btn {
   position: absolute;
-  bottom: 20px;
+  bottom: 1.041vw;
+  /* 20px */
   left: 50%;
-  transform: translateX(-50%) translateY(20px);
+  transform: translateX(-50%) translateY(1.041vw);
+  /* 20px */
   background: #000;
   color: #fff;
   border: none;
-  padding: 12px 30px;
+  padding: 0.625vw 1.5625vw;
+  /* 12px 30px */
   font-family: 'Antonio', sans-serif;
-  font-size: 1rem;
+  font-size: 0.833vw;
+  /* 16px */
   font-weight: bold;
   text-transform: uppercase;
   cursor: pointer;
@@ -196,39 +220,48 @@
 }
 
 .product-card:hover .shop-btn {
-  transform: translateX(-50%) translateY(-10px);
+  transform: translateX(-50%) translateY(-0.52vw);
+  /* -10px */
   opacity: 1;
 }
 
 .product-info {
-  margin-top: 10px;
+  margin-top: 0.52vw;
+  /* 10px */
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   font-family: 'Antonio', sans-serif;
-  padding: 0 10px;
+  padding: 0 0.52vw;
+  /* 10px */
 }
 
 .product-name {
-  font-size: 1.2rem;
+  font-size: 1vw;
+  /* 19.2px (1.2rem) */
   font-weight: 800;
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.052vw;
+  /* 1px */
   color: #000;
 }
 
 .product-status {
   display: block;
-  font-size: 0.75rem;
-  margin-top: 2px;
+  font-size: 0.625vw;
+  /* 12px (0.75rem) */
+  margin-top: 0.104vw;
+  /* 2px */
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: 0.104vw;
+  /* 2px */
   color: #666;
 }
 
 .product-price {
-  font-size: 1.2rem;
+  font-size: 1vw;
+  /* 19.2px (1.2rem) */
   font-weight: 400;
   color: #000;
 }

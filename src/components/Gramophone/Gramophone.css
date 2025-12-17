@@ -1,7 +1,6 @@
 /* Plik: /src/components/Gramophone/Gramophone.css (WERSJA Z POPRAWKĄ HOVERA) */
 :root {
-  --gramophone-3d-transform: translate(0%, 0%) skewX(-25deg) skewY(7deg)
-    scale(0.85) translateZ(0);
+  --gramophone-3d-transform: translate(0%, 0%) skewX(-25deg) skewY(7deg) scale(0.85) translateZ(0);
 }
 
 .Gramophone-section {
@@ -44,23 +43,27 @@
   /* Używamy SVG zakodowanego w base64 (Data URI) jako tła - ultra wydajne */
 
   background-image:
-    /* WARSTWA 1: Krzyżyki (SVG) */ url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='-6 -6 36 36' stroke-width='0.8' stroke='%23d4d4d4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 6v12m6-6H6'/%3E%3C/svg%3E"),
+    /* WARSTWA 1: Krzyżyki (SVG) */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='-6 -6 36 36' stroke-width='0.8' stroke='%23d4d4d4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 6v12m6-6H6'/%3E%3C/svg%3E"),
     /* WARSTWA 2: Pionowe linie */
-      linear-gradient(to right, #e5e5e5 1px, transparent 1px),
+    linear-gradient(to right, #e5e5e5 1px, transparent 1px),
     /* WARSTWA 3: Poziome linie */
-      linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
+    linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
 
   /* ROZMIARY (ODPOWIEDNIK BOXES.CSS) */
   /* Krzyżyki: pojawiają się co 2 kolumnę i co 2 rząd. 
      Skoro kolumna=4rem, a rząd=2rem, to powtarzanie krzyżyka = 8rem 4rem */
-  background-size: 8rem 4rem, /* Rozmiar powtarzania krzyżyków */ 4rem 2rem,
-    /* Rozmiar kratki pionowej (szerokość 4rem) */ 4rem 2rem;
+  background-size: 8rem 4rem,
+    /* Rozmiar powtarzania krzyżyków */
+    4rem 2rem,
+    /* Rozmiar kratki pionowej (szerokość 4rem) */
+    4rem 2rem;
   /* Rozmiar kratki poziomej (wysokość 2rem) */
 
   /* POZYCJA */
   background-position: 0rem 0rem,
     /* Przesunięcie krzyżyka, żeby celował w przecięcie linii (jak w oryginale top: -14px left: -22px) */
-      0 0,
+    0 0,
     0 0;
 
   background-repeat: repeat;
@@ -84,10 +87,12 @@
 }
 
 .gramophone-title-static {
-  font-size: 6rem;
+  font-size: 5vw;
+  /* 96px at 1920px */
   text-align: center;
   margin: 0;
-  padding: 7.5rem 0;
+  padding: 6.25vw 0;
+  /* 120px approx */
   flex-shrink: 0;
   color: #000000;
   width: 100%;
@@ -113,11 +118,15 @@
 
 .scroll-stack-card.album-card {
   font-family: "Antonio", sans-serif;
+  width: 46.875vw;
+  /* 900px / 1920px */
   max-width: 900px;
+  /* Keep max width for super large screens if desired, or remove for pure fluid */
   margin: 0 auto 20px auto;
   height: auto;
   min-height: 20rem;
-  padding: 2rem;
+  padding: 1.66vw;
+  /* 32px / 1920px */
   border-radius: 20px;
   background-color: #ffffff;
   color: #111;
@@ -125,8 +134,8 @@
 
   box-shadow: 1px 1px 0px #bbb, 2px 2px 0px #bbb, 3px 3px 0px #bbb,
     4px 4px 0px #bbb, 5px 5px 0px #bbb,
-    /* Ostatni cień jest miękki i rzucany na "podłogę" */ 6px 6px 10px
-      rgba(0, 0, 0, 0.2);
+    /* Ostatni cień jest miękki i rzucany na "podłogę" */
+    6px 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* ... (reszta stylów kart bez zmian) ... */
@@ -343,6 +352,40 @@
   margin: 0;
 }
 
+/* --- LAPTOP LAYOUT (< 1440px) --- */
+@media (min-width: 1025px) and (max-width: 1440px) {
+
+  /* Switch to 2 columns */
+  .album-content {
+    grid-template-columns: 1fr 1fr;
+    /* Cover | Tracklist */
+    gap: 1.5rem;
+  }
+
+  /* Hide Description */
+  .album-desc {
+    display: none;
+  }
+
+  /* Make card slightly wider to fill space since we only have 2 columns */
+  .scroll-stack-card.album-card {
+    width: 60vw;
+    /* Increase width for better presence */
+    padding: 2vw;
+  }
+
+  /* Move Cover to first position if needed, but grid 1fr 1fr might put cover in wrong place if order in HTML is Desc, Cover, Tracklist on desktop... 
+     Let's check HTML order:
+     <div className="album-desc">...</div>
+     <div className="album-cover">...</div>
+     <div className="album-tracklist">...</div>
+     
+     If Desc is hidden:
+     Columns will be: Cover | Tracklist.
+     Perfect.
+  */
+}
+
 /* --- RESPONSIVE DESIGN --- */
 
 /* Tablet */
@@ -376,6 +419,7 @@
 /* --- RESPONSIVE DESIGN (MOBILE) --- */
 
 @media (max-width: 768px) {
+
   /* 1. NAPRAWA TŁA (GRID) */
   .gramophone-css-grid {
     /* Uproszczony grid na mobile - same linie, bez krzyżyków */

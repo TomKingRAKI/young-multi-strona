@@ -26,7 +26,8 @@
   display: grid;
   place-items: center;
   /* Wyśrodkuj pudełko z obrazkiem */
-  padding: 4rem;
+  padding: 4.16vw;
+  /* ~80px at 1920px (matches 4rem approx) */
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -70,7 +71,8 @@
   font-family: 'Antonio', sans-serif;
   /* Czcionka Antonio */
   font-weight: 700;
-  font-size: 5rem;
+  font-size: 4.16vw;
+  /* ~80px at 1920px (matches 5rem) */
   /* Duże, czytelne linki */
   color: #fff;
   text-decoration: none;

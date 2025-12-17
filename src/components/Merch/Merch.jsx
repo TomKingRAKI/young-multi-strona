@@ -101,6 +101,7 @@ const Merch = () => {
               scrollStart='top bottom'
               scrollEnd='bottom center'
               stagger={0.05}
+              textClassName="merch-title-text"
             >
               SELECTED GOODS
             </ScrollFloat>

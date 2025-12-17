@@ -184,8 +184,8 @@ export function JellyDread({
         }}
       />
 
-      {/* SVG (bez zmian) */}
-      <svg className="jelly-dread-svg">
+      {/* SVG (skalowalne dzięki viewBox) */}
+      <svg className="jelly-dread-svg" viewBox="0 0 1000 1000">
         <defs>
           {children}
         </defs>

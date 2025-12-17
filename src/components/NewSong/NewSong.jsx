@@ -95,8 +95,8 @@ const NewSong = forwardRef((props, ref) => {
       const windowHeight = window.innerHeight;
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      const OFFSET_X = 0.01;
-      const OFFSET_Y = 0.1;
+      const OFFSET_X = 0.009;
+      const OFFSET_Y = 0.05;
       const newX = (centerX / windowWidth) + OFFSET_X;
       const newY = (centerY / windowHeight) + OFFSET_Y;
       originX.set(newX);
@@ -117,7 +117,12 @@ const NewSong = forwardRef((props, ref) => {
   // --- GRAMOPHONE & ABOUT & SMOKE ---
   const gramophoneZoomProgress = useTransform(contentProgress, [0.65, 0.85], [0, 1]);
   const gramophoneScale = useTransform(gramophoneZoomProgress, [0, 1], [1, 15]);
-  const aboutClipPath = useTransform(gramophoneZoomProgress, [0.05, 1], ["circle(0% at 50% 62%)", "circle(150% at 50% 0%)"]);
+  // Dynamiczna pozycja startowa dla clipPath (podąża za celownikiem "Snajper")
+  const originXPct = useTransform(originX, v => v * 100 - 0.5);
+  const originYPct = useTransform(originY, v => v * 100 - 8);
+  const clipRadius = useTransform(gramophoneZoomProgress, [0.05, 1], [0, 150]);
+
+  const aboutClipPath = useMotionTemplate`circle(${clipRadius}% at ${originXPct}% ${originYPct}%)`;
   const aboutOpacity = useTransform(gramophoneZoomProgress, [0, 0.001], [0, 1]);
   const aboutPointerEvents = useTransform(gramophoneZoomProgress, (v) => (v > 0.1 ? 'auto' : 'none'));
   const cloudProgress = useTransform(contentProgress, [0.85, 1.0], [0, 1]);

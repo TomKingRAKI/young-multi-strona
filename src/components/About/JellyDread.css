@@ -12,26 +12,32 @@
 .jelly-dread-svg {
   /* Płótno SVG leży na wierzchu */
   position: absolute;
-  top: -500px; 
-  left: -500px;
-  width: 1000px;
-  height: 1000px;
+  top: -26.04vw;
+  /* -500px (half of 1000px logic) converted to fluid */
+  left: -26.04vw;
+  width: 52.08vw;
+  /* 1000px logic matched to container width */
+  height: 52.08vw;
   overflow: visible;
-  pointer-events: none; /* Ignoruje myszkę, żeby dało się kliknąć uchwyt */
+  pointer-events: none;
+  /* Ignoruje myszkę, żeby dało się kliknąć uchwyt */
   z-index: 10;
 }
 
 .jelly-dread-handle {
   /* Niewidzialny uchwyt, który łapiemy */
-  width: 35px; /* Zmniejszony obszar łapania */
+  width: 35px;
+  /* Zmniejszony obszar łapania */
   height: 50px;
   border-radius: 50%;
   /* background-color: rgba(255, 0, 0, 0.5); /* Włącz to, żeby zobaczyć uchwyt */
   position: absolute;
-  top: -40px; /* Centrujemy uchwyt (połowa width/height) */
+  top: -40px;
+  /* Centrujemy uchwyt (połowa width/height) */
   left: -18px;
   cursor: grab;
-  z-index: 11; /* Nad dredem SVG */
+  z-index: 11;
+  /* Nad dredem SVG */
 }
 
 .jelly-dread-handle:active {
