@@ -5,7 +5,7 @@
   position: relative;
   color: white;
   z-index: 2;
-  background-color: #050505;
+  background-color: var(--color-bg-secondary);
   /* Baza */
 }
 
@@ -43,7 +43,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-color: #0a0a0a;
+  background-color: var(--color-bg-secondary);
   overflow: hidden;
 }
 
@@ -145,10 +145,10 @@
   font-family: 'Antonio', sans-serif;
   font-size: 1.2vw;
   letter-spacing: 0.5em;
-  color: #fff;
+  color: var(--color-text-primary);
   opacity: 0.7;
   margin-top: 1rem;
-  background: #000;
+  background: var(--color-bg-primary);
   display: inline-block;
   padding: 0.5em 1em;
 }
@@ -165,7 +165,7 @@
   aspect-ratio: 16/9;
 
   position: relative;
-  background: #000;
+  background: var(--color-bg-primary);
   border: 1px solid #333;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   cursor: pointer;
@@ -307,7 +307,7 @@
   border-left: 0.21vw solid #555;
   /* Akcent po lewej */
 
-  color: #ccc;
+  color: var(--color-text-secondary);
   text-decoration: none;
   font-family: 'Bernoru', sans-serif;
   font-size: 1.33vw;
