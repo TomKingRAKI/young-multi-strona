@@ -1,12 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
 import { FaInstagram, FaYoutube, FaSpotify } from 'react-icons/fa';
 import './Contact.css';
 
 import multiImg from '../../assets/multi-dark.png';
 
-const Contact = () => {
+const Contact = forwardRef((props, ref) => {
   const containerRef = useRef(null);
+
+  // Expose containerRef to parent via forwardRef
+  useImperativeHandle(ref, () => containerRef.current);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -117,7 +120,7 @@ const Contact = () => {
       </div>
     </div>
   );
-};
+});
 
 const ChangingNumbers = () => (
   <div className="coords-text">

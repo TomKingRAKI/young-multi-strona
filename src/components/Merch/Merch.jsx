@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import './Merch.css';
 import ScrollFloat from '../ScrollFloat/ScrollFloat';
@@ -35,10 +35,13 @@ const products = [
   }
 ];
 
-const Merch = () => {
+const Merch = forwardRef((props, ref) => {
   const targetRef = useRef(null);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Expose targetRef to parent via forwardRef
+  useImperativeHandle(ref, () => targetRef.current);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -165,7 +168,7 @@ const Merch = () => {
       </div>
     </section>
   );
-};
+});
 
 const ProductContent = ({ product }) => (
   <>
@@ -176,7 +179,7 @@ const ProductContent = ({ product }) => (
         rel="noopener noreferrer"
         className="img-link"
       >
-        <img src={product.image} alt={product.name} className="product-img" />
+        <img src={product.image} alt={product.name} className="product-img" loading="lazy" />
       </a>
 
       <a

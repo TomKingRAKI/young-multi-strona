@@ -59,8 +59,8 @@ export function JellyDread({
   // 4. Przywracamy useEffect, aby podłączyć sprężyny do 'idealMidX/Y'
   useEffect(() => {
     // Kiedy 'idealMidX' się zmienia, aktualizuj sprężynę 'midX'
-    const unsubX = idealMidX.onChange((v) => midX.set(v));
-    const unsubY = idealMidY.onChange((v) => midY.set(v));
+    const unsubX = idealMidX.on("change", (v) => midX.set(v));
+    const unsubY = idealMidY.on("change", (v) => midY.set(v));
 
     return () => {
       unsubX();
@@ -89,8 +89,8 @@ export function JellyDread({
       }
     };
 
-    const unsubX = ghostOffset.x.onChange(updateFromGhost);
-    const unsubY = ghostOffset.y.onChange(updateFromGhost);
+    const unsubX = ghostOffset.x.on("change", updateFromGhost);
+    const unsubY = ghostOffset.y.on("change", updateFromGhost);
 
     return () => {
       unsubX();
@@ -147,13 +147,13 @@ export function JellyDread({
   // Synchronizujemy pozycję uchwytu z końcówką dreda (tylko gdy nie przeciągamy)
   // Gdy końcówka wraca na miejsce, uchwyt też powinien wrócić
   useEffect(() => {
-    const unsubX = tipX.onChange((v) => {
+    const unsubX = tipX.on("change", (v) => {
       // Aktualizujemy pozycję uchwytu tylko gdy nie przeciągamy ORAZ nie ma aktywnego ducha
       if (!isDraggingRef.current && (!ghostOffset || (ghostOffset.x.get() === 0 && ghostOffset.y.get() === 0))) {
         handleX.set(v - CANVAS_CENTER);
       }
     });
-    const unsubY = tipY.onChange((v) => {
+    const unsubY = tipY.on("change", (v) => {
       if (!isDraggingRef.current && (!ghostOffset || (ghostOffset.x.get() === 0 && ghostOffset.y.get() === 0))) {
         handleY.set(v - CANVAS_CENTER);
       }

@@ -1,12 +1,12 @@
 // Plik: /src/components/Hero/Hero.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { motion, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import './Hero.css';
 
 import cutoutPerson from '../../assets/cutout-person.png';
 
-function Hero({ scrollY, startAnimation = false }) {
+const Hero = forwardRef(function Hero({ scrollY, startAnimation = false }, ref) {
   const mouseX = useMotionValue(0);
 
   const smoothMouseX = useSpring(mouseX, {
@@ -41,6 +41,7 @@ function Hero({ scrollY, startAnimation = false }) {
 
   return (
     <motion.section
+      ref={ref}
       className="hero-section"
       data-header-theme="light"
       onMouseMove={handleMouseMove}
@@ -96,6 +97,6 @@ function Hero({ scrollY, startAnimation = false }) {
       </motion.div>
     </motion.section>
   );
-}
+});
 
 export default Hero;

@@ -1,6 +1,6 @@
 // Plik: /src/App.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { AnimatePresence, useScroll } from 'framer-motion';
 
 // Importy komponentów
@@ -18,45 +18,68 @@ function App() {
 
   const { scrollY } = useScroll();
 
+  // === SECTION REFS FOR DYNAMIC NAVIGATION ===
+  const heroRef = useRef(null);
+  const newSongRef = useRef(null);
+  const merchRef = useRef(null);
+  const contactRef = useRef(null);
+
   const openMenu = () => setIsMenuOpen(true);
   const closeMenu = () => setIsMenuOpen(false);
 
-  // Scroll navigation values
-  const START_GRAMO = 5000;
-  const KONIEC_GRAMO = 10000;
-  const MERCH_START = 13892;
-  const CONTACT_START = 18330;
-
-  const handleSectionClick = (sectionId) => {
-    let targetScroll = 0;
-    const vh = window.innerHeight;
-
-    switch (sectionId) {
-      case 'home':
-        targetScroll = 0;
-        break;
-      case 'nowa-piosenka':
-        targetScroll = vh;
-        break;
-      case 'dyskolgrafia':
-        targetScroll = START_GRAMO + 660;
-        break;
-      case 'o-mnie':
-        targetScroll = KONIEC_GRAMO + 1500;
-        break;
-      case 'merch':
-        targetScroll = MERCH_START + 3000;
-        break;
-      case 'kontakt':
-        targetScroll = CONTACT_START;
-        break;
-      default:
-        targetScroll = 0;
+  // === DYNAMIC SCROLL NAVIGATION ===
+  // Uses actual DOM positions and calculates offsets for nested sections
+  const handleSectionClick = useCallback((sectionId) => {
+    // HOME always scrolls to top
+    if (sectionId === 'home') {
+      window.scrollTo({ top: 0 });
+      setTimeout(() => setIsMenuOpen(false), 300);
+      return;
     }
 
-    window.scrollTo({ top: targetScroll });
+    // KONTAKT scrolls to very bottom of page
+    if (sectionId === 'kontakt') {
+      window.scrollTo({ top: document.body.scrollHeight });
+      setTimeout(() => setIsMenuOpen(false), 300);
+      return;
+    }
+
+    // For sections inside NewSong, calculate scroll position based on percentage
+    if (newSongRef?.current) {
+      const newSongTop = newSongRef.current.offsetTop;
+      const newSongHeight = newSongRef.current.offsetHeight;
+
+      let scrollPosition = 0;
+
+      switch (sectionId) {
+        case 'nowa-piosenka':
+          // Scroll to start of NewSong
+          scrollPosition = newSongTop;
+          break;
+        case 'dyskolgrafia':
+          // Gramophone starts around 35% of NewSong
+          scrollPosition = newSongTop + (newSongHeight * 0.35);
+          break;
+        case 'o-mnie':
+          // About starts around 70% of NewSong
+          scrollPosition = newSongTop + (newSongHeight * 0.70);
+          break;
+        case 'merch':
+          // Merch is after NewSong
+          if (merchRef?.current) {
+            scrollPosition = merchRef.current.offsetTop;
+          }
+          break;
+        default:
+          scrollPosition = 0;
+      }
+
+      window.scrollTo({ top: scrollPosition });
+    }
+
+    // Close menu with delay to allow exit animation
     setTimeout(() => setIsMenuOpen(false), 300);
-  };
+  }, []);
 
   const handlePreloaderComplete = () => {
     setIsLoading(false);
@@ -83,10 +106,10 @@ function App() {
         </AnimatePresence>
 
         <main>
-          <Hero scrollY={scrollY} startAnimation={!isLoading} />
-          <NewSong isMenuOpen={isMenuOpen} />
-          <Merch />
-          <Contact />
+          <Hero ref={heroRef} scrollY={scrollY} startAnimation={!isLoading} />
+          <NewSong ref={newSongRef} isMenuOpen={isMenuOpen} />
+          <Merch ref={merchRef} />
+          <Contact ref={contactRef} />
         </main>
       </>
     </>

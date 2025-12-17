@@ -1,21 +1,97 @@
 @import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Antonio:wght@700&display=swap");
 
+/* ============================================
+   DESIGN SYSTEM - CSS Custom Properties
+   ============================================ */
+
+:root {
+  /* === COLOR PALETTE === */
+  --color-bg-primary: #111111;
+  --color-bg-secondary: #0a0a0a;
+  --color-bg-surface: #1a1a1a;
+  --color-bg-elevated: #222222;
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+  --color-text-muted: rgba(255, 255, 255, 0.4);
+
+  --color-accent-primary: #ff3333;
+  --color-accent-secondary: #ff6b6b;
+  --color-accent-spotify: #1DB954;
+  --color-accent-apple: #FC3C44;
+  --color-accent-youtube: #FF0000;
+  --color-accent-tidal: #00FFFF;
+
+  /* === TYPOGRAPHY === */
+  --font-display: 'Anton', sans-serif;
+  --font-heading: 'Antonio', sans-serif;
+  --font-body: 'Anton', sans-serif;
+
+  --font-size-xs: clamp(0.75rem, 1vw, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 1.5vw, 1rem);
+  --font-size-md: clamp(1rem, 2vw, 1.25rem);
+  --font-size-lg: clamp(1.25rem, 3vw, 1.5rem);
+  --font-size-xl: clamp(1.5rem, 4vw, 2rem);
+  --font-size-2xl: clamp(2rem, 5vw, 3rem);
+  --font-size-3xl: clamp(3rem, 8vw, 5rem);
+  --font-size-hero: clamp(4rem, 15vw, 12rem);
+
+  /* === SPACING SCALE === */
+  --space-xs: clamp(0.25rem, 0.5vw, 0.5rem);
+  --space-sm: clamp(0.5rem, 1vw, 0.75rem);
+  --space-md: clamp(1rem, 2vw, 1.5rem);
+  --space-lg: clamp(1.5rem, 3vw, 2.5rem);
+  --space-xl: clamp(2rem, 5vw, 4rem);
+  --space-2xl: clamp(3rem, 8vw, 6rem);
+  --space-3xl: clamp(5rem, 10vw, 10rem);
+
+  /* === TRANSITIONS === */
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 800ms;
+
+  /* === Z-INDEX SCALE === */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-preloader: 500;
+  --z-max: 9999;
+
+  /* === GRADIENTS === */
+  --gradient-chrome: linear-gradient(180deg,
+      #ffffff 0%,
+      #b0b0b0 30%,
+      #333333 50%,
+      #555555 51%,
+      #888888 100%);
+
+  --gradient-chrome-hover: linear-gradient(180deg,
+      #ffffff 0%,
+      #dddddd 30%,
+      #555555 50%,
+      #777777 51%,
+      #aaaaaa 100%);
+}
+
 body {
   margin: 0;
-  background-color: #111;
-  font-family: "Anton", sans-serif;
+  background-color: var(--color-bg-primary);
+  font-family: var(--font-body);
   overflow-x: hidden;
-
-  /* Istniejące u Ciebie: */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-
-  /* DODAJ TO: */
   -webkit-backface-visibility: hidden;
-  /* Czasami pomaga, czasami szkodzi - warto przetestować */
   -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 h1,
@@ -30,8 +106,7 @@ a,
 li {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Wyłączenie sprzętowej akceleracji dla samego tekstu, jeśli nie jest animowany */
-  transform: translateZ(0);
+  /* Removed translateZ(0) - it was creating unnecessary GPU layers */
 }
 
 /* ============================================
@@ -53,41 +128,35 @@ li {
 
 ::-webkit-scrollbar-thumb {
   /* Metallic chrome gradient - matching the website's title style */
-  background: linear-gradient(
-    180deg,
-    #ffffff 0%,
-    #b0b0b0 30%,
-    #333333 50%,
-    #555555 51%,
-    #888888 100%
-  );
+  background: linear-gradient(180deg,
+      #ffffff 0%,
+      #b0b0b0 30%,
+      #333333 50%,
+      #555555 51%,
+      #888888 100%);
   border-radius: 5px;
   border: 2px solid #0a0a0a;
   transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(
-    180deg,
-    #ffffff 0%,
-    #dddddd 30%,
-    #555555 50%,
-    #777777 51%,
-    #aaaaaa 100%
-  );
+  background: linear-gradient(180deg,
+      #ffffff 0%,
+      #dddddd 30%,
+      #555555 50%,
+      #777777 51%,
+      #aaaaaa 100%);
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.15),
     inset 0 0 5px rgba(255, 255, 255, 0.1);
 }
 
 ::-webkit-scrollbar-thumb:active {
-  background: linear-gradient(
-    180deg,
-    #cccccc 0%,
-    #999999 30%,
-    #222222 50%,
-    #444444 51%,
-    #666666 100%
-  );
+  background: linear-gradient(180deg,
+      #cccccc 0%,
+      #999999 30%,
+      #222222 50%,
+      #444444 51%,
+      #666666 100%);
 }
 
 /* Firefox */

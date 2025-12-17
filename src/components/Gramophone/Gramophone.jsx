@@ -157,7 +157,7 @@ function Gramophone({ contentProgress, isMenuOpen, style, zoomTargetRef }) {
                         className="album-cover-flip-front"
                         style={{ rotateY: flipRotationY, opacity: frontOpacity }}
                       >
-                        <img src={album.cover} alt={album.title} />
+                        <img src={album.cover} alt={album.title} loading="lazy" />
                       </motion.div>
                       <motion.div
                         className="album-cover-flip-back"
@@ -178,7 +178,7 @@ function Gramophone({ contentProgress, isMenuOpen, style, zoomTargetRef }) {
                       </motion.div>
                     </div>
                   ) : (
-                    <img src={album.cover} alt={album.title} />
+                    <img src={album.cover} alt={album.title} loading="lazy" />
                   )}
                 </div>
 
