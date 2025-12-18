@@ -171,9 +171,8 @@ function Preloader({ onComplete }) {
   return (
     <motion.div
       className="preloader"
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      initial={{ y: 0 }}
+      exit={{ y: "-100%", transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
     >
       <AnimatePresence mode="wait">
         {/* LOADING PHASE */}

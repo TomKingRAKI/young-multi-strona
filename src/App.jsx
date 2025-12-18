@@ -10,17 +10,34 @@ import Header from './components/Header/Header';
 import MenuOverlay from './components/MenuOverlay/MenuOverlay';
 // import CustomCursor from './components/CustomCursor/CustomCursor'; // DISABLED - uncomment to re-enable
 import GrainOverlay from './components/GrainOverlay/GrainOverlay';
+import useAdaptiveFavicon from './hooks/useAdaptiveFavicon';
 
 // Lazy-loaded components - load when needed (below the fold)
 const NewSong = lazy(() => import('./components/NewSong/NewSong'));
 const Merch = lazy(() => import('./components/Merch/Merch'));
 const Contact = lazy(() => import('./components/Contact/Contact'));
+const NotFound = lazy(() => import('./components/NotFound/NotFound'));
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Simple Routing Check
+  const path = window.location.pathname;
+  const isHome = path === '/' || path === '/index.html';
+
+  if (!isHome) {
+    return (
+      <Suspense fallback={null}>
+        <NotFound />
+      </Suspense>
+    );
+  }
+
   const { scrollY } = useScroll();
+
+  // === ADAPTIVE FAVICON ===
+  useAdaptiveFavicon();
 
   // === SECTION REFS FOR DYNAMIC NAVIGATION ===
   const heroRef = useRef(null);

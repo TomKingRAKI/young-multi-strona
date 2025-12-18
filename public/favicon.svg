@@ -1,0 +1,11 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="256" height="256" fill="#000000"/>
+  <rect x="0" y="0" width="256" height="256" fill="url(#noise)" opacity="0.15"/>
+  <path d="M48 64V192H80V128L112 192L144 128V192H176V64H144L112 128L80 64H48Z" fill="white"/>
+  <path d="M192 64H224V192H192V64Z" fill="white"/>
+  <defs>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+    </filter>
+  </defs>
+</svg>
