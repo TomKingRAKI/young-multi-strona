@@ -69,7 +69,7 @@
 }
 
 .marquee-text {
-    font-family: 'Antonio', sans-serif;
+    font-family: var(--font-heading);
     font-size: 10rem;
     font-weight: 900;
     display: inline-block;
@@ -89,10 +89,10 @@
 }
 
 .section-label {
-    font-family: 'Antonio', sans-serif;
+    font-family: var(--font-heading);
     color: #666;
     letter-spacing: 4px;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-lg);
 }
 
 .contact-link {
@@ -135,7 +135,7 @@
 }
 
 .coordinates-box {
-    margin-top: 3rem;
+    margin-top: var(--space-xl);
     font-family: 'Courier New', monospace;
     color: #444;
     font-size: 0.9rem;
@@ -150,7 +150,7 @@
 .socials-row {
     display: flex;
     gap: 20px;
-    margin-top: 4rem;
+    margin-top: var(--space-2xl);
 }
 
 .social-btn {
@@ -162,7 +162,7 @@
     place-items: center;
     color: var(--color-text-primary);
     text-decoration: none;
-    font-family: 'Antonio', sans-serif;
+    font-family: var(--font-heading);
     font-weight: bold;
 }
 
@@ -256,7 +256,7 @@
 }
 
 .section-label {
-    font-family: 'Antonio', sans-serif;
+    font-family: var(--font-heading);
     color: #666;
     letter-spacing: 4px;
     margin-bottom: 2rem;
@@ -333,7 +333,7 @@
     place-items: center;
     color: #fff;
     text-decoration: none;
-    font-family: 'Antonio', sans-serif;
+    font-family: var(--font-heading);
     font-weight: bold;
     font-size: 24px;
     /* Rozmiar ikony */
@@ -424,7 +424,7 @@
     justify-content: flex-start;
     gap: 2rem;
     padding: 0 5vw;
-    font-family: 'Antonio', sans-serif;
+    font-family: var(--font-heading);
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.4);
     box-sizing: border-box;

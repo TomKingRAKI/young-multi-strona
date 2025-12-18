@@ -142,7 +142,7 @@
 }
 
 .newsong-subtitle {
-  font-family: 'Antonio', sans-serif;
+  font-family: var(--font-heading);
   font-size: 1.2vw;
   letter-spacing: 0.5em;
   color: var(--color-text-primary);

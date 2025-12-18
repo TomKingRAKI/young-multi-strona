@@ -40,10 +40,11 @@
 
 .merch-header-inner {
   text-align: center;
+
 }
 
 .merch-subtitle {
-  font-family: 'Antonio', sans-serif;
+  font-family: var(--font-heading);
   font-size: 0.833vw;
   /* 16px */
   letter-spacing: 0.3125vw;
@@ -62,6 +63,7 @@
   line-height: 1;
   letter-spacing: -0.1vw;
   /* -2px approx */
+  color: #000;
 }
 
 /* 4. GRID PRODUKTÓW */
@@ -188,7 +190,7 @@
   color: #fff;
   padding: 0.208vw 0.416vw;
   /* 4px 8px */
-  font-family: 'Antonio', sans-serif;
+  font-family: var(--font-heading);
   font-weight: bold;
   font-size: 0.583vw;
   /* ~11.2px (0.7rem) */
@@ -208,7 +210,7 @@
   border: none;
   padding: 0.625vw 1.5625vw;
   /* 12px 30px */
-  font-family: 'Antonio', sans-serif;
+  font-family: var(--font-heading);
   font-size: 0.833vw;
   /* 16px */
   font-weight: bold;
@@ -231,7 +233,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  font-family: 'Antonio', sans-serif;
+  font-family: var(--font-heading);
   padding: 0 0.52vw;
   /* 10px */
 }
