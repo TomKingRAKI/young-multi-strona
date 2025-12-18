@@ -187,11 +187,7 @@ const NewSong = forwardRef((props, ref) => {
                   alt="Thumbnail"
                   loading="lazy"
                 />
-                <video
-                  src="/assets/preview-loop.mp4"
-                  className="video-preview-loop"
-                  muted loop autoPlay playsInline
-                />
+
                 <div className="play-button">
                   <div className="play-icon"></div>
                 </div>

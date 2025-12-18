@@ -52,6 +52,7 @@ const SmokeTransition = ({ progress }) => {
                 muted
                 playsInline
                 preload="auto"
+                crossOrigin="anonymous"
             />
         </div>
     );
