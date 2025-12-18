@@ -1,0 +1,6 @@
+/* Plik: /src/components/MagneticButton/MagneticButton.css */
+
+.magnetic-button {
+    display: inline-block;
+    will-change: transform;
+}

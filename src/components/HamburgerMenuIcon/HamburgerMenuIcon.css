@@ -12,6 +12,11 @@
 
   cursor: pointer;
   z-index: 1001;
+
+  /* Button reset styles */
+  background: none;
+  border: none;
+  padding: 0;
 }
 
 .hamburger-bar {

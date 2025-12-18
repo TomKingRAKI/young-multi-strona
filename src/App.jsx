@@ -1,16 +1,20 @@
 // Plik: /src/App.jsx
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, Suspense, lazy } from 'react';
 import { AnimatePresence, useScroll } from 'framer-motion';
 
-// Importy komponentów
+// Critical components - load immediately
 import Hero from './components/Hero/Hero';
 import Preloader from './components/Preloader/Preloader';
-import NewSong from './components/NewSong/NewSong';
 import Header from './components/Header/Header';
 import MenuOverlay from './components/MenuOverlay/MenuOverlay';
-import Merch from './components/Merch/Merch';
-import Contact from './components/Contact/Contact';
+// import CustomCursor from './components/CustomCursor/CustomCursor'; // DISABLED - uncomment to re-enable
+import GrainOverlay from './components/GrainOverlay/GrainOverlay';
+
+// Lazy-loaded components - load when needed (below the fold)
+const NewSong = lazy(() => import('./components/NewSong/NewSong'));
+const Merch = lazy(() => import('./components/Merch/Merch'));
+const Contact = lazy(() => import('./components/Contact/Contact'));
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -87,6 +91,13 @@ function App() {
 
   return (
     <>
+      {/* CUSTOM CURSOR - DISABLED
+      <CustomCursor />
+      */}
+
+      {/* GRAIN OVERLAY - Film texture */}
+      <GrainOverlay />
+
       {/* UNIFIED PRELOADER */}
       <AnimatePresence>
         {isLoading && <Preloader onComplete={handlePreloaderComplete} />}
@@ -107,9 +118,11 @@ function App() {
 
         <main>
           <Hero ref={heroRef} scrollY={scrollY} startAnimation={!isLoading} />
-          <NewSong ref={newSongRef} isMenuOpen={isMenuOpen} />
-          <Merch ref={merchRef} />
-          <Contact ref={contactRef} />
+          <Suspense fallback={null}>
+            <NewSong ref={newSongRef} isMenuOpen={isMenuOpen} />
+            <Merch ref={merchRef} />
+            <Contact ref={contactRef} />
+          </Suspense>
         </main>
       </>
     </>
@@ -117,3 +130,4 @@ function App() {
 }
 
 export default App;
+

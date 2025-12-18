@@ -181,6 +181,7 @@ const NewSong = forwardRef((props, ref) => {
                   src="https://img.youtube.com/vi/A0I1MrojmJE/maxresdefault.jpg"
                   className="video-thumb-img"
                   alt="Thumbnail"
+                  loading="lazy"
                 />
                 <video
                   src="/assets/preview-loop.mp4"

@@ -2,6 +2,7 @@ import React, { useRef, useState, forwardRef, useImperativeHandle } from 'react'
 import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
 import { FaInstagram, FaYoutube, FaSpotify } from 'react-icons/fa';
 import './Contact.css';
+import MagneticButton from '../MagneticButton/MagneticButton';
 
 import multiImg from '../../assets/multi-dark.png';
 
@@ -80,16 +81,19 @@ const Contact = forwardRef((props, ref) => {
                   <SocialButton
                     icon={<FaInstagram />}
                     link="https://www.instagram.com/youngmulti/"
+                    label="Instagram Young Multi"
                   />
 
                   <SocialButton
                     icon={<FaYoutube />}
                     link="https://www.youtube.com/channel/UCiP6-9NHJ36BCxUWL-gNKYg"
+                    label="YouTube Young Multi"
                   />
 
                   <SocialButton
                     icon={<FaSpotify />}
                     link="https://open.spotify.com/artist/5CkZIA3WpaEFxp0wSjMzRI"
+                    label="Spotify Young Multi"
                   />
                 </div>
               </div>
@@ -155,17 +159,20 @@ const CopyLink = ({ email }) => {
   );
 };
 
-const SocialButton = ({ icon, link }) => (
-  <motion.a
-    href={link}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="social-btn"
-    whileHover={{ scale: 1.2, backgroundColor: "#fff", color: "#000" }}
-    whileTap={{ scale: 0.9 }}
-  >
-    {icon}
-  </motion.a>
+const SocialButton = ({ icon, link, label }) => (
+  <MagneticButton strength={0.4}>
+    <motion.a
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="social-btn"
+      aria-label={label}
+      whileHover={{ scale: 1.2, backgroundColor: "#fff", color: "#000" }}
+      whileTap={{ scale: 0.9 }}
+    >
+      {icon}
+    </motion.a>
+  </MagneticButton>
 );
 
 export default Contact;

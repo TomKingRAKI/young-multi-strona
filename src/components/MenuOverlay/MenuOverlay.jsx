@@ -14,6 +14,14 @@ function MenuOverlay({ onSectionClick }) {
     }
   };
 
+  // Keyboard support for Enter and Space
+  const handleKeyDown = (e, sectionId) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleLinkClick(sectionId);
+    }
+  };
+
   // --- WARIANTY ANIMACJI (Klasyczne) ---
 
   const overlayVariants = {
@@ -53,6 +61,8 @@ function MenuOverlay({ onSectionClick }) {
       initial="initial"
       animate="animate"
       exit="exit"
+      role="dialog"
+      aria-label="Menu nawigacyjne"
     >
       <div className="menu-grid">
         {/* LEWA STRONA */}
@@ -66,7 +76,13 @@ function MenuOverlay({ onSectionClick }) {
 
         {/* PRAWA STRONA */}
         <div className="menu-links-side">
-          <motion.nav variants={linksContainerVariants} initial="initial" animate="animate" exit="exit">
+          <motion.nav
+            variants={linksContainerVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            aria-label="Główna nawigacja"
+          >
             {[
               { id: 'home', label: 'HOME' },
               { id: 'nowa-piosenka', label: 'NOWA PIOSENKA' },
@@ -74,9 +90,16 @@ function MenuOverlay({ onSectionClick }) {
               { id: 'o-mnie', label: 'O MNIE' },
               { id: 'merch', label: 'MERCH' },
               { id: 'kontakt', label: 'KONTAKT' }
-            ].map((item) => (
+            ].map((item, index) => (
               <motion.div key={item.id} variants={linkItemVariants} className="menu-link-wrapper">
-                <a onClick={() => handleLinkClick(item.id)} className="menu-link">
+                <a
+                  onClick={() => handleLinkClick(item.id)}
+                  onKeyDown={(e) => handleKeyDown(e, item.id)}
+                  className="menu-link"
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Przejdź do sekcji ${item.label}`}
+                >
                   {item.label}
                 </a><br />
               </motion.div>

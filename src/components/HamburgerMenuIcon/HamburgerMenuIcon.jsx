@@ -18,7 +18,13 @@ function HamburgerMenuIcon({ isOpen, onClick }) {
   };
 
   return (
-    <div className="hamburger-menu-icon" onClick={onClick}>
+    <button
+      className="hamburger-menu-icon"
+      onClick={onClick}
+      type="button"
+      aria-label={isOpen ? "Zamknij menu" : "Otwórz menu"}
+      aria-expanded={isOpen}
+    >
       <motion.div
         className="hamburger-bar top-bar"
         variants={topBarVariants}
@@ -32,7 +38,7 @@ function HamburgerMenuIcon({ isOpen, onClick }) {
         animate={isOpen ? "open" : "closed"}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       />
-    </div>
+    </button>
   );
 }
 

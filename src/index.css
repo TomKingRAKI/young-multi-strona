@@ -81,6 +81,11 @@
       #aaaaaa 100%);
 }
 
+/* Smooth scroll for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   background-color: var(--color-bg-primary);
@@ -168,4 +173,30 @@ li {
 /* Corner piece (where scrollbars meet) */
 ::-webkit-scrollbar-corner {
   background: #050505;
+}
+
+/* === ACCESSIBILITY: Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* === ACCESSIBILITY: Focus Visible Styles === */
+*:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+  border-radius: 4px;
 }
