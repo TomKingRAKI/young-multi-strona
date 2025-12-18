@@ -52,9 +52,9 @@ const Hero = forwardRef(function Hero({ scrollY, startAnimation = false }, ref) 
           src="/multiztlem.png"
           alt="Tło"
           className="hero-background-image"
-          initial={{ opacity: 0 }}
-          animate={startAnimation ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
+          initial={{ opacity: 0, scale: 1.15 }} // Started zoomed in
+          animate={startAnimation ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.15 }}
+          transition={{ duration: 1.5, delay: 0.1, ease: [0.76, 0, 0.24, 1] }} // Match transition curve
         />
 
         <div className="hero-person-container">
@@ -62,20 +62,21 @@ const Hero = forwardRef(function Hero({ scrollY, startAnimation = false }, ref) 
             src={cutoutPerson}
             alt="Artysta"
             className="hero-cutout-image"
-            initial={{ opacity: 0 }}
-            animate={startAnimation ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
+            initial={{ opacity: 0, scale: 1.1, y: 50 }}
+            animate={startAnimation ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 1.1, y: 50 }}
+            transition={{ duration: 1.4, delay: 0.2, ease: [0.76, 0, 0.24, 1] }}
           />
         </div>
 
         <motion.h1
           className="text-young"
           style={{ x: isMobile ? 0 : xYoung }}
-          initial={{ y: "-44%", opacity: 0 }}
-          animate={startAnimation ? { y: "-34%", opacity: 1 } : { y: "-44%", opacity: 0 }}
+          initial={{ y: "-20%", opacity: 0, filter: "blur(10px)" }}
+          animate={startAnimation ? { y: "-34%", opacity: 1, filter: "blur(0px)" } : { y: "-20%", opacity: 0, filter: "blur(10px)" }}
           transition={{
-            y: { duration: 0.8, delay: 1.0 },
-            opacity: { duration: 0.8, delay: 1.0 }
+            y: { duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] },
+            opacity: { duration: 1.0, delay: 0.4 },
+            filter: { duration: 1.0, delay: 0.4 }
           }}
         >
           YOUNG
@@ -84,11 +85,12 @@ const Hero = forwardRef(function Hero({ scrollY, startAnimation = false }, ref) 
         <motion.h2
           className="text-multi"
           style={{ x: isMobile ? 0 : xMulti }}
-          initial={{ y: "70%", opacity: 0 }}
-          animate={startAnimation ? { y: "80%", opacity: 1 } : { y: "70%", opacity: 0 }}
+          initial={{ y: "90%", opacity: 0, filter: "blur(10px)" }}
+          animate={startAnimation ? { y: "80%", opacity: 1, filter: "blur(0px)" } : { y: "90%", opacity: 0, filter: "blur(10px)" }}
           transition={{
-            y: { duration: 0.8, delay: 1.2 },
-            opacity: { duration: 0.8, delay: 1.2 }
+            y: { duration: 1.2, delay: 0.6, ease: [0.16, 1, 0.3, 1] },
+            opacity: { duration: 1.0, delay: 0.6 },
+            filter: { duration: 1.0, delay: 0.6 }
           }}
         >
           MULTI

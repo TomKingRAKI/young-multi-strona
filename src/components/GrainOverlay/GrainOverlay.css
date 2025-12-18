@@ -2,10 +2,10 @@
 
 .grain-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
     pointer-events: none;
     z-index: 99990;
     opacity: 0.04;
