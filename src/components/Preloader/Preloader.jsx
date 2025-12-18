@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Preloader.css';
 import logoWhite from '../../assets/logoyflbiale.png'; // Import logo
+import { usePerformance } from '../../context/PerformanceContext';
+import useFpsMonitor from '../../hooks/useFpsMonitor';
 
 // System checks logic (simplified for cleaner component)
 const useSystemChecks = () => {
   const [issues, setIssues] = useState([]);
-  const fpsRef = useRef({ frames: [], startTime: 0 });
 
   useEffect(() => {
     const checkGPU = () => {
@@ -19,8 +20,6 @@ const useSystemChecks = () => {
 
     const hasGPU = checkGPU();
     if (!hasGPU) setIssues(prev => [...prev, { type: 'gpu', title: 'No GPU Detected' }]);
-
-    // FPS Check not blocking the main flow anymore, just logging
   }, []);
 
   return issues;
@@ -69,6 +68,10 @@ function Preloader({ onComplete }) {
   const [progress, setProgress] = useState(0);
   const issues = useSystemChecks();
 
+  // FPS Monitoring
+  const { setFps } = usePerformance();
+  const { startMonitoring, stopMonitoring } = useFpsMonitor();
+
   useEffect(() => {
     const runSequence = async () => {
       // 1. Initial State
@@ -97,6 +100,9 @@ function Preloader({ onComplete }) {
       document.body.style.overflow = 'auto';
       document.documentElement.style.overflow = 'auto'; // Ensure scrollbar is visible
 
+      // START MONITORING
+      startMonitoring();
+
       // Scroll Down (~2s)
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
       await new Promise(resolve => setTimeout(resolve, 2000));
@@ -104,6 +110,10 @@ function Preloader({ onComplete }) {
       // Scroll Up (~1.5s)
       window.scrollTo({ top: 0, behavior: 'smooth' });
       await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // STOP MONITORING & REGISTER FPS
+      const avgFps = stopMonitoring();
+      setFps(avgFps);
 
       // 4. Final Sync
       clearInterval(progressInterval);
@@ -124,7 +134,7 @@ function Preloader({ onComplete }) {
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
     };
-  }, [onComplete]);
+  }, [onComplete, setFps, startMonitoring, stopMonitoring]);
 
   return (
     <motion.div

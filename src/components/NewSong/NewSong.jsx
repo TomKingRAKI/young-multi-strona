@@ -142,7 +142,11 @@ const NewSong = forwardRef((props, ref) => {
     >
       <div className="newsong-sticky-viewport">
 
-        <motion.div className="newsong-train-track" style={{ x: trackX }}>
+        {/* Forces GPU layer for the track */}
+        <motion.div
+          className="newsong-train-track"
+          style={{ x: trackX, willChange: 'transform' }}
+        >
 
           {/* PANEL 1: NEW SONG */}
           <div className="newsong-panel">
@@ -160,7 +164,7 @@ const NewSong = forwardRef((props, ref) => {
             {/* TYTUŁ */}
             <motion.div
               className="newsong-text-wrapper"
-              style={{ y: textY }}
+              style={{ y: textY, willChange: 'transform' }}
             >
               <h1 className="newsong-title">GDZIE MOJ DOM</h1>
               <h2 className="newsong-subtitle">OUT NOW • STREAMING EVERYWHERE</h2>
@@ -169,7 +173,7 @@ const NewSong = forwardRef((props, ref) => {
             {/* WIDEO */}
             <motion.div
               className="video-container"
-              style={{ y: videoY, x: videoX, scale: videoScale }}
+              style={{ y: videoY, x: videoX, scale: videoScale, willChange: 'transform' }}
               onClick={() => window.open('https://www.youtube.com/watch?v=A0I1MrojmJE&list=RDA0I1MrojmJE&start_radio=1', '_blank')}
             >
               <div className="tech-corner tl"></div>
@@ -197,7 +201,7 @@ const NewSong = forwardRef((props, ref) => {
             {/* LINKI */}
             <motion.div
               className="links-container"
-              style={{ opacity: linksOpacity, x: linksX, y: linksY }}
+              style={{ opacity: linksOpacity, x: linksX, y: linksY, willChange: 'transform, opacity' }}
             >
               <InteractiveLink
                 name="SPOTIFY"
@@ -238,7 +242,8 @@ const NewSong = forwardRef((props, ref) => {
             zoomTargetRef={zoomTargetRef}
             style={{
               scale: gramophoneScale,
-              transformOrigin: calculatedOrigin
+              transformOrigin: calculatedOrigin,
+              willChange: 'transform' // Critical for the big zoom
             }}
           />
         </motion.div>
@@ -246,7 +251,12 @@ const NewSong = forwardRef((props, ref) => {
         {/* WARSTWY DODATKOWE (About, Smoke) */}
         <motion.div
           className="newsong-about-layer"
-          style={{ opacity: aboutOpacity, clipPath: aboutClipPath, pointerEvents: aboutPointerEvents }}
+          style={{
+            opacity: aboutOpacity,
+            clipPath: aboutClipPath,
+            pointerEvents: aboutPointerEvents,
+            willChange: 'clip-path, opacity' // Critical for the circle reveal
+          }}
         >
           <About externalOpacity={aboutOpacity} />
         </motion.div>

@@ -9,7 +9,6 @@ import Preloader from './components/Preloader/Preloader';
 import Header from './components/Header/Header';
 import MenuOverlay from './components/MenuOverlay/MenuOverlay';
 // import CustomCursor from './components/CustomCursor/CustomCursor'; // DISABLED - uncomment to re-enable
-import GrainOverlay from './components/GrainOverlay/GrainOverlay';
 import useAdaptiveFavicon from './hooks/useAdaptiveFavicon';
 
 // Lazy-loaded components - load when needed (below the fold)
@@ -18,7 +17,17 @@ const Merch = lazy(() => import('./components/Merch/Merch'));
 const Contact = lazy(() => import('./components/Contact/Contact'));
 const NotFound = lazy(() => import('./components/NotFound/NotFound'));
 
+import { PerformanceProvider } from './context/PerformanceContext';
+
 function App() {
+  return (
+    <PerformanceProvider>
+      <AppContent />
+    </PerformanceProvider>
+  );
+}
+
+function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -111,9 +120,6 @@ function App() {
       {/* CUSTOM CURSOR - DISABLED
       <CustomCursor />
       */}
-
-      {/* GRAIN OVERLAY - Film texture */}
-      <GrainOverlay />
 
       {/* UNIFIED PRELOADER */}
       <AnimatePresence>

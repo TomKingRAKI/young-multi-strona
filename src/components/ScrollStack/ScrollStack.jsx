@@ -67,19 +67,18 @@ const ScrollStack = ({
     }, []
   );
 
-  // --- ZMIANA: CAŁA NOWA LOGIKA AKTUALIZACJI ---
+  // ZMIANA: Przechowujemy przeliczone wartości w refie, żeby nie liczyć ich przy każdym scrollu
+  const layoutValuesRef = useRef({
+    stackPositionPx: 0,
+    scaleEndPositionPx: 0
+  });
+
   const updateCardTransforms = useCallback((scrollTop) => {
     if (!cardsRef.current.length || isUpdatingRef.current) return;
     isUpdatingRef.current = true;
 
-    const { containerHeight } = getScrollData();
-    if (containerHeight === 0) {
-      isUpdatingRef.current = false;
-      return;
-    }
-
-    const stackPositionPx = parsePercentage(stackPosition, containerHeight);
-    const scaleEndPositionPx = parsePercentage(scaleEndPosition, containerHeight);
+    // Pobieramy cached values
+    const { stackPositionPx, scaleEndPositionPx } = layoutValuesRef.current;
 
     cardsRef.current.forEach((card, i) => {
       if (!card) return;
@@ -145,9 +144,9 @@ const ScrollStack = ({
 
     isUpdatingRef.current = false;
   }, [
-    itemScale, itemStackDistance, stackPosition, scaleEndPosition, baseScale,
+    itemScale, itemStackDistance, baseScale,
     rotationAmount, blurAmount,
-    calculateProgress, parsePercentage, getScrollData, getElementOffset
+    calculateProgress, getElementOffset
   ]);
 
   // --- Logika mapowania scrolla (z 'useSpring') ---
@@ -171,6 +170,13 @@ const ScrollStack = ({
     if (!innerContent) return;
     const cards = Array.from(scroller.querySelectorAll('.scroll-stack-card'));
     if (cards.length === 0) return;
+
+    // PRZELICZAMY WARTOŚCI LAYOUTU RAZ
+    const containerHeight = scroller.clientHeight;
+    layoutValuesRef.current = {
+      stackPositionPx: parsePercentage(stackPosition, containerHeight),
+      scaleEndPositionPx: parsePercentage(scaleEndPosition, containerHeight)
+    };
 
     cardsRef.current = cards;
 
@@ -205,6 +211,7 @@ const ScrollStack = ({
       isUpdatingRef.current = false;
     };
   }, [
+    stackPosition, scaleEndPosition, parsePercentage, // Zależności layoutu
     itemDistance, updateCardTransforms, children
   ]);
 

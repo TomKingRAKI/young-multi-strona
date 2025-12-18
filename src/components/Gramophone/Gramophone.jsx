@@ -105,6 +105,7 @@ function Gramophone({ contentProgress, isMenuOpen, style, zoomTargetRef }) {
           x: '0%',
           y: '0%',
           z: 0,
+          willChange: 'transform'
         }}
       >
         <div className="gramophone-css-grid" />
@@ -117,6 +118,7 @@ function Gramophone({ contentProgress, isMenuOpen, style, zoomTargetRef }) {
           skewY: skewY,
           scale: scale,
           x: '0%',
+          willChange: 'transform' // Ensure 3D transforms are GPU accelerated
         }}
       >
         <h1 className="gramophone-title-static">
