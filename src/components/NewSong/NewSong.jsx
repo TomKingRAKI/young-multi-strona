@@ -280,7 +280,7 @@ const InteractiveLink = ({ name, url, baseColor, onHoverStart, onHoverEnd }) => 
     if (isAnimating) return;
     setIsAnimating(true);
 
-    const chars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&@';
     const originalName = name;
     const iterations = 15;
 
@@ -289,15 +289,15 @@ const InteractiveLink = ({ name, url, baseColor, onHoverStart, onHoverEnd }) => 
 
       if (i < iterations - 5) {
         setDisplayName(
-          originalName.split('').map(() =>
-            chars[Math.floor(Math.random() * chars.length)]
+          originalName.split('').map((char) =>
+            char === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)]
           ).join('')
         );
       } else {
         const revealIndex = Math.floor((i - (iterations - 5)) / 5 * originalName.length);
         setDisplayName(
           originalName.split('').map((char, idx) =>
-            idx <= revealIndex ? char : chars[Math.floor(Math.random() * chars.length)]
+            idx <= revealIndex ? char : (char === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)])
           ).join('')
         );
       }
