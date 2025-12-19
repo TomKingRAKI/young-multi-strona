@@ -7,7 +7,7 @@ import { SpectralGuide } from './SpectralGuide';
 import { FaceFeatures } from './FaceFeatures';
 import { SpeechBubble } from './SpeechBubble';
 
-import headImg from '../../assets/head1.png';
+import headImg from '../../assets/head1.avif';
 
 // (Twoje tablice factsLeft i factsRight pozostają bez zmian...)
 const factsLeft = [

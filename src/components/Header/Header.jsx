@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import './Header.css';
-import logoYFL from '../../assets/logoyflczarne.png';
+import logoYFL from '../../assets/logoyflczarne.avif';
 import HamburgerMenuIcon from '../HamburgerMenuIcon/HamburgerMenuIcon';
 
 function Header({ onMenuClick, isMenuOpen, onCloseClick, startAnimation = false }) {

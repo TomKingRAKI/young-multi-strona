@@ -4,7 +4,7 @@ import React, { useState, useEffect, forwardRef } from 'react';
 import { motion, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import './Hero.css';
 
-import cutoutPerson from '../../assets/cutout-person.png';
+import cutoutPerson from '../../assets/cutout-person.avif';
 
 const Hero = forwardRef(function Hero({ scrollY, startAnimation = false }, ref) {
   const mouseX = useMotionValue(0);
@@ -49,7 +49,7 @@ const Hero = forwardRef(function Hero({ scrollY, startAnimation = false }, ref) 
       <motion.div className="hero-content-wrapper" style={{ y }}>
 
         <motion.img
-          src="/multiztlem.png"
+          src="/multiztlem.avif"
           alt="Tło"
           className="hero-background-image"
           initial={{ opacity: 0, scale: 1.15 }} // Started zoomed in

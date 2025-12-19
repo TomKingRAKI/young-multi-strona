@@ -4,7 +4,7 @@ import { FaInstagram, FaYoutube, FaSpotify } from 'react-icons/fa';
 import './Contact.css';
 import MagneticButton from '../MagneticButton/MagneticButton';
 
-import multiImg from '../../assets/multi-dark.png';
+import multiImg from '../../assets/multi-dark.avif';
 
 const Contact = forwardRef((props, ref) => {
   const containerRef = useRef(null);

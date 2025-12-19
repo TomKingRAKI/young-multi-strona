@@ -5,10 +5,10 @@ import { useTransform, motion } from 'framer-motion';
 import './Gramophone.css';
 import ScrollStack, { ScrollStackItem } from '../ScrollStack/ScrollStack';
 
-import nowaFalaCover from '../../assets/NowafalaCover.jpg';
-import trapstarCover from '../../assets/trapstarCover.jpg';
-import tadCover from '../../assets/tadCover.jpg';
-import toxicCover from '../../assets/toxicCover.jpg';
+import nowaFalaCover from '../../assets/NowafalaCover.avif';
+import trapstarCover from '../../assets/trapstarCover.avif';
+import tadCover from '../../assets/tadCover.avif';
+import toxicCover from '../../assets/toxicCover.avif';
 
 const albums = [
   {

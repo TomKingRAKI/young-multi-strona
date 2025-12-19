@@ -4,9 +4,9 @@ import './Merch.css';
 import ScrollFloat from '../ScrollFloat/ScrollFloat';
 
 // Importy zdjęć
-import hoodieImg from '../../assets/hoodie1.png';
-import hoodie1Img from '../../assets/hoodie2.png';
-import teeImg from '../../assets/tshirt.png';
+import hoodieImg from '../../assets/hoodie1.avif';
+import hoodie1Img from '../../assets/hoodie2.avif';
+import teeImg from '../../assets/tshirt.avif';
 
 const products = [
   {

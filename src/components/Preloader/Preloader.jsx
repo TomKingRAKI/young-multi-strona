@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Preloader.css';
-import logoWhite from '../../assets/logoyflbiale.png'; // Import logo
+import logoWhite from '../../assets/logoyflbiale.avif'; // Import logo
 import { usePerformance } from '../../context/PerformanceContext';
 import useFpsMonitor from '../../hooks/useFpsMonitor';
 
