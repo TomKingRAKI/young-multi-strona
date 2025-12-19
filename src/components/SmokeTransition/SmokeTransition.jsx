@@ -51,7 +51,7 @@ const SmokeTransition = ({ progress }) => {
                 src="/smoke-transition.mp4"
                 muted
                 playsInline
-                preload="auto"
+                preload="metadata"
                 crossOrigin="anonymous"
             />
         </div>

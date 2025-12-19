@@ -186,6 +186,8 @@ const NewSong = forwardRef((props, ref) => {
                   className="video-thumb-img"
                   alt="Thumbnail"
                   loading="lazy"
+                  width="1280"
+                  height="720"
                 />
 
                 <div className="play-button">

@@ -1,10 +1,11 @@
 /* Plik: /src/components/Hero/Hero.css */
 
 @font-face {
-  font-family: 'Bernoru';
-  src: url('/fonts/bernoru-blackultraexpanded.otf') format('opentype');
+  font-family: "Bernoru";
+  src: url("/fonts/bernoru-blackultraexpanded.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 .hero-section {
@@ -48,15 +49,12 @@
 /* --- WARSTWA 1: Napis "YOUNG" --- */
 .text-young {
   z-index: 1;
-  font-family: 'Antonio', sans-serif;
+  font-family: "Antonio", sans-serif;
   font-weight: 700;
   font-size: 24vw;
   letter-spacing: 0.03em;
   color: #000;
-  text-shadow:
-    4px 4px 0px #333333,
-    8px 8px 0px #666666,
-    12px 12px 0px #999999;
+  text-shadow: 4px 4px 0px #333333, 8px 8px 0px #666666, 12px 12px 0px #999999;
   transform: translateY(-34%);
   pointer-events: none;
 }
@@ -84,7 +82,7 @@
 .text-multi {
   z-index: 3;
   color: #fff;
-  font-family: 'Bernoru', sans-serif;
+  font-family: "Bernoru", sans-serif;
   text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.6);
   font-size: 7vw;
   transform: translateY(80%);
@@ -122,10 +120,7 @@
 @media (max-width: 1024px) {
   .text-young {
     font-size: 20vw;
-    text-shadow:
-      3px 3px 0px #333333,
-      6px 6px 0px #666666,
-      9px 9px 0px #999999;
+    text-shadow: 3px 3px 0px #333333, 6px 6px 0px #666666, 9px 9px 0px #999999;
   }
 
   .text-multi {
@@ -140,9 +135,7 @@
     transform: translateY(-30%);
     z-index: 4;
     -webkit-text-stroke: 1px white;
-    text-shadow:
-      2px 2px 0px #333333,
-      4px 4px 0px #666666;
+    text-shadow: 2px 2px 0px #333333, 4px 4px 0px #666666;
   }
 
   .text-multi {
@@ -161,9 +154,7 @@
   .text-young {
     font-size: 35vw;
     transform: translateY(-28%);
-    text-shadow:
-      2px 2px 0px #333333,
-      3px 3px 0px #666666;
+    text-shadow: 2px 2px 0px #333333, 3px 3px 0px #666666;
   }
 
   .text-multi {

@@ -179,7 +179,7 @@ const ProductContent = ({ product }) => (
         rel="noopener noreferrer"
         className="img-link"
       >
-        <img src={product.image} alt={product.name} className="product-img" loading="lazy" />
+        <img src={product.image} alt={product.name} className="product-img" loading="lazy" width="400" height="400" />
       </a>
 
       <a
