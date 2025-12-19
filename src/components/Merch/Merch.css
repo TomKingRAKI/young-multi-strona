@@ -40,7 +40,6 @@
 
 .merch-header-inner {
   text-align: center;
-
 }
 
 .merch-subtitle {
@@ -80,57 +79,6 @@
   z-index: 5;
 }
 
-/* --- RESPONSIVE DESIGN (MOBILE) --- */
-@media (max-width: 768px) {
-
-  .merch-sticky-wrapper {
-    /* Ustawiamy na start, żeby tytuł mógł być na górze */
-    justify-content: flex-start;
-    padding-top: 0;
-  }
-
-  .merch-header-wrapper {
-    position: absolute;
-    /* Tytuł startuje przyklejony do samej góry, ale JS go przesunie w dół na starcie (do 25vh) */
-    top: 0;
-    left: 0;
-    width: 100%;
-    margin-bottom: 0;
-    pointer-events: none;
-    /* Dajemy mu flexa, żeby centrował tekst */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: auto;
-  }
-
-  /* POPRAWKA 2 i 3: OBNIŻENIE PRODUKTÓW */
-  .products-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    width: 100%;
-    height: auto;
-
-    /* TU JEST KLUCZ: */
-    /* Odpychamy produkty mocno w dół (35% wysokości ekranu) */
-    /* Dzięki temu nie nachodzą na tytuł i jest odstęp */
-    margin-top: 35vh;
-  }
-
-  .product-card {
-    grid-area: 1 / 1;
-    width: 85vw;
-    max-width: 380px;
-    margin: 0 auto;
-  }
-
-  .merch-subtitle {
-    font-size: 0.75rem;
-    letter-spacing: 3px;
-  }
-}
-
 /* --- WNĘTRZE KARTY (BEZ ZMIAN) --- */
 
 .products-grid:hover .product-card:not(:hover) {
@@ -157,7 +105,8 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease;
   overflow: visible;
 }
 
@@ -268,14 +217,101 @@
   color: #000;
 }
 
-/* TABLET */
-@media (max-width: 1024px) {
+.img-link {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* --- RESPONSIVE DESIGN (MOBILE) --- */
+@media (max-width: 768px) {
+  .merch-sticky-wrapper {
+    justify-content: flex-start;
+    padding-top: 0;
+  }
+
+  .merch-header-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin-bottom: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    min-height: 80px;
+  }
+
   .products-grid {
-    gap: 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    justify-items: center;
+    margin-top: 35vh;
+  }
+
+  .product-card {
+    grid-area: 1 / 1;
+    width: 85vw;
+    max-width: 380px;
+    margin: 0 auto;
+    justify-self: center;
+  }
+
+  .merch-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+  }
+
+  .merch-title-text {
+    font-size: 2.5rem !important;
+    letter-spacing: -1px;
+  }
+
+  .status-badge {
+    right: 10px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+  }
+
+  .shop-btn {
+    bottom: 16px;
+    transform: translateX(-50%) translateY(16px);
+    padding: 12px 28px;
+    font-size: 0.9rem;
+  }
+
+  .product-card:hover .shop-btn {
+    transform: translateX(-50%) translateY(-8px);
+  }
+
+  .product-info {
+    margin-top: 12px;
+    padding: 0 10px;
   }
 
   .product-name {
-    font-size: 1rem;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+  }
+
+  .product-status {
+    font-size: 0.75rem;
+    margin-top: 3px;
+    letter-spacing: 1px;
+  }
+
+  .product-price {
+    font-size: 1.1rem;
   }
 }
 
@@ -288,16 +324,37 @@
   .product-card {
     width: 90vw;
   }
-}
 
-.img-link {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  /* Link staje się kontenerem */
-  justify-content: center;
-  /* Centruje obrazek w poziomie */
-  align-items: center;
-  /* Centruje obrazek w pionie */
-  text-decoration: none;
+  .status-badge {
+    right: 8px;
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+  }
+
+  .shop-btn {
+    bottom: 14px;
+    padding: 10px 22px;
+    font-size: 0.85rem;
+  }
+
+  .product-info {
+    margin-top: 10px;
+    padding: 0 8px;
+  }
+
+  .product-name {
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .product-status {
+    font-size: 0.7rem;
+    margin-top: 2px;
+    letter-spacing: 1px;
+  }
+
+  .product-price {
+    font-size: 1rem;
+  }
 }
