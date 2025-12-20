@@ -555,7 +555,7 @@
 @media (max-width: 480px) {
   .gramophone-title-static {
     font-size: 1.8rem;
-    padding: 8rem 0 3rem 0;
+    padding: 5rem 0 3rem 0;
     /* Zwiększony padding z góry */
     text-shadow: 1px 1px 0 #444, 2px 2px 2px rgba(0, 0, 0, 0.3);
   }
