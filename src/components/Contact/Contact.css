@@ -487,7 +487,7 @@
     }
 
     .contact-link {
-        font-size: clamp(1.5rem, 5vw, 2.5rem);
+        font-size: clamp(1.2rem, 4vw, 2rem);
         padding: 0.8rem 0;
         gap: 15px;
     }
@@ -550,7 +550,7 @@
     }
 
     .contact-link {
-        font-size: clamp(1.2rem, 6vw, 2rem);
+        font-size: clamp(1rem, 5vw, 1.5rem);
         padding: 0.6rem 0;
         gap: 10px;
     }

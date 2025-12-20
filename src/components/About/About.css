@@ -270,7 +270,7 @@
   /* Kontener na tytuł */
   .mobile-title-container {
     width: 100%;
-    padding-top: 4rem;
+    padding-top: 10rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -322,8 +322,8 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
-    max-width: 450px;
+    width: 100%;
+    max-width: 550px;
     height: auto;
     z-index: 10;
     pointer-events: none;
@@ -350,7 +350,7 @@
   }
 
   .mobile-title-container {
-    padding-top: 2rem;
+    padding-top: 4rem;
   }
 }
 
