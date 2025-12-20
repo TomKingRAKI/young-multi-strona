@@ -72,14 +72,14 @@ function AppContent() {
   const handleSectionClick = useCallback((sectionId) => {
     // HOME always scrolls to top
     if (sectionId === 'home') {
-      window.scrollTo({ top: 0 });
+      window.scrollTo({ top: 0, behavior: 'auto' });
       setTimeout(() => setIsMenuOpen(false), 300);
       return;
     }
 
     // KONTAKT scrolls to very bottom of page
     if (sectionId === 'kontakt') {
-      window.scrollTo({ top: document.body.scrollHeight });
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'auto' });
       setTimeout(() => setIsMenuOpen(false), 300);
       return;
     }
@@ -93,19 +93,15 @@ function AppContent() {
 
       switch (sectionId) {
         case 'nowa-piosenka':
-          // Scroll to start of NewSong
           scrollPosition = newSongTop;
           break;
         case 'dyskolgrafia':
-          // Gramophone starts around 35% of NewSong
           scrollPosition = newSongTop + (newSongHeight * 0.35);
           break;
         case 'o-mnie':
-          // About starts around 70% of NewSong
           scrollPosition = newSongTop + (newSongHeight * 0.70);
           break;
         case 'merch':
-          // Merch is after NewSong
           if (merchRef?.current) {
             scrollPosition = merchRef.current.offsetTop;
           }
@@ -114,11 +110,40 @@ function AppContent() {
           scrollPosition = 0;
       }
 
-      window.scrollTo({ top: scrollPosition });
+      // TELEPORT: Instant scroll as requested
+      window.scrollTo({ top: scrollPosition, behavior: 'auto' });
     }
 
     // Close menu with delay to allow exit animation
     setTimeout(() => setIsMenuOpen(false), 300);
+  }, []);
+
+  // === ASSET PRELOADING ===
+  React.useEffect(() => {
+    // 1. Code Splitting Preload
+    import('./components/NewSong/NewSong');
+    import('./components/Merch/Merch');
+    import('./components/Contact/Contact');
+    import('./components/NotFound/NotFound');
+
+    // 2. Heavy Assets Preload
+    const preloadImage = (src) => {
+      const img = new Image();
+      img.src = src;
+    };
+
+    // Preload About Head
+    preloadImage('/src/assets/head1.avif');
+    // Note: In Vite dev mode paths might differ, but usually imports are better. 
+    // Since we can't easily import inside useEffect without top-level, we rely on browser cache if we imported it above.
+    // Let's use the public path if possible or just trust the earlier import if we add it at top.
+
+    // Explicitly fetching the video to force buffer
+    const video = document.createElement('video');
+    video.src = '/smoke-transition.mp4';
+    video.preload = 'auto';
+    video.load();
+
   }, []);
 
   const handlePreloaderComplete = () => {

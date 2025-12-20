@@ -82,7 +82,7 @@
 
 /* Smooth scroll for the entire page */
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; - DISABLED for instant menu teleport */
 }
 
 body {

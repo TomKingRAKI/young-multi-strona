@@ -20,8 +20,10 @@ const NewSong = forwardRef((props, ref) => {
 
   // === SNAJPER ===
   const zoomTargetRef = useRef(null);
+  // Stabilizacja: Zakładamy, że celownik jest ZAWSZE na środku ekranu (0.5, 0.5).
+  // Dynamiczne mierzenie (getBoundingClientRect) powodowało błędy przy szybkim scrollu/skokach w menu.
   const originX = useMotionValue(0.5);
-  const originY = useMotionValue(0.78);
+  const originY = useMotionValue(0.5); // ZMIANA: Startujemy od środka (było 0.78)
   const calculatedOrigin = useMotionTemplate`${useTransform(originX, x => x * 100)}% ${useTransform(originY, y => y * 100)}%`;
 
   // --- RESPANSYWNOŚĆ ---
@@ -88,30 +90,38 @@ const NewSong = forwardRef((props, ref) => {
       }
     }
 
-    // Logika celowania - OPTIMIZED: Measure once to avoid layout thrashing
-    if (latest > 0.6 && latest < 0.65 && zoomTargetRef.current && !zoomTargetRef.current.dataset.measured) {
-      // Wykonujemy pomiar TYLKO RAZ przed rozpoczęciem głównego zoomu (który startuje od 0.65)
+    // Logika celowania - DYNAMIC TRACKING
+    // 1. Śledzimy cel continuously w bezpiecznej strefie (0.55 - 0.649)
+    // Dzięki temu origin jest zawsze aktualny w momencie startu zooma (0.65).
+    if (latest > 0.55 && latest < 0.649 && zoomTargetRef.current) {
       const rect = zoomTargetRef.current.getBoundingClientRect();
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
-      
+
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
-      // Delikatny offset, żeby wycentrować dokładnie w celowniku
-      const OFFSET_X = 0.009; 
+
+      // Delikatny offset
+      const OFFSET_X = 0.009;
       const OFFSET_Y = 0.05;
-      
+
       const newX = (centerX / windowWidth) + OFFSET_X;
       const newY = (centerY / windowHeight) + OFFSET_Y;
-      
+
       originX.set(newX);
       originY.set(newY);
-      
-      // Oznaczamy jako zmierzone, żeby nie katować layoutu w pętli
+
       zoomTargetRef.current.dataset.measured = "true";
-    } else if (latest < 0.5 && zoomTargetRef.current?.dataset.measured) {
-      // Reset flagi jak wrócimy na górę
+    }
+    // 2. Fallback dla strzału z menu (Teleport za 0.65)
+    else if (latest >= 0.65 && zoomTargetRef.current && !zoomTargetRef.current.dataset.measured) {
+      // Teleport: Używamy "idealnego środka" (z offsetem)
+      originX.set(0.509);
+      originY.set(0.55);
+      zoomTargetRef.current.dataset.measured = "true";
+    }
+    // 3. Reset
+    else if (latest < 0.5 && zoomTargetRef.current?.dataset.measured) {
       delete zoomTargetRef.current.dataset.measured;
     }
   });
