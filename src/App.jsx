@@ -10,6 +10,7 @@ import Header from './components/Header/Header';
 import MenuOverlay from './components/MenuOverlay/MenuOverlay';
 // import CustomCursor from './components/CustomCursor/CustomCursor'; // DISABLED - uncomment to re-enable
 import useAdaptiveFavicon from './hooks/useAdaptiveFavicon';
+import head1Img from './assets/head1.avif'; // Explicit import for preload
 
 // Lazy-loaded components - load when needed (below the fold)
 const NewSong = lazy(() => import('./components/NewSong/NewSong'));
@@ -133,10 +134,7 @@ function AppContent() {
     };
 
     // Preload About Head
-    preloadImage('/src/assets/head1.avif');
-    // Note: In Vite dev mode paths might differ, but usually imports are better. 
-    // Since we can't easily import inside useEffect without top-level, we rely on browser cache if we imported it above.
-    // Let's use the public path if possible or just trust the earlier import if we add it at top.
+    preloadImage(head1Img);
 
     // Explicitly fetching the video to force buffer
     const video = document.createElement('video');
@@ -188,4 +186,3 @@ function AppContent() {
 }
 
 export default App;
-
