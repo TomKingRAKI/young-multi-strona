@@ -66,8 +66,9 @@ function About({ externalOpacity }) {
   // Nowy stan: czy tekst się pisze?
   const [isTyping, setIsTyping] = useState(false);
 
-  // --- NOWE STANY DLA INTERAKCJI TWARZY ---
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  // --- NOWE STANY DLA INTERAKCJI TWARZY (OPTIMIZED: Use MotionValue instead of State) ---
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
   const [isIdle, setIsIdle] = useState(false); // Czy użytkownik jest nieaktywny?
   const idleTimerRef = useRef(null); // Referencja do timera
 
@@ -75,8 +76,6 @@ function About({ externalOpacity }) {
   const ghostDreadOffsetX = useMotionValue(0);
   const ghostDreadOffsetY = useMotionValue(0);
   // Obiekt, który przekażemy do JellyDread i SpectralGuide
-  // Używamy useMemo lub po prostu tworzymy obiekt, ale JellyDread oczekuje {x, y}
-  // Ważne: JellyDread używa .get() i .onChange() na x i y, więc to muszą być MotionValues.
   const ghostDreadOffset = { x: ghostDreadOffsetX, y: ghostDreadOffsetY };
 
   // Funkcja resetująca timer bezczynności. Wywoływana przy każdej akcji.
@@ -92,10 +91,11 @@ function About({ externalOpacity }) {
     }
   }, [activeInfo]);
 
-  // Handler ruchu myszki w obrębie sekcji
+  // Handler ruchu myszki w obrębie sekcji - OPTIMIZED: No re-renders!
   const handleMouseMove = (e) => {
     if (isMobile) return; // Nie obsługujemy na mobile
-    setMousePos({ x: e.clientX, y: e.clientY });
+    mouseX.set(e.clientX);
+    mouseY.set(e.clientY);
     resetIdleTimer(); // Ruch myszką resetuje timer
   };
 
@@ -221,7 +221,8 @@ function About({ externalOpacity }) {
 
         {/* B. Komponent Twarzy (Oczy i Usta) */}
         <FaceFeatures
-          mousePos={mousePos}
+          mouseX={mouseX}
+          mouseY={mouseY}
           mouthState={currentMouthState}
         />
 

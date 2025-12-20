@@ -91,9 +91,17 @@ const NewSong = forwardRef((props, ref) => {
     }
 
     // Logika celowania - DYNAMIC TRACKING
-    // 1. Śledzimy cel continuously w bezpiecznej strefie (0.55 - 0.649)
-    // Dzięki temu origin jest zawsze aktualny w momencie startu zooma (0.65).
-    if (latest > 0.55 && latest < 0.649 && zoomTargetRef.current) {
+    if (isMobile) {
+      // NA MOBILE: Nie mierzymy nic. Zakładamy środek ekranu.
+      // To eliminuje "Forced Reflow" (91ms) w PageSpeed Insights na telefonach.
+      if (!zoomTargetRef.current?.dataset.measured) {
+        originX.set(0.5);
+        originY.set(0.5);
+        if (zoomTargetRef.current) zoomTargetRef.current.dataset.measured = "true";
+      }
+    }
+    // DESKTOP: Original Logic
+    else if (latest > 0.55 && latest < 0.649 && zoomTargetRef.current) {
       const rect = zoomTargetRef.current.getBoundingClientRect();
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;

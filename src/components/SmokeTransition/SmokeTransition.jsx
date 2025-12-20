@@ -6,6 +6,10 @@ const SmokeTransition = ({ progress }) => {
     const videoRef = useRef(null);
     const [isMobile, setIsMobile] = useState(false);
 
+    // Optymalizacja wideo: RAF loop vars
+    const latestProgressRef = useRef(0);
+    const isUpdatingRef = useRef(false);
+
     // Detekcja mobile
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -17,24 +21,38 @@ const SmokeTransition = ({ progress }) => {
     // Animacja kurtyny na mobile - przesuwa się od lewej do prawej
     const curtainX = useTransform(progress, [0, 1], ['-100%', '0%']);
 
-    // Desktop: scroll-driven video
+    // Desktop: scroll-driven video (OPTIMIZED with RAF)
     useMotionValueEvent(progress, "change", (latestValue) => {
-        if (isMobile) return; // Na mobile nie używamy video
+        if (isMobile) return;
+        latestProgressRef.current = latestValue;
 
+        // Jeśli klatka nie jest akurat liczona, zlecamy nową.
+        // To ogranicza aktualizacje do częstotliwości odświeżania ekranu (60Hz/144Hz)
+        // zamiast katować przeglądarkę przy każdym pikselu scrolla (np. 1000Hz przy szybkiej myszce).
+        if (!isUpdatingRef.current) {
+            isUpdatingRef.current = true;
+            requestAnimationFrame(updateVideoFrame);
+        }
+    });
+
+    const updateVideoFrame = () => {
         const video = videoRef.current;
-        if (video && video.duration) {
-            const targetTime = latestValue * video.duration;
-            if (Number.isFinite(targetTime)) {
+        // Sprawdzamy readyState > 0, żeby nie męczyć pustego wideo
+        if (video && video.duration && video.readyState >= 1) {
+            const targetTime = latestProgressRef.current * video.duration;
+            // Mały "treshold" (np. 0.001s), żeby nie aktualizować, jak nic się nie zmieniło
+            if (Number.isFinite(targetTime) && Math.abs(video.currentTime - targetTime) > 0.001) {
                 video.currentTime = targetTime;
             }
         }
-    });
+        isUpdatingRef.current = false;
+    };
 
     // MOBILE: Sliding curtain effect
     if (isMobile) {
         return (
             <div className="smoke-transition-container">
-                <motion.div 
+                <motion.div
                     className="mobile-curtain"
                     style={{ x: curtainX }}
                 />
@@ -51,7 +69,7 @@ const SmokeTransition = ({ progress }) => {
                 src="/smoke-transition.mp4"
                 muted
                 playsInline
-                preload="metadata"
+                preload="auto" // Zmiana na auto, żeby buforowało agresywniej
                 crossOrigin="anonymous"
             />
         </div>

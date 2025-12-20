@@ -1,7 +1,7 @@
 // Plik: /src/components/About/FaceFeatures.jsx
 
 import React, { useEffect, useState } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation, useTransform } from 'framer-motion';
 
 // --- KONFIGURACJA POZYCJI (%) ---
 // Pozycje względem kontenera 1000x960
@@ -11,7 +11,7 @@ const RIGHT_EYE_X_PCT = 56; // 560 / 1000 * 100
 
 const MOUTH_POS_PCT = { x: 48.5, y: 72.9 }; // 485/1000, 700/960
 
-export const FaceFeatures = ({ mousePos, mouthState }) => {
+export const FaceFeatures = ({ mouseX, mouseY, mouthState }) => {
     // Stan szerokości okna do obliczeń
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -21,29 +21,25 @@ export const FaceFeatures = ({ mousePos, mouthState }) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // --- LOGIKA ŚLEDZENIA OCZU (SKALOWALNA) ---
-    const calculatePupilPos = (eyeXPct, eyeYPct) => {
-        if (!mousePos.x && !mousePos.y) return { x: 0, y: 0 };
-
+    // --- LOGIKA ŚLEDZENIA OCZU (OPTIMIZED: GPU/MotionValue) ---
+    const getPupilOffset = (mX, mY, eyeXPct, eyeYPct) => {
+        // Obliczenia geometryczne bez re-renderów Reacta
         const containerCenterX = windowWidth / 2;
         const containerCenterY = window.innerHeight / 2;
 
-        // Obliczamy szerokość kontenera (52.08vw) i wysokość (z aspect ratio 1000/960)
         const currentContainerW = windowWidth * 0.5208;
         const currentContainerH = currentContainerW * (960 / 1000);
 
-        // Obliczamy offset oka od środka ekranu
         const offsetX = ((eyeXPct - 50) / 100) * currentContainerW;
         const offsetY = ((eyeYPct - 50) / 100) * currentContainerH;
 
         const eyeScreenX = containerCenterX + offsetX;
         const eyeScreenY = containerCenterY + offsetY;
 
-        const dx = mousePos.x - eyeScreenX;
-        const dy = mousePos.y - eyeScreenY;
+        const dx = mX - eyeScreenX;
+        const dy = mY - eyeScreenY;
 
         const angle = Math.atan2(dy, dx);
-        // Ograniczamy ruch źrenicy (skalujemy limit też? 8px to ok. 0.4vw)
         const limit = windowWidth * 0.004;
         const distance = Math.min(limit, Math.hypot(dx, dy) / 20);
 
@@ -53,8 +49,12 @@ export const FaceFeatures = ({ mousePos, mouthState }) => {
         };
     };
 
-    const leftPupil = calculatePupilPos(LEFT_EYE_X_PCT, EYE_Y_PCT);
-    const rightPupil = calculatePupilPos(RIGHT_EYE_X_PCT, EYE_Y_PCT);
+    // Tworzymy transformacje podpięte bezpośrednio pod ruch myszki
+    const leftPupilX = useTransform([mouseX, mouseY], ([x, y]) => getPupilOffset(x, y, LEFT_EYE_X_PCT, EYE_Y_PCT).x);
+    const leftPupilY = useTransform([mouseX, mouseY], ([x, y]) => getPupilOffset(x, y, LEFT_EYE_X_PCT, EYE_Y_PCT).y);
+
+    const rightPupilX = useTransform([mouseX, mouseY], ([x, y]) => getPupilOffset(x, y, RIGHT_EYE_X_PCT, EYE_Y_PCT).x);
+    const rightPupilY = useTransform([mouseX, mouseY], ([x, y]) => getPupilOffset(x, y, RIGHT_EYE_X_PCT, EYE_Y_PCT).y);
 
     // --- LOGIKA ANIMACJI UST (Wartości VW) ---
     const mouthControls = useAnimation();
@@ -124,7 +124,7 @@ export const FaceFeatures = ({ mousePos, mouthState }) => {
                         borderRadius: '50%', backgroundColor: 'black',
                         x: '-50%', y: '-50%', // Centrowanie źrenicy
                         zIndex: 1,
-                        translateX: leftPupil.x, translateY: leftPupil.y
+                        translateX: leftPupilX, translateY: leftPupilY
                     }}
                 />
             </div>
@@ -139,7 +139,7 @@ export const FaceFeatures = ({ mousePos, mouthState }) => {
                         borderRadius: '50%', backgroundColor: 'black',
                         x: '-50%', y: '-50%',
                         zIndex: 1,
-                        translateX: rightPupil.x, translateY: rightPupil.y
+                        translateX: rightPupilX, translateY: rightPupilY
                     }}
                 />
             </div>
