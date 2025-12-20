@@ -47,12 +47,13 @@
   overflow: hidden;
 }
 
-/* Szum (Noise) - daje teksturę betonu/filmu */
+/* Szum (Noise) - ZALEŻNOŚĆ STATYCZNA (Base64 PNG) zamiast filtra SVG */
 .noise-overlay {
   position: absolute;
   inset: 0;
-  opacity: 0.07;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  /* Lightweight noise pattern (64x64) */
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyBAMAAADsEZWCAAAAGFBMVEUAAAA5OTkAAABMTExERERmZmYzMzMyMjJl7m+WAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfmCwYODiI3sC8AAAAAB3RJTUUH5gsGDg4iN7AvAAAAAHjaY2AYBaNgFIyCUTAKRsEoGAWjYBSMglEwCkbBKBgFo2AUjIJRMApGwSgYBaNgFIyCUTAKRsEoGAWjYBSMglEwCkbBKBgFo2AUjIJRMApGwSgYBaNgFIyCUTAKRsEoGAWjYBSMglEwCkbBKBgFo2AUjIJRMApGwSgYBagAAKF/AQE+sPc+AAAAAElFTkSuQmCC");
   pointer-events: none;
 }
 
@@ -317,9 +318,9 @@
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-  /* Blur effect */
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  /* Blur effect - MOVED TO DESKTOP ONLY for performance */
+  /* backdrop-filter: blur(5px); */
+  /* -webkit-backdrop-filter: blur(5px); */
 
   /* Subtelny cień */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
@@ -380,6 +381,14 @@
   color: #fff;
   /* Biały tekst */
   box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+}
+
+/* DESKTOP ONLY: Blur effect */
+@media (min-width: 1025px) {
+  .streaming-link {
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
 }
 
 .link-arrow {

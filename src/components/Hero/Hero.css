@@ -75,7 +75,7 @@
   width: 100%;
   object-fit: cover;
   object-position: center;
-  filter: drop-shadow(3px 3px 8px rgba(0, 0, 0, 0.2));
+  /* filter: drop-shadow(3px 3px 8px rgba(0, 0, 0, 0.2)); - REMOVED FOR PERFORMANCE */
 }
 
 /* --- WARSTWA 3: Napis "MULTI" --- */

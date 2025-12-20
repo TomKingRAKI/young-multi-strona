@@ -88,19 +88,31 @@ const NewSong = forwardRef((props, ref) => {
       }
     }
 
-    // Logika celowania
-    if (latest > 0.55 && latest < 0.64 && zoomTargetRef.current) {
+    // Logika celowania - OPTIMIZED: Measure once to avoid layout thrashing
+    if (latest > 0.6 && latest < 0.65 && zoomTargetRef.current && !zoomTargetRef.current.dataset.measured) {
+      // Wykonujemy pomiar TYLKO RAZ przed rozpoczęciem głównego zoomu (który startuje od 0.65)
       const rect = zoomTargetRef.current.getBoundingClientRect();
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
+      
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      const OFFSET_X = 0.009;
+      
+      // Delikatny offset, żeby wycentrować dokładnie w celowniku
+      const OFFSET_X = 0.009; 
       const OFFSET_Y = 0.05;
+      
       const newX = (centerX / windowWidth) + OFFSET_X;
       const newY = (centerY / windowHeight) + OFFSET_Y;
+      
       originX.set(newX);
       originY.set(newY);
+      
+      // Oznaczamy jako zmierzone, żeby nie katować layoutu w pętli
+      zoomTargetRef.current.dataset.measured = "true";
+    } else if (latest < 0.5 && zoomTargetRef.current?.dataset.measured) {
+      // Reset flagi jak wrócimy na górę
+      delete zoomTargetRef.current.dataset.measured;
     }
   });
 
@@ -279,6 +291,7 @@ const InteractiveLink = ({ name, url, baseColor, onHoverStart, onHoverEnd }) => 
   const [isAnimating, setIsAnimating] = useState(false);
 
   const linkRef = useRef(null);
+  const rectRef = useRef(null); // Cache dla rect
   const magneticX = useMotionValue(0);
   const magneticY = useMotionValue(0);
   const springX = useSpring(magneticX, { damping: 15, stiffness: 150 });
@@ -315,10 +328,18 @@ const InteractiveLink = ({ name, url, baseColor, onHoverStart, onHoverEnd }) => 
     setIsAnimating(false);
   };
 
-  const handleMouseMove = (e) => {
-    if (!linkRef.current) return;
+  const handleMouseEnter = () => {
+    if (linkRef.current) {
+      rectRef.current = linkRef.current.getBoundingClientRect();
+    }
+    scrambleText();
+    onHoverStart?.();
+  };
 
-    const rect = linkRef.current.getBoundingClientRect();
+  const handleMouseMove = (e) => {
+    if (!rectRef.current) return;
+
+    const rect = rectRef.current;
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
@@ -345,10 +366,7 @@ const InteractiveLink = ({ name, url, baseColor, onHoverStart, onHoverEnd }) => 
       target="_blank"
       rel="noopener noreferrer"
       style={{ x: springX, y: springY }}
-      onMouseEnter={() => {
-        scrambleText();
-        onHoverStart?.();
-      }}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >

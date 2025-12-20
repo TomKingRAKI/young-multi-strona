@@ -20,6 +20,16 @@ const NotFound = lazy(() => import('./components/NotFound/NotFound'));
 import { PerformanceProvider } from './context/PerformanceContext';
 
 function App() {
+  // === PRELOAD CRITICAL CHUNKS ===
+  // Start fetching these bundles immediately, even if they are suspended.
+  // This ensures that when the Preloader finishes, the code is already here.
+  React.useEffect(() => {
+    import('./components/NewSong/NewSong');
+    import('./components/Merch/Merch');
+    import('./components/Contact/Contact');
+    import('./components/NotFound/NotFound');
+  }, []);
+
   return (
     <PerformanceProvider>
       <AppContent />
