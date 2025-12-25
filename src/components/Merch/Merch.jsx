@@ -3,10 +3,13 @@ import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-mot
 import './Merch.css';
 import ScrollFloat from '../ScrollFloat/ScrollFloat';
 
-// Importy zdjęć
-import hoodieImg from '../../assets/hoodie1.avif';
-import hoodie1Img from '../../assets/hoodie2.avif';
-import teeImg from '../../assets/tshirt.avif';
+// Responsive image imports with srcset
+import hoodieSrcset from '../../assets/hoodie1.avif?w=200;400;600&format=avif&as=srcset';
+import hoodieFallback from '../../assets/hoodie1.avif?w=400&format=avif';
+import hoodie1Srcset from '../../assets/hoodie2.avif?w=200;400;600&format=avif&as=srcset';
+import hoodie1Fallback from '../../assets/hoodie2.avif?w=400&format=avif';
+import teeSrcset from '../../assets/tshirt.avif?w=200;400;600&format=avif&as=srcset';
+import teeFallback from '../../assets/tshirt.avif?w=400&format=avif';
 
 const products = [
   {
@@ -14,7 +17,8 @@ const products = [
     name: "YFL PATCH HOODIE",
     price: "499,00 ZŁ",
     status: "WYPRZEDANE",
-    image: hoodieImg,
+    srcset: hoodieSrcset,
+    fallback: hoodieFallback,
     link: "https://sklep.yfl.pl/products/yfl-limited-hoodie"
   },
   {
@@ -22,7 +26,8 @@ const products = [
     name: "YFL EMBOSSED HOODIE",
     price: "459,00 ZŁ",
     status: "WYPRZEDANE",
-    image: hoodie1Img,
+    srcset: hoodie1Srcset,
+    fallback: hoodie1Fallback,
     link: "https://sklep.yfl.pl/products/yfl-hoodie"
   },
   {
@@ -30,7 +35,8 @@ const products = [
     name: "STEALTH ERA T-SHIRT",
     price: "179,00 ZŁ",
     status: "WYPRZEDANE",
-    image: teeImg,
+    srcset: teeSrcset,
+    fallback: teeFallback,
     link: "https://sklep.yfl.pl/products/yfl-basic-tshirt-1"
   }
 ];
@@ -179,7 +185,16 @@ const ProductContent = ({ product }) => (
         rel="noopener noreferrer"
         className="img-link"
       >
-        <img src={product.image} alt={product.name} className="product-img" loading="lazy" width="400" height="400" />
+        <img
+          srcSet={product.srcset}
+          src={product.fallback}
+          sizes="(max-width: 768px) 80vw, 30vw"
+          alt={product.name}
+          className="product-img"
+          loading="lazy"
+          width="400"
+          height="400"
+        />
       </a>
 
       <a

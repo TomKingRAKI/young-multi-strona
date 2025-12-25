@@ -1,36 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://img.youtube.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Antonio:wght@700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="preload"
-      href="/fonts/bernoru-blackultraexpanded.otf"
-      as="font"
-      type="font/otf"
-      crossorigin
-    />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YOUNG MULTI | OFFICIAL WEBSITE</title>
-    <meta
-      name="description"
-      content="Experience the world of Young Multi. New music, merch, and interactive journey."
-    />
-  </head>
+<html lang="pl">
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://img.youtube.com" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@700&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/bernoru-blackultraexpanded.otf" as="font" type="font/otf" crossorigin />
+
+  <!-- Favicon & Icons -->
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://young-multi-strona.netlify.app/" />
+
+  <!-- Primary Meta Tags -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YOUNG MULTI | OFFICIAL WEBSITE</title>
+  <meta name="description"
+    content="Oficjalna strona Young Multi. Nowa muzyka, merch i interaktywna podróż przez świat artysty." />
+  <meta name="author" content="Young Multi" />
+  <meta name="theme-color" content="#111111" />
+
+  <!-- JSON-LD Structured Data (Schema.org) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MusicGroup",
+    "name": "Young Multi",
+    "alternateName": "Michał Rychlik",
+    "url": "https://young-multi-strona.netlify.app/",
+    "image": "https://young-multi-strona.netlify.app/multiztlem.avif",
+    "description": "Polski raper i artysta znany z albumów Nowa Fala, Trapstar, Trap After Death i Toxic.",
+    "genre": ["Hip-Hop", "Trap", "Rap"],
+    "sameAs": [
+      "https://www.instagram.com/youngmulti/",
+      "https://www.youtube.com/@YoungMulti",
+      "https://open.spotify.com/artist/4RVnFyqkqn7VEb5r4wOdSY"
+    ],
+    "member": {
+      "@type": "Person",
+      "name": "Michał Rychlik",
+      "birthPlace": "Głubczyce, Poland"
+    }
+  }
+  </script>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://young-multi-strona.netlify.app/" />
+  <meta property="og:title" content="YOUNG MULTI | OFFICIAL WEBSITE" />
+  <meta property="og:description"
+    content="Oficjalna strona Young Multi. Nowa muzyka, merch i interaktywna podróż przez świat artysty." />
+  <meta property="og:image" content="https://young-multi-strona.netlify.app/multiztlem.avif" />
+  <meta property="og:locale" content="pl_PL" />
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://young-multi-strona.netlify.app/" />
+  <meta name="twitter:title" content="YOUNG MULTI | OFFICIAL WEBSITE" />
+  <meta name="twitter:description"
+    content="Oficjalna strona Young Multi. Nowa muzyka, merch i interaktywna podróż przez świat artysty." />
+  <meta name="twitter:image" content="https://young-multi-strona.netlify.app/multiztlem.avif" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>

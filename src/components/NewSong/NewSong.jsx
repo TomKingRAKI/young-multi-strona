@@ -159,6 +159,20 @@ const NewSong = forwardRef((props, ref) => {
   const smokeZIndex = useTransform(contentProgress, [0, 0.8, 0.81, 1], [0, 0, 100, 100]);
   const smokeOpacity = useTransform(contentProgress, [0.7, 0.8], [0, 1]);
 
+  // === PRELOAD ABOUT IMAGE WHEN IN GRAMOPHONE SECTION ===
+  const [aboutImagePreloaded, setAboutImagePreloaded] = useState(false);
+  useMotionValueEvent(contentProgress, "change", (latest) => {
+    // Preload About head image when user reaches ~40% (middle of Gramophone)
+    if (latest > 0.35 && !aboutImagePreloaded) {
+      const preloadImg = new Image();
+      preloadImg.src = '/assets/head1-B-vNzeSa.avif'; // Largest srcset variant
+      // Also preload the srcset variants
+      import('../../assets/head1.avif?w=800&format=avif').then(() => {
+        setAboutImagePreloaded(true);
+      });
+    }
+  });
+
   return (
     <motion.section
       id="nowa-piosenka"

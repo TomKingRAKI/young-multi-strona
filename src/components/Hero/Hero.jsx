@@ -4,7 +4,9 @@ import React, { useState, useEffect, forwardRef } from 'react';
 import { motion, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import './Hero.css';
 
-import cutoutPerson from '../../assets/cutout-person.avif';
+// Responsive image imports with srcset
+import cutoutPersonSrcset from '../../assets/cutout-person.avif?w=400;800;1200&format=avif&as=srcset';
+import cutoutPersonFallback from '../../assets/cutout-person.avif?w=800&format=avif';
 
 const Hero = forwardRef(function Hero({ scrollY, startAnimation = false }, ref) {
   const mouseX = useMotionValue(0);
@@ -61,7 +63,9 @@ const Hero = forwardRef(function Hero({ scrollY, startAnimation = false }, ref) 
 
         <div className="hero-person-container">
           <motion.img
-            src={cutoutPerson}
+            srcSet={cutoutPersonSrcset}
+            src={cutoutPersonFallback}
+            sizes="(max-width: 768px) 100vw, 50vw"
             alt="Artysta"
             className="hero-cutout-image"
             fetchPriority="high"

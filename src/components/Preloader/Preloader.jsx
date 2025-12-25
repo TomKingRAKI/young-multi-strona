@@ -79,6 +79,10 @@ function Preloader({ onComplete }) {
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
 
+      // === PRELOAD MENU IMAGE ===
+      const preloadMenuImage = new Image();
+      preloadMenuImage.src = '/menu-image.avif';
+
       // Start Progress Tween (0 -> 100% over ~4.5 seconds)
       const duration = 4500;
       const start = Date.now();

@@ -41,8 +41,6 @@ function useHeaderTheme() {
             if (activeSection) {
                 const newTheme = activeSection.dataset.headerTheme;
                 if (newTheme && newTheme !== lastThemeRef.current) {
-                    console.log('[useHeaderTheme] THEME CHANGE:', lastThemeRef.current, '->', newTheme,
-                        '| Section top:', Math.round(bestTop));
                     lastThemeRef.current = newTheme;
                     setTheme(newTheme);
                 }

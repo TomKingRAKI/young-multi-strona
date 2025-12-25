@@ -5,10 +5,15 @@ import { useTransform, motion } from 'framer-motion';
 import './Gramophone.css';
 import ScrollStack, { ScrollStackItem } from '../ScrollStack/ScrollStack';
 
-import nowaFalaCover from '../../assets/NowafalaCover.avif';
-import trapstarCover from '../../assets/trapstarCover.avif';
-import tadCover from '../../assets/tadCover.avif';
-import toxicCover from '../../assets/toxicCover.avif';
+// Responsive image imports with srcset
+import nowaFalaSrcset from '../../assets/NowafalaCover.avif?w=150;300;450&format=avif&as=srcset';
+import nowaFalaFallback from '../../assets/NowafalaCover.avif?w=300&format=avif';
+import trapstarSrcset from '../../assets/trapstarCover.avif?w=150;300;450&format=avif&as=srcset';
+import trapstarFallback from '../../assets/trapstarCover.avif?w=300&format=avif';
+import tadSrcset from '../../assets/tadCover.avif?w=150;300;450&format=avif&as=srcset';
+import tadFallback from '../../assets/tadCover.avif?w=300&format=avif';
+import toxicSrcset from '../../assets/toxicCover.avif?w=150;300;450&format=avif&as=srcset';
+import toxicFallback from '../../assets/toxicCover.avif?w=300&format=avif';
 
 const albums = [
   {
@@ -16,7 +21,8 @@ const albums = [
     title: 'NOWA FALA',
     year: '2017',
     styleId: 'nowa-fala',
-    cover: nowaFalaCover,
+    srcset: nowaFalaSrcset,
+    fallback: nowaFalaFallback,
     desc: 'Oficjalny debiut, który zadebiutował na 1. miejscu OLiS. Przełomowy moment przejścia z YouTube do rapu. Album finalnie pokrył się Platyną, a single takie jak "Plecak" czy "Pytasz mnie" stały się wiralami.',
     tracklist: ['1. Nowa Fala', '2. Pytasz mnie', '3. Plecak', '4. Pogba', '5. Diamenty (feat. Bedoes)', '6. ....']
   },
@@ -25,7 +31,8 @@ const albums = [
     title: 'TRAPSTAR',
     year: '2018',
     styleId: 'trapstar',
-    cover: trapstarCover,
+    srcset: trapstarSrcset,
+    fallback: trapstarFallback,
     desc: 'Album ugruntowujący pozycję na scenie newschoolu. Dojrzalsze brzmienie i mocni goście – m.in. Peja (na tracku "Podziały"), Bedoes i Żabson. Projekt ponownie trafił na szczyt listy OLiS.',
     tracklist: ['1. Trapstar', '2. Skrzydła', '3. Podziały (feat. Peja)', '4. Kosmita (feat. Żabson)', '5. Kiedy odejdę (feat. Bedoes)', '6. ....']
   },
@@ -34,8 +41,9 @@ const albums = [
     title: 'TRAP AFTER DEATH',
     year: '2019',
     styleId: 'tad',
-    cover: tadCover,
-    desc: 'Mroczny, spójny materiał wyprodukowany w całości przez Fast Life Sharky’ego. Mniej komercyjny, nastawiony na cięższy trap i eksperymenty. Gościnnie m.in. Żabson i Aleshen.',
+    srcset: tadSrcset,
+    fallback: tadFallback,
+    desc: 'Mroczny, spójny materiał wyprodukowany w całości przez Fast Life Sharky\'ego. Mniej komercyjny, nastawiony na cięższy trap i eksperymenty. Gościnnie m.in. Żabson i Aleshen.',
     tracklist: ['1. 9 żyć', '2. Skate 3', '3. Torba', '4. Modelki (feat. Aleshen)', '5. K4fle! (feat. Żabson)', '6. ....']
   },
   {
@@ -43,7 +51,8 @@ const albums = [
     title: 'TOXIC',
     year: '2021',
     styleId: 'toxic',
-    cover: toxicCover,
+    srcset: toxicSrcset,
+    fallback: toxicFallback,
     desc: 'Wielki powrót w stylu rage/hyperpop po przerwie wydawniczej. Album uzyskał status Platynowej Płyty. Gościnnie pojawili się m.in. White 2115, White Widow i Miszel.',
     tracklist: ['1. Toxic Luv (feat. White 2115)', '2. Bez serca', '3. Beksa', '4. Oscar (feat. White Widow)', '5. Sól', '6. ....']
   },
@@ -159,7 +168,7 @@ function Gramophone({ contentProgress, isMenuOpen, style, zoomTargetRef }) {
                         className="album-cover-flip-front"
                         style={{ rotateY: flipRotationY, opacity: frontOpacity }}
                       >
-                        <img src={album.cover} alt={album.title} loading="lazy" width="300" height="300" />
+                        <img srcSet={album.srcset} src={album.fallback} sizes="(max-width: 768px) 40vw, 20vw" alt={album.title} loading="lazy" width="300" height="300" />
                       </motion.div>
                       <motion.div
                         className="album-cover-flip-back"
@@ -180,7 +189,7 @@ function Gramophone({ contentProgress, isMenuOpen, style, zoomTargetRef }) {
                       </motion.div>
                     </div>
                   ) : (
-                    <img src={album.cover} alt={album.title} loading="lazy" width="300" height="300" />
+                    <img srcSet={album.srcset} src={album.fallback} sizes="(max-width: 768px) 40vw, 20vw" alt={album.title} loading="lazy" width="300" height="300" />
                   )}
                 </div>
 

@@ -7,7 +7,9 @@ import { SpectralGuide } from './SpectralGuide';
 import { FaceFeatures } from './FaceFeatures';
 import { SpeechBubble } from './SpeechBubble';
 
-import headImg from '../../assets/head1.avif';
+// Responsive image imports with srcset
+import headImgSrcset from '../../assets/head1.avif?w=400;800;1200&format=avif&as=srcset';
+import headImgFallback from '../../assets/head1.avif?w=800&format=avif';
 
 // (Twoje tablice factsLeft i factsRight pozostają bez zmian...)
 const factsLeft = [
@@ -184,7 +186,9 @@ function About({ externalOpacity }) {
 
         {/* Dół: Statyczna głowa */}
         <img
-          src={headImg}
+          srcSet={headImgSrcset}
+          src={headImgFallback}
+          sizes="(max-width: 768px) 80vw, 40vw"
           alt="Young Multi"
           className="about-head mobile-head"
           loading="lazy"
@@ -212,7 +216,9 @@ function About({ externalOpacity }) {
       <div className="about-avatar-container">
         {/* A. Zdjęcie głowy */}
         <img
-          src={headImg}
+          srcSet={headImgSrcset}
+          src={headImgFallback}
+          sizes="(max-width: 768px) 80vw, 40vw"
           alt="Young Multi"
           className="about-head"
           style={{ zIndex: 1 }}

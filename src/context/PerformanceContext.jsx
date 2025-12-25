@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useCallback, useMemo } from
 
 const PerformanceContext = createContext({
   tier: "high", // 'high' | 'medium' | 'low'
-  setFps: () => {},
+  setFps: () => { },
 });
 
 export const PerformanceProvider = ({ children }) => {
@@ -17,18 +17,6 @@ export const PerformanceProvider = ({ children }) => {
     } else {
       newTier = "high";
     }
-
-    // Console Log as requested
-    console.log(
-      `%c[Performance] FPS detected: ${fps.toFixed(
-        1
-      )} | Tier set to: ${newTier}`,
-      fps < 30
-        ? "color: red; font-weight: bold;"
-        : fps < 55
-        ? "color: orange; font-weight: bold;"
-        : "color: green; font-weight: bold;"
-    );
 
     setTier(newTier);
   }, []);

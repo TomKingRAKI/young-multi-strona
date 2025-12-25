@@ -199,9 +199,7 @@ export default function PixelCard({ variant = 'default', gap, speed, colors, noF
   };
 
   const onMouseEnter = () => {
-    console.log('PixelCard: MOUSE ENTER!'); 
     if (pixelsRef.current.length === 0) {
-      console.log('PixelCard: Wykryto pustą tablicę! Ponowna inicjalizacja...');
       initPixels();
     }
     handleAnimation('appear');
