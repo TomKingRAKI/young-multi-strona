@@ -9,6 +9,7 @@ import Preloader from './components/Preloader/Preloader';
 import Header from './components/Header/Header';
 import MenuOverlay from './components/MenuOverlay/MenuOverlay';
 import CustomCursor from './components/CustomCursor/CustomCursor';
+import SmoothScroll from './components/SmoothScroll/SmoothScroll';
 // import NoiseOverlay from './components/NoiseOverlay/NoiseOverlay'; // DISABLED
 import useAdaptiveFavicon from './hooks/useAdaptiveFavicon';
 import head1Img from './assets/head1.avif'; // Explicit import for preload
@@ -153,6 +154,7 @@ function AppContent() {
     <>
       {/* CUSTOM CURSOR */}
       <CustomCursor />
+      <SmoothScroll />
 
       {/* NOISE OVERLAY - DISABLED
        <NoiseOverlay />
