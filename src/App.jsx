@@ -8,7 +8,8 @@ import Hero from './components/Hero/Hero';
 import Preloader from './components/Preloader/Preloader';
 import Header from './components/Header/Header';
 import MenuOverlay from './components/MenuOverlay/MenuOverlay';
-// import CustomCursor from './components/CustomCursor/CustomCursor'; // DISABLED - uncomment to re-enable
+import CustomCursor from './components/CustomCursor/CustomCursor';
+// import NoiseOverlay from './components/NoiseOverlay/NoiseOverlay'; // DISABLED
 import useAdaptiveFavicon from './hooks/useAdaptiveFavicon';
 import head1Img from './assets/head1.avif'; // Explicit import for preload
 
@@ -150,8 +151,11 @@ function AppContent() {
 
   return (
     <>
-      {/* CUSTOM CURSOR - DISABLED
+      {/* CUSTOM CURSOR */}
       <CustomCursor />
+
+      {/* NOISE OVERLAY - DISABLED
+       <NoiseOverlay />
       */}
 
       {/* UNIFIED PRELOADER */}

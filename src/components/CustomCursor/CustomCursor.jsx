@@ -6,77 +6,80 @@ import './CustomCursor.css';
 
 function CustomCursor() {
     const [isDragging, setIsDragging] = useState(false);
+    const [isHovering, setIsHovering] = useState(false);
 
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
-    const cursorScale = useMotionValue(1);
 
-    // Smooth spring animation (used when not dragging)
+    // Smooth spring animation
     const springConfig = { damping: 25, stiffness: 300 };
     const cursorXSpring = useSpring(cursorX, springConfig);
     const cursorYSpring = useSpring(cursorY, springConfig);
+
+    // Scale animation
+    const cursorScale = useMotionValue(1);
     const scaleSpring = useSpring(cursorScale, { damping: 20, stiffness: 400 });
 
     useEffect(() => {
         const moveCursor = (e) => {
             cursorX.set(e.clientX);
             cursorY.set(e.clientY);
+
+            // Event delegation for hover state
+            const target = e.target;
+            const isInteractive = target.closest('a, button, [role="button"], .product-card, .streaming-link, input, textarea, select, .interactive');
+
+            if (isInteractive && !isDragging) {
+                if (!isHovering) {
+                    scaleSpring.set(2);
+                    setIsHovering(true);
+                }
+            } else {
+                if (isHovering && !isDragging) {
+                    scaleSpring.set(1);
+                    setIsHovering(false);
+                }
+            }
         };
 
-        const handleMouseEnterLink = () => {
-            cursorScale.set(2);
-        };
-
-        const handleMouseLeaveLink = () => {
-            cursorScale.set(1);
-        };
-
-        // Detect drag start on draggable elements
         const handleDragStart = () => {
             setIsDragging(true);
-            cursorScale.set(1.5);
+            scaleSpring.set(1.5);
         };
 
         const handleDragEnd = () => {
             setIsDragging(false);
-            cursorScale.set(1);
+            scaleSpring.set(isHovering ? 2 : 1);
         };
 
-        // Track mouse movement
+        // Track mouse movement and hovers via delegation
         window.addEventListener('mousemove', moveCursor);
 
-        // Track mouseup globally (for drag end)
+        // Track drag on jelly dread handles (keep legacy listeners if needed, or stick to delegation if possible)
+        // For specific drag logic that might be preventDefault-heavy, we might stick to specific listeners or just global mouseup
         window.addEventListener('mouseup', handleDragEnd);
 
-        // Track hover on interactive elements
-        const interactiveElements = document.querySelectorAll('a, button, [role="button"], .product-card, .streaming-link');
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', handleMouseEnterLink);
-            el.addEventListener('mouseleave', handleMouseLeaveLink);
-        });
-
-        // Track drag on jelly dread handles
-        const draggableElements = document.querySelectorAll('.jelly-dread-handle');
-        draggableElements.forEach(el => {
-            el.addEventListener('mousedown', handleDragStart);
-        });
+        // For specific draggables, we might still want to listen `mousedown` if we can't delegate easily
+        // But for "jelly-dread-handle", let's try delegation too or keep it simple. 
+        // Let's rely on the previous implementation's specific logic for dragging if it was complex, 
+        // but here we just toggle visual state.
+        const handleMouseDown = (e) => {
+            if (e.target.closest('.jelly-dread-handle')) {
+                handleDragStart();
+            }
+        };
+        window.addEventListener('mousedown', handleMouseDown);
 
         return () => {
             window.removeEventListener('mousemove', moveCursor);
             window.removeEventListener('mouseup', handleDragEnd);
-            interactiveElements.forEach(el => {
-                el.removeEventListener('mouseenter', handleMouseEnterLink);
-                el.removeEventListener('mouseleave', handleMouseLeaveLink);
-            });
-            draggableElements.forEach(el => {
-                el.removeEventListener('mousedown', handleDragStart);
-            });
+            window.removeEventListener('mousedown', handleMouseDown);
         };
-    }, [cursorX, cursorY, cursorScale]);
+    }, [cursorX, cursorY, scaleSpring, isHovering, isDragging]);
 
     // Hide on touch devices
     if (typeof window !== 'undefined' && 'ontouchstart' in window) {
-        return null;
+        return null; // Return null effectively disables it
     }
 
     // Use direct position when dragging, spring animation otherwise
@@ -109,4 +112,3 @@ function CustomCursor() {
 }
 
 export default CustomCursor;
-

@@ -115,7 +115,7 @@ const Contact = forwardRef((props, ref) => {
             <footer className="main-footer">
               <span>© 2025 YFL. ALL RIGHTS RESERVED.</span>
               <a href="https://www.youtube.com/@itompoland" target="_blank" rel="noopener noreferrer" className="creator-link">
-                STRONĘ WYKONAŁ ITOM ↗
+                DESIGN & CODE: TOMASZ SZMAJDA (ITOM) • UNIWERSYTET OPOLSKI ↗
               </a>
             </footer>
 

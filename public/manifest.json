@@ -1,0 +1,21 @@
+{
+    "name": "YOUNG MULTI | OFFICIAL EXPERIENCE",
+    "short_name": "YFL WORLD",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#111111",
+    "theme_color": "#111111",
+    "icons": [
+        {
+            "src": "/favicon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/favicon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "orientation": "portrait-primary"
+}
