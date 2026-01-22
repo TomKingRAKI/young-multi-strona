@@ -1,7 +1,7 @@
 // Plik: /src/components/About/FaceFeatures.jsx
 
 import React, { useEffect, useState } from 'react';
-import { motion, useAnimation, useTransform } from 'framer-motion';
+import { motion, useAnimation, useTransform, useSpring } from 'framer-motion';
 
 // --- KONFIGURACJA POZYCJI (%) ---
 // Pozycje względem kontenera 1000x960
@@ -49,12 +49,18 @@ export const FaceFeatures = ({ mouseX, mouseY, mouthState }) => {
         };
     };
 
-    // Tworzymy transformacje podpięte bezpośrednio pod ruch myszki
-    const leftPupilX = useTransform([mouseX, mouseY], ([x, y]) => getPupilOffset(x, y, LEFT_EYE_X_PCT, EYE_Y_PCT).x);
-    const leftPupilY = useTransform([mouseX, mouseY], ([x, y]) => getPupilOffset(x, y, LEFT_EYE_X_PCT, EYE_Y_PCT).y);
+    // --- SYNC WITH CUSTOM CURSOR ---
+    // CustomCursor uses: { damping: 25, stiffness: 300 }
+    // We apply the same spring here so eyes track the *cursor*, not the invisible mouse.
+    const smoothX = useSpring(mouseX, { damping: 25, stiffness: 300 });
+    const smoothY = useSpring(mouseY, { damping: 25, stiffness: 300 });
 
-    const rightPupilX = useTransform([mouseX, mouseY], ([x, y]) => getPupilOffset(x, y, RIGHT_EYE_X_PCT, EYE_Y_PCT).x);
-    const rightPupilY = useTransform([mouseX, mouseY], ([x, y]) => getPupilOffset(x, y, RIGHT_EYE_X_PCT, EYE_Y_PCT).y);
+    // Tworzymy transformacje podpięte pod SMOOTH (opóźnione) wartości
+    const leftPupilX = useTransform([smoothX, smoothY], ([x, y]) => getPupilOffset(x, y, LEFT_EYE_X_PCT, EYE_Y_PCT).x);
+    const leftPupilY = useTransform([smoothX, smoothY], ([x, y]) => getPupilOffset(x, y, LEFT_EYE_X_PCT, EYE_Y_PCT).y);
+
+    const rightPupilX = useTransform([smoothX, smoothY], ([x, y]) => getPupilOffset(x, y, RIGHT_EYE_X_PCT, EYE_Y_PCT).x);
+    const rightPupilY = useTransform([smoothX, smoothY], ([x, y]) => getPupilOffset(x, y, RIGHT_EYE_X_PCT, EYE_Y_PCT).y);
 
     // --- LOGIKA ANIMACJI UST (Wartości VW) ---
     const mouthControls = useAnimation();

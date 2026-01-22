@@ -146,6 +146,11 @@
   height: 0;
   z-index: 20;
   /* Dredy muszą być nad wszystkim */
+  cursor: grab;
+}
+
+.jelly-dread-wrapper:active {
+  cursor: grabbing;
 }
 
 /* SPEECH BUBBLE - lekki lifting cienia */

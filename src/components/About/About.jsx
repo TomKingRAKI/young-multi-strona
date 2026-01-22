@@ -236,7 +236,7 @@ function About({ externalOpacity }) {
         {dreadPositions.map((pos, i) => (
           <motion.div
             key={i}
-            className="jelly-dread-wrapper"
+            className="jelly-dread-wrapper interactive"
             style={{ left: `${pos.x}%`, top: `${pos.y}%`, zIndex: 10 }}
           >
             <JellyDread
