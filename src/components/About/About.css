@@ -11,9 +11,10 @@
   /* 1. TŁO: Zamiast flat black, robimy Gradient Radialny (Spotlight) */
   background-color: #000000;
 
-  /* Grid centrujący */
+  /* Grid — avatar przyklejony do dołu, wycentrowany poziomo */
   display: grid;
-  place-items: center;
+  align-items: end;
+  justify-items: center;
 }
 
 /* 2. EFEKT "NOISE" (ZIARNO) - Dodaje teksturę jak w teledyskach */
@@ -246,16 +247,19 @@
 /* Tablet */
 @media (max-width: 1024px) {
   .about-avatar-container {
-    width: 700px;
-    height: 672px;
+    /* Responsywne zamiast fixed 700px — nie wylatuje poza ekran */
+    width: 70vw;
+    max-width: 700px;
+    height: auto;
+    aspect-ratio: 1000 / 960;
   }
 
   .about-head {
-    width: 700px;
+    width: 100%;
   }
 
   .about-title {
-    font-size: 14rem;
+    font-size: clamp(8rem, 14vw, 14rem);
     transform: translate(-50%, -50%) translateY(-80px);
   }
 }

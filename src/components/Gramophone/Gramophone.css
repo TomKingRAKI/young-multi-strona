@@ -131,6 +131,8 @@
   background-color: #ffffff;
   color: #111;
   display: block;
+  /* Nadpisujemy bazowy border z ScrollStack.css (.scroll-stack-card: border: 1px solid #ddd) */
+  border: none;
 
   box-shadow: 1px 1px 0px #bbb, 2px 2px 0px #bbb, 3px 3px 0px #bbb,
     4px 4px 0px #bbb, 5px 5px 0px #bbb,
@@ -204,12 +206,24 @@
   place-items: center;
 }
 
-.album-cover img {
+.album-cover-standard-container {
+  position: relative;
   width: 100%;
   max-width: 300px;
+  aspect-ratio: 1 / 1;
   border-radius: 10px;
+  overflow: hidden;
   box-shadow: 1px 1px 0px #bbb, 2px 2px 0px #bbb, 3px 3px 0px #bbb,
     4px 4px 5px rgba(0, 0, 0, 0.2);
+}
+
+.album-cover img,
+.album-cover-standard-container img,
+.album-cover-flip-front img,
+.album-cover-flip-back img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cover-placeholder {
@@ -284,11 +298,10 @@
   aspect-ratio: 1 / 1;
   perspective: 1000px;
   transform-style: preserve-3d;
-  /* Ważne: upewniamy się, że kontener ma właściwą perspektywę */
   perspective-origin: center center;
-  /* ZMIANA: Upewnij się, że kontener flip jest nad resztą treści karty */
   z-index: 100;
-  transform: translateZ(0.1px);
+  border-radius: 10px;
+  /* Usunięto overflow: hidden i box-shadow — były tu i psuły 3D rotation (ucinały boki i zostawiały martwy cień) */
 }
 
 .album-cover-flip-front,
@@ -302,7 +315,11 @@
   -webkit-backface-visibility: hidden;
   transform-style: preserve-3d;
   border-radius: 10px;
+  /* Overflow na same twarze zapobiega wyciekom, ale nie ucina w 3D */
   overflow: hidden;
+  /* Cień przeniesiony na faces, żeby obracał się razem z kartą! */
+  box-shadow: 1px 1px 0px #bbb, 2px 2px 0px #bbb, 3px 3px 0px #bbb,
+    4px 4px 5px rgba(0, 0, 0, 0.2);
   will-change: transform, opacity;
 }
 
@@ -321,8 +338,6 @@
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
-  box-shadow: 1px 1px 0px #bbb, 2px 2px 0px #bbb, 3px 3px 0px #bbb,
-    4px 4px 5px rgba(0, 0, 0, 0.2);
 }
 
 .album-cover-about-preview {
@@ -500,22 +515,10 @@
     /* Reszta bez zmian */
   }
 
-  .album-cover img {
+  .album-cover-standard-container,
+  .album-cover-flip-container {
     width: 250px;
-    /* Baza */
     max-width: 70vw;
-    /* Ograniczenie szerokości */
-
-    /* KLUCZOWA ZMIANA: */
-    height: auto;
-    /* Wysokość elastyczna */
-    aspect-ratio: 1 / 1;
-    /* Zawsze kwadrat */
-    object-fit: cover;
-    /* Wypełnienie */
-
-    border-radius: 10px;
-    /* Dla pewności */
   }
 
   /* 6. TRACKLISTA POD SPODEM */
@@ -577,7 +580,8 @@
     font-size: 1rem;
   }
 
-  .album-cover img {
+  .album-cover-standard-container,
+  .album-cover-flip-container {
     max-width: 200px;
   }
 
@@ -590,7 +594,5 @@
     font-size: 0.9rem;
   }
 
-  .album-cover-flip-container {
-    max-width: 200px;
-  }
+
 }

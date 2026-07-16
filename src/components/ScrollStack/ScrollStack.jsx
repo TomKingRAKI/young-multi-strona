@@ -156,11 +156,7 @@ const ScrollStack = ({
     [0, 1]
   );
 
-  const stackProgress = useSpring(rawStackProgress, {
-    stiffness: 400,
-    damping: 90,
-    mass: 1
-  });
+  const stackProgress = rawStackProgress;
 
   // --- ZMIANA: useLayoutEffect (poprawka zIndex) ---
   useLayoutEffect(() => {

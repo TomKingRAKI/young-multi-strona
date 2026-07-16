@@ -97,6 +97,7 @@ function Gramophone({ contentProgress, isMenuOpen, style, zoomTargetRef }) {
   );
 
   const flipRotationY = useTransform(flipProgress, [0, 1], [0, 180]);
+  const backFaceRotationY = useTransform(flipRotationY, (ry) => ry - 180);
   const frontOpacity = useTransform(flipProgress, [0, 0.5, 1], [1, 1, 0]);
   const backOpacity = useTransform(flipProgress, [0, 0.5, 1], [0, 0, 1]);
 
@@ -168,28 +169,40 @@ function Gramophone({ contentProgress, isMenuOpen, style, zoomTargetRef }) {
                         className="album-cover-flip-front"
                         style={{ rotateY: flipRotationY, opacity: frontOpacity }}
                       >
-                        <img srcSet={album.srcset} src={album.fallback} sizes="(max-width: 768px) 40vw, 20vw" alt={album.title} loading="lazy" width="300" height="300" />
+                        <img srcSet={album.srcset} src={album.fallback} sizes="(max-width: 768px) 40vw, 20vw" alt={album.title} loading="lazy" />
                       </motion.div>
                       <motion.div
                         className="album-cover-flip-back"
                         style={{
-                          rotateY: useTransform(flipRotationY, (ry) => ry - 180),
+                          rotateY: backFaceRotationY,
                           opacity: backOpacity,
-                          // Ważne: Flexbox żeby wycentrować celownik
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center'
                         }}
                       >
-                        {/* === TU JEST NASZ NIEWIDZIALNY CELOWNIK === */}
-                        <div
-                          ref={zoomTargetRef}
-                          style={{ width: '10px', height: '10px', background: 'transparent' }}
-                        />
                       </motion.div>
+
+                      {/* === CELOWNIK POZA ROTACJĄ 3D === */}
+                      {/* Dzięki temu, że jest w 2D, jego środek NIGDY nie ulega zniekształceniu perspektywą 3D podczas obrotu. */}
+                      <div
+                        ref={zoomTargetRef}
+                        style={{
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          width: '10px',
+                          height: '10px',
+                          transform: 'translate(-50%, -50%)',
+                          background: 'transparent',
+                          pointerEvents: 'none'
+                        }}
+                      />
                     </div>
                   ) : (
-                    <img srcSet={album.srcset} src={album.fallback} sizes="(max-width: 768px) 40vw, 20vw" alt={album.title} loading="lazy" width="300" height="300" />
+                    <div className="album-cover-standard-container">
+                      <img srcSet={album.srcset} src={album.fallback} sizes="(max-width: 768px) 40vw, 20vw" alt={album.title} loading="lazy" />
+                    </div>
                   )}
                 </div>
 

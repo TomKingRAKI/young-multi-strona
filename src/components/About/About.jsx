@@ -191,7 +191,6 @@ function About({ externalOpacity }) {
           sizes="(max-width: 768px) 80vw, 40vw"
           alt="Young Multi"
           className="about-head mobile-head"
-          loading="lazy"
         />
       </section>
     );
@@ -222,7 +221,6 @@ function About({ externalOpacity }) {
           alt="Young Multi"
           className="about-head"
           style={{ zIndex: 1 }}
-          loading="lazy"
         />
 
         {/* B. Komponent Twarzy (Oczy i Usta) */}

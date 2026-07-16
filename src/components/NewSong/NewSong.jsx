@@ -90,18 +90,9 @@ const NewSong = forwardRef((props, ref) => {
       }
     }
 
-    // Logika celowania - DYNAMIC TRACKING
-    if (isMobile) {
-      // NA MOBILE: Nie mierzymy nic. Zakładamy środek ekranu.
-      // To eliminuje "Forced Reflow" (91ms) w PageSpeed Insights na telefonach.
-      if (!zoomTargetRef.current?.dataset.measured) {
-        originX.set(0.5);
-        originY.set(0.5);
-        if (zoomTargetRef.current) zoomTargetRef.current.dataset.measured = "true";
-      }
-    }
-    // DESKTOP: Original Logic
-    else if (latest > 0.55 && latest < 0.649 && zoomTargetRef.current) {
+    // Logika celowania - DYNAMIC TRACKING (Zoptymalizowana: pomiar tylko raz, po zakończeniu ruchu)
+    // Karty kończą ruch przy latest = 0.60 (ponieważ stackProgress mapuje 0.35-0.6 -> 0-1)
+    if (latest >= 0.60 && latest < 0.649 && zoomTargetRef.current && !zoomTargetRef.current.dataset.measured) {
       const rect = zoomTargetRef.current.getBoundingClientRect();
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
@@ -109,12 +100,9 @@ const NewSong = forwardRef((props, ref) => {
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
 
-      // Delikatny offset
-      const OFFSET_X = 0.009;
-      const OFFSET_Y = 0.05;
-
-      const newX = (centerX / windowWidth) + OFFSET_X;
-      const newY = (centerY / windowHeight) + OFFSET_Y;
+      // Usunięto sztuczne offsety - pozycjonowanie jest teraz idealne 1:1 ze środkiem karty
+      const newX = (centerX / windowWidth);
+      const newY = (centerY / windowHeight);
 
       originX.set(newX);
       originY.set(newY);
@@ -146,10 +134,11 @@ const NewSong = forwardRef((props, ref) => {
 
   // --- GRAMOPHONE & ABOUT & SMOKE ---
   const gramophoneZoomProgress = useTransform(contentProgress, [0.65, 0.85], [0, 1]);
-  const gramophoneScale = useTransform(gramophoneZoomProgress, [0, 1], [1, 15]);
+  const gramophoneScale = 1;
   // Dynamiczna pozycja startowa dla clipPath (podąża za celownikiem "Snajper")
-  const originXPct = useTransform(originX, v => v * 100 - 0.5);
-  const originYPct = useTransform(originY, v => v * 100 - 8);
+  // Offset proporcjonalny do viewportu zamiast hardcoded stałych
+  const originXPct = useTransform(originX, v => v * 100);
+  const originYPct = useTransform(originY, v => v * 100);
   const clipRadius = useTransform(gramophoneZoomProgress, [0.05, 1], [0, 150]);
 
   const aboutClipPath = useMotionTemplate`circle(${clipRadius}% at ${originXPct}% ${originYPct}%)`;
